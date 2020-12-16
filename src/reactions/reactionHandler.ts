@@ -27,7 +27,7 @@ export abstract class ReactionHandler {
      * @param isBot whether the message reacted to is sent by the bot
      * @param reactionObject the reaction object recieved from the API
      */
-    abstract execute(user: User, message: Message, isBot: boolean, reactionObject: MessageReaction): Promise<void>;
+    abstract execute(user: User, message: Message, isBot: boolean, reactionObject: MessageReaction);
 
 }
 

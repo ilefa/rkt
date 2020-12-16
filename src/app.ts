@@ -7,6 +7,7 @@ import ReactionManager from './reactions/manager';
 
 import {
     AlertsCommand,
+    BigJannieCommand,
     ContractCommand,
     FlipCommand,
     IsMarketOpenCommand,
@@ -29,6 +30,7 @@ const commandCenter = new CommandManager();
 const reactionCenter = new ReactionManager();
 
 commandCenter.registerCommand('alerts', new AlertsCommand());
+commandCenter.registerCommand('bigjannie', new BigJannieCommand());
 commandCenter.registerCommand('contract', new ContractCommand());
 commandCenter.registerCommand('flip', new FlipCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
@@ -57,6 +59,8 @@ client.on('ready', () => {
 });
 
 client.on('message', async message => {
+    if (message.content.toLowerCase().includes("nicky d")) await message.react(client.emojis.resolveID('788575949813186571'))
+
     if (message.author.bot) return;
 
     if (containsReactPhrase(message) && env.react) {
