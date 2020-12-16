@@ -1,0 +1,20 @@
+{
+   "type": "sqlite",
+   "database": "database.sqlite",
+   "synchronize": true,
+   "logging": false,
+   "entities": [
+      "src/lib/entity/**/*.ts"
+   ],
+   "migrations": [
+      "src/lib/migration/**/*.ts"
+   ],
+   "subscribers": [
+      "src/lib/subscriber/**/*.ts"
+   ],
+   "cli": {
+      "entitiesDir": "src/lib/entity",
+      "migrationsDir": "src/lib/migration",
+      "subscribersDir": "src/lib/subscriber"
+   }
+}
