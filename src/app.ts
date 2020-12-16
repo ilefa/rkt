@@ -4,6 +4,7 @@ import env from '../env.json';
 import Announcer from './lib/announcer';
 import CommandManager from './commands/manager';
 import ReactionManager from './reactions/manager';
+import CountHerManager from './lib/counther/manager';
 
 import {
     AlertsCommand,
@@ -23,15 +24,18 @@ import {
 import { DeleteMessageReactionHandler, OnlyGoesUpReactionHandler } from './reactions';
 import { MessageReaction, User } from 'discord.js';
 import { containsReactPhrase } from './lib/util';
+import CountHerCommand from './commands/types/counther';
 
 const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const announcer = new Announcer(client);
 const commandCenter = new CommandManager();
 const reactionCenter = new ReactionManager();
+const countHerManager = new CountHerManager(client);
 
 commandCenter.registerCommand('alerts', new AlertsCommand());
 commandCenter.registerCommand('bigjannie', new BigJannieCommand());
 commandCenter.registerCommand('contract', new ContractCommand());
+commandCenter.registerCommand('counther', new CountHerCommand(countHerManager));
 commandCenter.registerCommand('flip', new FlipCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
 commandCenter.registerCommand('options', new OptionsCommand());
@@ -65,6 +69,10 @@ client.on('message', async message => {
 
     if (containsReactPhrase(message) && env.react) {
         await message.react(client.emojis.resolveID('786296476757524490'));
+    }
+
+    if (countHerManager.isLobby(message.channel.id)) {
+        await countHerManager.handleInput(message);
     }
 
     if (!message.content.startsWith(env.prefix)) {

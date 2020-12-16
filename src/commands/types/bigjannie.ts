@@ -9,7 +9,9 @@ export default class BigJannieCommand extends Command {
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
         message.delete();
-        message.channel.send(null,{files: ["https://cdn.discordapp.com/attachments/778422963560644639/788266859718901770/cleanyourscreen.gif"]});
+        message.channel.send(null, {
+            files: ["https://cdn.discordapp.com/attachments/778422963560644639/788266859718901770/cleanyourscreen.gif"]
+        });
 
         if (args.length > 0) return CommandReturn.HELP_MENU;
         return CommandReturn.EXIT;
