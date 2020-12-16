@@ -34,7 +34,7 @@ export abstract class Command {
      * @param message the original message object
      * @param args the arguments provided for the command
      */
-    async abstract execute(user: User, message: Message, args: string[]): Promise<CommandReturn>;
+    abstract execute(user: User, message: Message, args: string[]): Promise<CommandReturn>;
 
 }
 

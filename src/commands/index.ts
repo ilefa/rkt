@@ -1,4 +1,5 @@
 import AlertsCommand from './types/alerts';
+import BigJannieCommand from './types/bigjannie';
 import ContractCommand from './types/contract';
 import FlipCommand from './types/flip';
 import IsMarketOpenCommand from './types/ismarketopen';
@@ -12,6 +13,7 @@ import StonksCommand from './types/stonks';
 
 export {
     AlertsCommand,
+    BigJannieCommand,
     ContractCommand,
     FlipCommand,
     IsMarketOpenCommand,
