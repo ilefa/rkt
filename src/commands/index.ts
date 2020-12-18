@@ -1,11 +1,13 @@
 import AlertsCommand from './types/alerts';
 import BigJannieCommand from './types/bigjannie';
 import ContractCommand from './types/contract';
-import FlipCommand from './types/flip';
-import IsMarketOpenCommand from './types/ismarketopen';
+import CountHerCommand from './types/counther';
+import IsMarketOpenCommand from './types/isMarketOpen';
 import OptionsCommand from './types/options';
 import PermissionsCommand from './types/perms';
 import QuoteCommand from './types/quote';
+import PrefsCommand from './types/prefs';
+import PurgeCommand from './types/purge';
 import ReactCommand from './types/react';
 import SayCommand from './types/say';
 import StimmyCommand from './types/stimmy';
@@ -15,11 +17,13 @@ export {
     AlertsCommand,
     BigJannieCommand,
     ContractCommand,
-    FlipCommand,
+    CountHerCommand,
     IsMarketOpenCommand,
     OptionsCommand,
     PermissionsCommand,
     QuoteCommand,
+    PrefsCommand,
+    PurgeCommand,
     ReactCommand,
     SayCommand,
     StimmyCommand,

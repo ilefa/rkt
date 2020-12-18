@@ -21,9 +21,22 @@ export const quote = async (ticker: string, range: string | RangeGranularity, in
  * @param ticker the ticker to lookup information for
  */
 export const getOptions = async (ticker: string, expDate?: string | number): Promise<OptionsData> => await axios
-    .get(`https://query2.finance.yahoo.com/v7/finance/options/${ticker + (expDate ? '?expirationDate=' + expDate : '')}`)
+    .get(`https://query2.finance.yahoo.com/v7/finance/options/${ticker + (expDate ? '?date=' + expDate : '')}`)
     .then(res => res.data.optionChain.result[0])
     .then(data => {
         return data;
     })
     .catch(err => console.error(err));
+
+/**
+ * Attempts to retrieve options data for the given ticker.
+ * @param ticker the ticker to lookup information for
+ */
+export const getExpirationDates = async (ticker: string): Promise<number[]> => {
+    let data = await getOptions(ticker);
+    if (!data) {
+        return null;
+    } 
+
+    return data.expirationDates;
+}

@@ -17,6 +17,7 @@ import {
     timeDiff,
     validRanges,
     validIntervals,
+    generateSimpleEmbed,
 } from '../../lib/util';
 
 export default class QuoteCommand extends Command {
@@ -25,7 +26,7 @@ export default class QuoteCommand extends Command {
         super('quote', `Invalid usage: ${emboss('.quote <ticker> <[range] [interval]>')}`, null, [
             {
                 name: 'Args',
-                value: `${bold('__ticker__')}: the ticker to retrieve data for\n${bold('__range__')}: the time period for the results\n${bold('__interval__')} the granularity of those results`,
+                value: `${bold('__ticker__')}: the ticker to retrieve data for\n${bold('__range__')}: the time period for the results\n${bold('__interval__')}: the granularity of those results`,
                 inline: true
             },
             {
@@ -42,8 +43,6 @@ export default class QuoteCommand extends Command {
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
-        message.delete();
-
         if (args.length === 0 || args.length > 3) {
             return CommandReturn.HELP_MENU;
         }
@@ -53,18 +52,20 @@ export default class QuoteCommand extends Command {
         let interval: DataGranularity = args.length > 2 ? args[2] as any : '5m';
 
         let start = Date.now();
-        let loading = await message.reply(':hourglass_flowing_sand: Working on that..');
+        let loading = await message.reply('<a:loading:788890776444207194> Working on that..');
 
         let res = await quote(ticker, range, interval);
         if (!res) {
-            message.reply(`:x: Couldn't locate ticker ${emboss(ticker)}.`);
+            loading.delete();
+            message.reply(generateSimpleEmbed('.contract | Error', `Couldn't find any results for ticker ${emboss(ticker)}.`));
             return CommandReturn.EXIT;
         }
 
         let opt = await getOptions(ticker);
         let payload = res.indicators.quote[0].close;
         if (!payload) {
-            message.reply(`:x: An error occurred while quoting ${emboss(ticker)}.`);
+            loading.delete();
+            message.reply(generateSimpleEmbed('.contract | Error', `An unknown error occurred while quoting ${emboss(ticker)}.`));
             return CommandReturn.EXIT;
         }
 
@@ -102,7 +103,7 @@ export default class QuoteCommand extends Command {
         let chart = await genPriceChart(prices, volumes, prices[0].y)
             .setWidth(1250)
             .setHeight(800)
-            .setBackgroundColor('rgba(0,0,0,0)')
+            .setBackgroundColor('rgba(0, 0, 0, 0)')
             .getShortUrl();
 
         let variance = getPriceVariance(res);
@@ -120,7 +121,7 @@ export default class QuoteCommand extends Command {
             .setTitle(`${opt.quote.displayName ? opt.quote.displayName : ticker}`)
             .setColor(0x27AE60)
             .setImage(chart)
-            .setDescription(`Retrieved quote data for ${bold(ticker)} for the last ${emboss(`${range} | ${interval}`)}\nThis operation took ${emboss(timeDiff(start) + 'ms')} to complete.`)
+            .setDescription(`Retrieved quote data for ${bold(ticker)} for the last ${emboss(`${range} (${interval})`)}.\nThis operation took ${emboss(timeDiff(start) + 'ms')} to complete.`)
             .addFields([
                 {
                     name: 'Price',
@@ -159,12 +160,12 @@ export default class QuoteCommand extends Command {
                 },
                 {
                     name: 'MACD',
-                    value: `${getEmoteForIndicator(macd) + ' ' + macd}`,
+                    value: `${getEmoteForIndicator(macd, 0, 0, 0) + ' ' + macd}`,
                     inline: true,
                 },
                 {
                     name: 'RSI',
-                    value: `${getEmoteForIndicator(rsi) + ' ' + rsi}`,
+                    value: `${getEmoteForIndicator(rsi, 40, 40, 40) + ' ' + rsi}`,
                     inline: true
                 }
             ]);

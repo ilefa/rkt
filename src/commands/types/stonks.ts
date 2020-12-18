@@ -1,6 +1,6 @@
 import { Message, MessageEmbed, Permissions, User } from 'discord.js';
-import { emboss } from '../../lib/util';
 import { Command, CommandReturn } from '../command';
+import { emboss } from '../../lib/util';
 
 export default class HelpCommand extends Command {
 
@@ -9,8 +9,6 @@ export default class HelpCommand extends Command {
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
-        message.delete();
-
         if (args.length > 0) {
             return CommandReturn.HELP_MENU;
         }
@@ -20,7 +18,7 @@ export default class HelpCommand extends Command {
             .setColor(0x27AE60)
             .setThumbnail('https://styles.redditmedia.com/t5_2th52/styles/communityIcon_4411rfa4elr41.png?width=256&s=bba3f4384cbcb8590f768f4446d98f7b2017beb0')
             .setDescription('stonks. only. go. up.\n' 
-                        + 'anyone who tells you otherwise is in kahoots with the SEC, the stock exchanges, and the banks. dont trust the banks.\n' 
+                        + 'anyone who tells you otherwise is in kahoots with the SEC, the stock exchanges, and the banks. dont trust (or bet on) the banks.\n' 
                         + 'they are trying to take over everything.\n' 
                         + 'we ride at dawn and will take back what is ours.\n\n'
 

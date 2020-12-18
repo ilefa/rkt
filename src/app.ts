@@ -3,17 +3,19 @@ import env from '../env.json';
 
 import Announcer from './lib/announcer';
 import CommandManager from './commands/manager';
-import ReactionManager from './reactions/manager';
 import CountHerManager from './lib/counther/manager';
+import ReactionManager from './reactions/manager';
 
 import {
     AlertsCommand,
     BigJannieCommand,
     ContractCommand,
-    FlipCommand,
+    CountHerCommand,
     IsMarketOpenCommand,
     OptionsCommand,
     PermissionsCommand,
+    PrefsCommand,
+    PurgeCommand,
     QuoteCommand,
     ReactCommand,
     SayCommand,
@@ -23,24 +25,24 @@ import {
 
 import { DeleteMessageReactionHandler, OnlyGoesUpReactionHandler } from './reactions';
 import { MessageReaction, User } from 'discord.js';
-import { containsReactPhrase } from './lib/util';
-import CountHerCommand from './commands/types/counther';
+import { getReactionPhrase } from './lib/util';
 
 const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const announcer = new Announcer(client);
-const commandCenter = new CommandManager();
-const reactionCenter = new ReactionManager();
+const commandCenter = new CommandManager(client);
 const countHerManager = new CountHerManager(client);
+const reactionCenter = new ReactionManager();
 
 commandCenter.registerCommand('alerts', new AlertsCommand());
 commandCenter.registerCommand('bigjannie', new BigJannieCommand());
 commandCenter.registerCommand('contract', new ContractCommand());
 commandCenter.registerCommand('counther', new CountHerCommand(countHerManager));
-commandCenter.registerCommand('flip', new FlipCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
 commandCenter.registerCommand('options', new OptionsCommand());
 commandCenter.registerCommand('perms', new PermissionsCommand());
 commandCenter.registerCommand('quote', new QuoteCommand());
+commandCenter.registerCommand('prefs', new PrefsCommand());
+commandCenter.registerCommand('purge', new PurgeCommand());
 commandCenter.registerCommand('react', new ReactCommand());
 commandCenter.registerCommand('say', new SayCommand());
 commandCenter.registerCommand('stimmy', new StimmyCommand());
@@ -63,12 +65,15 @@ client.on('ready', () => {
 });
 
 client.on('message', async message => {
-    if (message.content.toLowerCase().includes("nicky d")) await message.react(client.emojis.resolveID('788575949813186571'))
-
-    if (message.author.bot) return;
-
-    if (containsReactPhrase(message) && env.react) {
-        await message.react(client.emojis.resolveID('786296476757524490'));
+    if (message.author.bot) {
+        return;
+    }
+    
+    if (env.react) {
+        let phrase = getReactionPhrase(message);
+        if (phrase) {
+            await message.react(client.emojis.resolveID(phrase.response));
+        }
     }
 
     if (countHerManager.isLobby(message.channel.id)) {

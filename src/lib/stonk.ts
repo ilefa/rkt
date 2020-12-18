@@ -72,12 +72,13 @@ export type OptionsContract = {
     currency: string;
     lastPrice: number;
     change: number;
+    volume: number;
     percentChange: number;
     openInterest: number;
     bid: number;
     ask: number;
     contractSize: string;
-    expiration: number | Date;
+    expiration: number;
     lastTradeDate: number | Date;
     impliedVolatility: number;
     inTheMoney: boolean;

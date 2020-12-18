@@ -29,8 +29,6 @@ export default class OptionsCommand extends Command {
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
-        message.delete();
-
         if (args.length !== 2 && args.length !== 3) {
             return CommandReturn.HELP_MENU;
         }

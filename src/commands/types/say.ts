@@ -9,7 +9,6 @@ export default class SayCommand extends Command {
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
-        message.delete();
         message.channel.send(args.join(' '));
         return CommandReturn.EXIT;
     }

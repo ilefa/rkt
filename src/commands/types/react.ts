@@ -9,8 +9,6 @@ export default class ReactCommand extends Command {
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
-        message.delete();
-
         if (args.length > 0) {
             return CommandReturn.HELP_MENU;
         }

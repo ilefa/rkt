@@ -4,13 +4,14 @@ import MA from 'moving-average';
 import df, { Units } from 'parse-duration';
 import { MACD, RSI } from 'trading-signals';
 import { PriceList, RangeGranularity, StonkQuote } from './stonk';
-import { EmbedFieldData, Message, MessageEmbed, Permissions, PermissionFlags, User } from 'discord.js';
+import { EmbedFieldData, Message, MessageEmbed, Permissions, PermissionFlags, User, Client, Emoji } from 'discord.js';
 
 export const emboss = (message: any) => `\`\`${message}\`\``;
 export const bold = (message: any) => `**${message}**`;
 export const italic = (message: any) => `*${message}*`;
 export const codeBlock = (lang: string, message: any) => `\`\`\`${lang}\n${message}\`\`\``;
-export const asMention = (user: User) => `<@${user.id}>`;
+export const asMention = (user: User | string) => `<@${user instanceof User ? user.id : user}>`;
+export const mentionChannel = (id: string) => `<#${id}>`;
 export const getDuration = (input: string) => df(input, 's');
 export const getDurationWithUnit = (input: string, unit: Units) => df(input, unit);
 
@@ -158,10 +159,19 @@ export const computeRSI = (res: StonkQuote) => {
     return computation.getResult().toFixed(2);
 }
 
-export const getEmoteForIndicator = (indicator: number | string) => {
-    if (indicator === 0) return ':arrow_right:';
-    if (indicator > 0) return ':arrow_upper_right:';
-    if (indicator < 0) return ':arrow_lower_left:';
+export const cond = (cond: boolean, t: string, f: string) => {
+    if (t)
+        return t;
+    return f;
+}
+
+export const resolveEmote = (client: Client, id: string) => client.emojis.cache.get(id);
+export const asEmote = (emote: Emoji) => `<${emote.animated ? 'a' : ''}:${emote.name}:${emote.id}>`
+
+export const getEmoteForIndicator = (indicator: number | string, upThreshold: number, downThreshold: number, stagnent: number) => {
+    if (indicator === stagnent) return ':arrow_right:';
+    if (indicator > upThreshold) return ':arrow_upper_right:';
+    if (indicator < downThreshold) return ':arrow_lower_left:';
 
     return ':twisted_rightwards_arrows:';
 }
@@ -212,7 +222,18 @@ export const toggleAlerts = () => {
     return env.alerts;
 }
 
-export const containsReactPhrase = (msg: Message) => env.reactPhrases.some(phrase => msg.content.toLowerCase().includes(phrase));
+export const getReactionPhrase = (msg: Message) => {
+    let formatted = msg.content.toLowerCase();
+    let payload = env.reactPhrases.filter(ent => ent.phrases.includes(formatted))[0];
+    if (!payload) {
+        return null;
+    }
+
+    return {
+        message: payload.phrases[formatted] as string,
+        response: payload.emote
+    };
+}
 
 export const validRanges = ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max'];
 export const validIntervals = ['1m', '5m', '10m', '15m', '30m', '1h', '2h', '4h', 'D', 'W', 'M', 'Q', 'Y'];

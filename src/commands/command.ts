@@ -1,5 +1,10 @@
-import { User, Message, EmbedFieldData } from 'discord.js';
 import CommandManager from './manager';
+
+import {
+    User,
+    Message,
+    EmbedFieldData
+} from 'discord.js';
 
 export abstract class Command {
     
@@ -8,6 +13,7 @@ export abstract class Command {
     helpTitle: string;
     helpFields: EmbedFieldData[];
     permission: number;
+    deleteMessage: boolean;
     manager: CommandManager;
 
     /**
@@ -19,11 +25,12 @@ export abstract class Command {
      * @param helpFields the fields of the help message embed
      * @param permission the required permission
      */
-    constructor(name, help, helpTitle, helpFields, permission) {
+    constructor(name, help, helpTitle, helpFields, permission, deleteMessage = true) {
         this.name = name;
         this.help = help;
         this.helpTitle = helpTitle;
         this.helpFields = helpFields;
+        this.deleteMessage = deleteMessage;
         this.permission = permission;
     }
 
@@ -57,6 +64,5 @@ export class CommandEntry {
 }
 
 export enum CommandReturn {
-    EXIT,
-    HELP_MENU
+    EXIT, HELP_MENU
 }
