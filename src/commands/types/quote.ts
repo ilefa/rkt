@@ -1,13 +1,15 @@
-import { User, Message, MessageEmbed, Permissions } from 'discord.js';
 import { DataGranularity, PriceList, RangeGranularity } from '../../lib/stonk';
+import { User, Message, MessageEmbed, Permissions } from 'discord.js';
 import { Command, CommandReturn } from '../command';
-import { genPriceChart } from '../../lib/chart';
 import { getOptions, quote } from '../../lib/repo';
+import { genPriceChart } from '../../lib/chart';
+
 import {
     bold,
     emboss,
     computeMACD,
     computeRSI,
+    generateSimpleEmbed,
     getEmoteForEPS,
     getEmoteForIndicator,
     getJoinedList,
@@ -17,7 +19,6 @@ import {
     timeDiff,
     validRanges,
     validIntervals,
-    generateSimpleEmbed,
 } from '../../lib/util';
 
 export default class QuoteCommand extends Command {
@@ -57,7 +58,7 @@ export default class QuoteCommand extends Command {
         let res = await quote(ticker, range, interval);
         if (!res) {
             loading.delete();
-            message.reply(generateSimpleEmbed('.contract | Error', `Couldn't find any results for ticker ${emboss(ticker)}.`));
+            message.reply(generateSimpleEmbed('.quote | Error', `Couldn't find any results for ticker ${emboss(ticker)}.`));
             return CommandReturn.EXIT;
         }
 
@@ -65,7 +66,7 @@ export default class QuoteCommand extends Command {
         let payload = res.indicators.quote[0].close;
         if (!payload) {
             loading.delete();
-            message.reply(generateSimpleEmbed('.contract | Error', `An unknown error occurred while quoting ${emboss(ticker)}.`));
+            message.reply(generateSimpleEmbed('.quote | Error', `An unknown error occurred while quoting ${emboss(ticker)}.`));
             return CommandReturn.EXIT;
         }
 

@@ -2,7 +2,18 @@ import env from '../../../env.json';
 
 import { Message, User } from 'discord.js';
 import { Command, CommandReturn } from '../command';
-import { asEmote, asMention, bold, cond, CUSTOM_PERMS, emboss, generateEmbed, italic, mentionChannel, resolveEmote } from '../../lib/util';
+
+import {
+    asEmote,
+    asMention,
+    bold,
+    CUSTOM_PERMS,
+    emboss,
+    generateEmbed,
+    italic,
+    mentionChannel,
+    resolveEmote
+} from '../../lib/util';
 
 export default class PrefsCommand extends Command {
 

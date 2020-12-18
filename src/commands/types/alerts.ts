@@ -1,8 +1,6 @@
-import env from '../../../env.json';
-
-import { Message, Permissions, User } from 'discord.js';
 import { Command, CommandReturn } from '../command';
-import { bold, emboss, toggleAlerts } from '../../lib/util';
+import { Message, Permissions, User } from 'discord.js';
+import { bold, emboss, generateSimpleEmbed, toggleAlerts } from '../../lib/util';
 
 export default class AlertsCommand extends Command {
 
@@ -16,7 +14,8 @@ export default class AlertsCommand extends Command {
         }
 
         let state = toggleAlerts();
-        message.reply(`${state ? ':white_check_mark:' : ':x:'} ${bold('Alerts')} are ${state ? 'now' : 'no longer'} enabled.`);
+        let embed = generateSimpleEmbed('Announcer Preferences', `${bold('Alerts')} are ${state ? 'now' : 'no longer'} enabled.`);
+        message.reply(embed);
         return CommandReturn.EXIT;
     }
 

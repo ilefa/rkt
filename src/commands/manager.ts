@@ -1,7 +1,7 @@
 import env from '../../env.json';
 
-import { Command, CommandEntry, CommandReturn } from './command';
 import { User, Message, MessageEmbed, Client } from 'discord.js';
+import { Command, CommandEntry, CommandReturn } from './command';
 import { generateEmbed, generateSimpleEmbed, italic } from '../lib/util';
 
 export default class CommandManager {

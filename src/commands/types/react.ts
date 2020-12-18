@@ -1,6 +1,6 @@
-import { Message, Permissions, User } from 'discord.js';
-import { bold, emboss, toggleReactions } from '../../lib/util';
 import { Command, CommandReturn } from '../command';
+import { Message, Permissions, User } from 'discord.js';
+import { bold, emboss, generateSimpleEmbed, toggleReactions } from '../../lib/util';
 
 export default class ReactCommand extends Command {
 
@@ -14,7 +14,8 @@ export default class ReactCommand extends Command {
         }
 
         let state = toggleReactions();
-        message.reply(`${state ? ':white_check_mark:' : ':x:'} ${bold('Reactions')} are ${state ? 'now' : 'no longer'} enabled.`);
+        let embed = generateSimpleEmbed('Reaction Preferences', `${bold('Reactions')} are ${state ? 'now' : 'no longer'} enabled.`);
+        message.reply(embed);
         return CommandReturn.EXIT;
     }
 

@@ -1,16 +1,36 @@
 import moment from 'moment';
 import env from '../../env.json';
+import df from 'parse-duration';
 import MA from 'moving-average';
-import df, { Units } from 'parse-duration';
+
+import { Units } from 'parse-duration';
 import { MACD, RSI } from 'trading-signals';
 import { PriceList, RangeGranularity, StonkQuote } from './stonk';
-import { EmbedFieldData, Message, MessageEmbed, Permissions, PermissionFlags, User, Client, Emoji } from 'discord.js';
+import {
+    Client,
+    EmbedFieldData,
+    Emoji,
+    Message,
+    MessageEmbed,
+    Permissions,
+    PermissionFlags,
+    User
+} from 'discord.js';
+
+export const validRanges = ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max'];
+export const validIntervals = ['1m', '5m', '10m', '15m', '30m', '1h', '2h', '4h', 'D', 'W', 'M', 'Q', 'Y'];
 
 export const emboss = (message: any) => `\`\`${message}\`\``;
+export const cond = (cond: boolean, t: string, f: string) => cond ? t : f;
 export const bold = (message: any) => `**${message}**`;
 export const italic = (message: any) => `*${message}*`;
+export const numberEnding = (num: number) => num === 1 ? '' : 's';
+export const timeDiff = (start: number) => (Date.now() - start).toFixed(2);
+export const conforms = (regex: RegExp, target: string) => regex.test(target);
 export const codeBlock = (lang: string, message: any) => `\`\`\`${lang}\n${message}\`\`\``;
+export const asEmote = (emote: Emoji) => `<${emote.animated ? 'a' : ''}:${emote.name}:${emote.id}>`;
 export const asMention = (user: User | string) => `<@${user instanceof User ? user.id : user}>`;
+export const resolveEmote = (client: Client, id: string) => client.emojis.cache.get(id);
 export const mentionChannel = (id: string) => `<#${id}>`;
 export const getDuration = (input: string) => df(input, 's');
 export const getDurationWithUnit = (input: string, unit: Units) => df(input, unit);
@@ -159,15 +179,6 @@ export const computeRSI = (res: StonkQuote) => {
     return computation.getResult().toFixed(2);
 }
 
-export const cond = (cond: boolean, t: string, f: string) => {
-    if (t)
-        return t;
-    return f;
-}
-
-export const resolveEmote = (client: Client, id: string) => client.emojis.cache.get(id);
-export const asEmote = (emote: Emoji) => `<${emote.animated ? 'a' : ''}:${emote.name}:${emote.id}>`
-
 export const getEmoteForIndicator = (indicator: number | string, upThreshold: number, downThreshold: number, stagnent: number) => {
     if (indicator === stagnent) return ':arrow_right:';
     if (indicator > upThreshold) return ':arrow_upper_right:';
@@ -210,8 +221,6 @@ export const getEmoteForPermissions = (superPerms: boolean, admin: boolean) => {
     return ':runner:';
 }
 
-export const timeDiff = (start: number) => (Date.now() - start).toFixed(2);
-export const numberEnding = (num: number) => num === 1 ? '' : 's';
 export const toggleReactions = () => {
     env.react = !env.react;
     return env.react;
@@ -234,9 +243,6 @@ export const getReactionPhrase = (msg: Message) => {
         response: payload.emote
     };
 }
-
-export const validRanges = ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max'];
-export const validIntervals = ['1m', '5m', '10m', '15m', '30m', '1h', '2h', '4h', 'D', 'W', 'M', 'Q', 'Y'];
 
 export const getJoinedList = (list: any[], delimiter: string) => {
     let str = '';
@@ -275,19 +281,6 @@ export const generateEmbed = (title: string, message: string, fields: EmbedField
         .addFields(fields);
 }
 
-export const formatOptionsExpDate = (expDate: Date) => {
-    let date = new Date();
-
-    console.log(date.getTime(), expDate.getTime());
-    console.log(date.getTime() - expDate.getTime());
-
-    if (date.getFullYear() !== expDate.getFullYear()) {
-        return moment(expDate.getTime()).format('M/D/YYYY');
-    }
-
-    return moment(expDate.getTime()).format('M/D');
-}
-
 export const getExpDate = (input: string): Date => {
     // checks if its MM/DD without year
     if (/^\d{1,2}\/\d{1,2}$/.test(input)) {
@@ -302,8 +295,13 @@ export const getExpDate = (input: string): Date => {
     return customDate._d;
 }
 
+/**
+ * Attempts to retrieve the closest date
+ * to the inputted value from a given list.
+ * 
+ * @param input the inputted date
+ * @param valid a list of valid dates
+ */
 export const getClosestDate = (input: Date, valid: Date[]) => {
     return valid.reduce((prev, cur) => (Math.abs(cur.getTime() - input.getTime()) < Math.abs(prev.getTime() - input.getTime())) ? cur : prev);
 }
-
-export const conforms = (regex: RegExp, target: string) => regex.test(target);

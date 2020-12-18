@@ -89,14 +89,14 @@ export default class ContractCommand extends Command {
 
         let validExps = await getExpirationDates(ticker);
         if (!validExps) {
-            message.reply(generateSimpleEmbed('.contracts | Error', `Oops, I couldn't find anything for ${emboss(ticker)}.`));
+            message.reply(generateSimpleEmbed('.contract | Error', `Oops, I couldn't find anything for ${emboss(ticker)}.`));
             return CommandReturn.EXIT;
         }
 
         expDate = getClosestDate(expDate ? expDate : new Date(), validExps.map(millis => new Date(millis * 1000)));
         let opts = await getOptions(ticker, expDate.getTime() / 1000);
         if (!opts) {
-            message.reply(generateSimpleEmbed('.contracts | Error', `Oops, I couldn't find anything for ${emboss(ticker)}.`));
+            message.reply(generateSimpleEmbed('.contract | Error', `Oops, I couldn't find anything for ${emboss(ticker)}.`));
             return CommandReturn.EXIT;
         }
         
@@ -107,7 +107,6 @@ export default class ContractCommand extends Command {
         } else if (type.toLowerCase().startsWith('p')) {
             contracts = all.puts;
         } else {
-            message.reply('wrong contract type.')
             return CommandReturn.EXIT;
         }
 
@@ -131,7 +130,7 @@ export default class ContractCommand extends Command {
         
         let contract = contracts.find((contract: OptionsContract) => contract.strike === strike) as OptionsContract;
         if (!contract) {
-            message.reply(generateSimpleEmbed('.contracts | Error', `Couldn't find any contracts for ${emboss(ticker)} with parameters ${emboss(`$${strike}${type} (${moment(expDate).format('MM/DD')})`)}.`));
+            message.reply(generateSimpleEmbed('.contract | Error', `Couldn't find any contracts for ${emboss(ticker)} with parameters ${emboss(`$${strike}${type} (${moment(expDate).format('MM/DD')})`)}.`));
             return CommandReturn.EXIT;
         }
 
@@ -197,7 +196,8 @@ export default class ContractCommand extends Command {
                         'OTM')),
                 inline: true
             }*/
-        ]))
+        ]));
+        
         return CommandReturn.EXIT;
     }
 

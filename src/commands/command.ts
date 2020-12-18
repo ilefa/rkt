@@ -25,7 +25,12 @@ export abstract class Command {
      * @param helpFields the fields of the help message embed
      * @param permission the required permission
      */
-    constructor(name, help, helpTitle, helpFields, permission, deleteMessage = true) {
+    constructor(name: string,
+                help: string,
+                helpTitle: string,
+                helpFields: EmbedFieldData[],
+                permission: number,
+                deleteMessage = true) {
         this.name = name;
         this.help = help;
         this.helpTitle = helpTitle;

@@ -1,4 +1,4 @@
-import { Message, Permissions, User } from 'discord.js';
+import { Message, User } from 'discord.js';
 import { CUSTOM_PERMS, emboss } from '../../lib/util';
 import { Command, CommandReturn } from '../command';
 

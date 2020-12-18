@@ -1,5 +1,11 @@
 import axios from 'axios';
-import { DataGranularity, RangeGranularity, OptionsData, StonkQuote } from './stonk';
+
+import { 
+    DataGranularity,
+    RangeGranularity,
+    OptionsData,
+    StonkQuote
+} from './stonk';
 
 /**
  * Attempts to retrieve a comprehensive quote for the given ticker.
@@ -14,7 +20,7 @@ export const quote = async (ticker: string, range: string | RangeGranularity, in
     .then(data => {
         return data;
     })
-    .catch(err => console.error(err));
+    .catch(console.error);
 
 /**
  * Attempts to retrieve options data for the given ticker.
@@ -26,7 +32,7 @@ export const getOptions = async (ticker: string, expDate?: string | number): Pro
     .then(data => {
         return data;
     })
-    .catch(err => console.error(err));
+    .catch(console.error);
 
 /**
  * Attempts to retrieve options data for the given ticker.

@@ -1,16 +1,9 @@
 import moment from 'moment';
 
-import { Command, CommandReturn } from '../command';
 import { OptionsContract } from '../../lib/stonk';
-import { getOptions } from '../../lib/repo';
-
-import {
-    EmbedFieldData,
-    Message,
-    MessageEmbed,
-    Permissions,
-    User
-} from 'discord.js';
+import { Command, CommandReturn } from '../command';
+import { getExpirationDates, getOptions } from '../../lib/repo';
+import { EmbedFieldData, Message, MessageEmbed, Permissions, User } from 'discord.js';
 
 import {
     bold,
@@ -79,14 +72,18 @@ export default class OptionsCommand extends Command {
             expDate = date;
         }
 
+        let validExps = await getExpirationDates(ticker);
+        if (!validExps) {
+            message.reply(generateSimpleEmbed('.contract | Error', `Oops, I couldn't find anything for ${emboss(ticker)}.`));
+            return CommandReturn.EXIT;
+        }
+
+        expDate = getClosestDate(expDate ? expDate : new Date(), validExps.map(millis => new Date(millis * 1000)));
         let opts = await getOptions(ticker, expDate.getTime());
         if (!opts) {
             message.reply(generateSimpleEmbed('.options | Error', `Oops, I couldn't find anything for ${emboss(ticker)}.`));
             return CommandReturn.EXIT;
         }
-
-        if (expDate) expDate = getClosestDate(expDate, opts.expirationDates.map(millis => new Date(millis * 1000)));
-        if (!expDate) expDate = new Date();
 
         let all = opts.options[0];
         let contracts = [];

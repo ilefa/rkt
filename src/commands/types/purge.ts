@@ -1,6 +1,6 @@
 import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
-import { emboss, generateSimpleEmbed, numberEnding, timeDiff, toggleAlerts } from '../../lib/util';
+import { emboss, generateSimpleEmbed, numberEnding, timeDiff } from '../../lib/util';
 
 export default class PurgeCommand extends Command {
 
@@ -36,7 +36,8 @@ export default class PurgeCommand extends Command {
 
         messages = messages.slice(0, amount);
         messages.forEach(async message => message?.delete());
-        message.reply(`Purged ${messages.length} message${numberEnding(messages.length)} in ${timeDiff(start)}ms.`)
+        message.reply(`Purged ${messages.length} message${numberEnding(messages.length)} in ${timeDiff(start)}ms.`);
+        
         return CommandReturn.EXIT;
     }
 

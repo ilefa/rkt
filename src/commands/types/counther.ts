@@ -1,7 +1,7 @@
 import CountHerManager from '../../lib/counther/manager';
 
-import { Message, Permissions, User } from 'discord.js';
 import { Command, CommandReturn } from '../command';
+import { Message, Permissions, User } from 'discord.js';
 import { emboss, generateEmbed, generateSimpleEmbed, italic } from '../../lib/util';
 
 export default class CountHerCommand extends Command {

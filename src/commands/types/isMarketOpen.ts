@@ -1,12 +1,10 @@
-import moment from 'moment';
-
-import { Message, Permissions, User } from 'discord.js';
 import { Command, CommandReturn } from '../command';
+import { Message, Permissions, User } from 'discord.js';
 
 export default class IsMarketOpenCommand extends Command {
 
     constructor() {
-        super('ismarketopen', `:x: Invalid usage: .ismarketopen`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
+        super('ismarketopen', `Invalid usage: .ismarketopen`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
