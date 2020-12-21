@@ -8,7 +8,7 @@ export default class StimmyCommand extends Command {
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
-        message.channel.send('no');
+        message.channel.send('yes');
         return CommandReturn.EXIT;
     }
 
