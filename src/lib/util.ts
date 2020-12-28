@@ -5,7 +5,12 @@ import MA from 'moving-average';
 
 import { Units } from 'parse-duration';
 import { MACD, RSI } from 'trading-signals';
-import { PriceList, RangeGranularity, StonkQuote } from './stonk';
+import {
+    PriceList,
+    RangeGranularity,
+    StonkQuote
+} from './stonk';
+
 import {
     Client,
     EmbedFieldData,
@@ -179,6 +184,26 @@ export const computeRSI = (res: StonkQuote) => {
     return computation.getResult().toFixed(2);
 }
 
+/**
+ * Generates a change string for stock prices.
+ * 
+ * @param input the input value
+ * @param seperator the seperator to place between the prepended +/- and the value
+ * @param digits the amount of digits to fix the resulting value to
+ * @param prependPlus whether or not to prepend a plus sign if the change is positive
+ */
+export const getChangeString = (input: string | number, seperator: string, digits: number, prependPlus?: boolean) => {
+    return (Number(input) > 0 
+        ? prependPlus 
+            ? '+' 
+            : '' 
+        : '-') 
+        + seperator 
+        + Math
+            .abs(Number(input))
+            .toFixed(digits);
+}
+
 export const getEmoteForIndicator = (indicator: number | string, upThreshold: number, downThreshold: number, stagnent: number) => {
     if (indicator === stagnent) return ':arrow_right:';
     if (indicator > upThreshold) return ':arrow_upper_right:';
@@ -188,11 +213,7 @@ export const getEmoteForIndicator = (indicator: number | string, upThreshold: nu
 }
 
 export const getEmoteForEPS = (eps: number | string) => {
-    if (eps === 0) return ':arrow_right:';
-    if (eps > 0) return ':arrow_up:';
-    if (eps < 0) return ':arrow_down:';
-
-    return ':twisted_rightwards_arrows:';
+    return getEmoteForIndicator(eps, 0, 0, 0);
 }
 
 export const getEmoteForStatus = (state: string) => {
@@ -244,6 +265,12 @@ export const getReactionPhrase = (msg: Message) => {
     };
 }
 
+/**
+ * Creates a joined string from a list of objects.
+ * 
+ * @param list the list of objects
+ * @param delimiter the delimiter
+ */
 export const getJoinedList = (list: any[], delimiter: string) => {
     let str = '';
     list.forEach((range, i) => {
@@ -253,6 +280,14 @@ export const getJoinedList = (list: any[], delimiter: string) => {
     return str;
 }
 
+/**
+ * Computes the moving average, moving variance,
+ * moving deviation, and general forecast for
+ * a given stock price dataset.
+ * 
+ * @param range the time period for the provided data
+ * @param prices the list of prices for the given time period
+ */
 export const getMovingAverage = (range: RangeGranularity, prices: PriceList[]) => {
     let duration = getDurationWithUnit(range, 'millisecond');
     let ma = MA(duration);
@@ -266,6 +301,12 @@ export const getMovingAverage = (range: RangeGranularity, prices: PriceList[]) =
     };
 }
 
+/**
+ * Shorthand for generating a simple message embed.
+ * 
+ * @param title the title of the embed
+ * @param message the description for the embed
+ */
 export const generateSimpleEmbed = (title: string, message: string) => {
     return new MessageEmbed()
         .setTitle(title)
@@ -273,6 +314,13 @@ export const generateSimpleEmbed = (title: string, message: string) => {
         .setDescription(message);
 }
 
+/**
+ * Shorthand for generating a complex message embed.
+ * 
+ * @param title the title of the embed
+ * @param message the description for the embed
+ * @param fields a list of EmbedFieldData for the embed
+ */
 export const generateEmbed = (title: string, message: string, fields: EmbedFieldData[]) => {
     return new MessageEmbed()
         .setTitle(title)
@@ -281,6 +329,12 @@ export const generateEmbed = (title: string, message: string, fields: EmbedField
         .addFields(fields);
 }
 
+/**
+ * Extracts a valid expiration date out of a
+ * user-provided expiration date for a contract.
+ * 
+ * @param input the inputted contract expiry date
+ */
 export const getExpDate = (input: string): Date => {
     // checks if its MM/DD without year
     if (/^\d{1,2}\/\d{1,2}$/.test(input)) {

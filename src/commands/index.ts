@@ -2,6 +2,7 @@ import AlertsCommand from './types/alerts';
 import BigJannieCommand from './types/bigjannie';
 import ContractCommand from './types/contract';
 import CountHerCommand from './types/counther';
+import FuturesCommand from './types/futures';
 import IsMarketOpenCommand from './types/isMarketOpen';
 import OptionsCommand from './types/options';
 import PermissionsCommand from './types/perms';
@@ -18,6 +19,7 @@ export {
     BigJannieCommand,
     ContractCommand,
     CountHerCommand,
+    FuturesCommand,
     IsMarketOpenCommand,
     OptionsCommand,
     PermissionsCommand,

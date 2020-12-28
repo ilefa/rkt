@@ -25,11 +25,16 @@ export default class CountHerManager {
             return false;
         }
 
-
         this.countHers.push(new CountHer(this.client, this, target, channel));
         return true;
     }
 
+    /**
+     * Destroys a lobby after someone fucks it up.
+     * 
+     * @param channel the channel the lobby is based in
+     * @param loser the person who fucked it up
+     */
     async destroyLobby(channel: string, loser?: User) {
         if (!this.isLobby(channel)) {
             return;
@@ -44,6 +49,10 @@ export default class CountHerManager {
         }
     }
 
+    /**
+     * Cleans up a lobby after a game has ended.
+     * @param lobby the counther lobby
+     */
     async cleanLobby(lobby: CountHer) {
         if (!this.isLobby(lobby.channel)) {
             return;
@@ -102,7 +111,6 @@ export default class CountHerManager {
         }
 
         if (!lobby.active) {
-            
             return;
         }
 
@@ -116,13 +124,13 @@ export default class CountHerManager {
      * @param user the user who sent the message
      */
     async generateChannel(message: Message, user: User, target: number): Promise<TextChannel> {
+        let date = Date.now();
         return await message
             .guild
             .channels
-            .create(`counther-${Date
-                .now()
+            .create(`counther-${date
                 .toString()
-                .substring(0, 4)}`, {
+                .substring(date.toString().length - 4)}`, {
                     parent: env.countHerCategory,
                     topic: `CountHer Lobby | Count to ${target}`
                 });

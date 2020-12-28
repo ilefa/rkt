@@ -27,7 +27,8 @@ export default class HelpCommand extends Command {
 
                         + 'we will also never forget all the boomers that shorted pfizer\n'
                         + 'and beaurocrats that decided not to push for EUA on pfizer\n'
-                        + 'and idiots that blocked stimulus and threw the market into chaos\n\n' 
+                        + 'and idiots that blocked stimulus and threw the market into chaos\n'
+                        + '*(fuck pfizer)*\n\n' 
                         
                         + ':rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket:\n\n' 
                         + 'made by <@177167251986841600> & <@268044207854190604>');

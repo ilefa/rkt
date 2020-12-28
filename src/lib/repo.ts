@@ -4,7 +4,8 @@ import {
     DataGranularity,
     RangeGranularity,
     OptionsData,
-    StonkQuote
+    StonkQuote,
+    FuturesQuote
 } from './stonk';
 
 /**
@@ -46,3 +47,13 @@ export const getExpirationDates = async (ticker: string): Promise<number[]> => {
 
     return data.expirationDates;
 }
+
+/**
+ * Attempts to retrieve futures informations for the given tickers.
+ * @param tickers the list of tickers to lookup futures information for
+ */
+export const getFutures = async (tickers: string[]): Promise<FuturesQuote[]> => await axios
+    .get(`https://quote.cnbc.com/quote-html-webservice/quote.htm?partnerId=2&requestMethod=quick&exthrs=1&noform=1&fund=1&output=json&symbols=${tickers.join('|')}`)
+    .then(res => res.data)
+    .then(data => data.QuickQuoteResult.QuickQuote)
+    .catch(console.error);

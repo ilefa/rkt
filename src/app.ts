@@ -11,6 +11,7 @@ import {
     BigJannieCommand,
     ContractCommand,
     CountHerCommand,
+    FuturesCommand,
     IsMarketOpenCommand,
     OptionsCommand,
     PermissionsCommand,
@@ -23,7 +24,11 @@ import {
     StonksCommand
 } from './commands'; 
 
-import { DeleteMessageReactionHandler, OnlyGoesUpReactionHandler } from './reactions';
+import {
+    DeleteMessageReactionHandler,
+    OnlyGoesUpReactionHandler
+} from './reactions';
+
 import { MessageReaction, User } from 'discord.js';
 import { getReactionPhrase } from './lib/util';
 
@@ -37,6 +42,7 @@ commandCenter.registerCommand('alerts', new AlertsCommand());
 commandCenter.registerCommand('bigjannie', new BigJannieCommand());
 commandCenter.registerCommand('contract', new ContractCommand());
 commandCenter.registerCommand('counther', new CountHerCommand(countHerManager));
+commandCenter.registerCommand('futures', new FuturesCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
 commandCenter.registerCommand('options', new OptionsCommand());
 commandCenter.registerCommand('perms', new PermissionsCommand());

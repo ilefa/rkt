@@ -156,3 +156,54 @@ export type OptionsStonkQuote = {
 }
 
 export type OptionsStonkQuoteType = 'EQUITY';
+
+export type FuturesQuote = {
+    symbol: string;
+    code: string;
+    curmktstatus: string;
+    FundamentalData: {
+        yrlodate: string;
+        yrloprice: string;
+        yrhidate: string;
+        yrhiprice: string;
+    }
+    mappedSymbol: {
+        "xsi:nil": string;
+    },
+    source: string;
+    cnbcId: string;
+    high: string;
+    low: string;
+    provider: string;
+    streamable: string;
+    last_time: string;
+    countryCode: string;
+    previous_day_closing: string;
+    altName: string;
+    reg_last_time: Date;
+    last_time_msec: string;
+    altSymbol: string;
+    change_pct: string;
+    providerSymbol: string;
+    assetSubType: string;
+    comments: string;
+    last: string;
+    issue_id: string;
+    cacheServed: boolean;
+    responseTime: string;
+    change: string;
+    timeZone: string;
+    onAirName: string;
+    symbolType: string;
+    assetType: string;
+    volume: string;
+    fullVolume: string;
+    realTime: string;
+    name: string;
+    quoteDesc: any;
+    exchange: string;
+    shortName: string;
+    cachedTime: string;
+    currencyCode: string;
+    open: string;
+}

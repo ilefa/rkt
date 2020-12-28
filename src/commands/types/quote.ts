@@ -112,8 +112,8 @@ export default class QuoteCommand extends Command {
         let macd = computeMACD(res);
         let rsi = computeRSI(res);
         
-        let ma = getMovingAverage(range, prices);
-        console.log(ma);
+        // let ma = getMovingAverage(range, prices);
+        // console.log(ma);
 
         let state = opt.quote.marketState;
         state = state.substring(state.indexOf(state));

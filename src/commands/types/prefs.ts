@@ -31,6 +31,11 @@ export default class PrefsCommand extends Command {
             superPerms += ` • ${asMention(user)}\n`
         })
 
+        let futures = '';
+        env.futures.map(future => {
+            futures += ` • ${emboss(future)}\n`
+        })
+
         let schedules = `${env.alerts ? ':white_check_mark: Enabled' : ':x: Disabled'}\n~~${'-'.repeat(45)}~~\n`;
         env.schedules.map(schedule => {
             schedules += `**${schedule.name} | [${schedule.cron}]**\n${schedule.message}\n\n`
@@ -51,19 +56,19 @@ export default class PrefsCommand extends Command {
 
         let embed = generateEmbed('Stonks Bot Preferences', '', [
             {
+                name: 'Futures Tickers',
+                value: futures,
+                inline: true
+            },
+            {
                 name: 'Verbose Servers',
                 value: verbose,
                 inline: true
             },
             {
-                name: 'SuperPerms Clients',
-                value: superPerms,
-                inline: true
-            },
-            {
                 name: 'CountHer Settings',
                 value: ` • Max Conseq. Lobbies: ${bold(env.countHerMaxLobbies)}\n • Reports Channel: ${mentionChannel(env.countHerFailChannel)}`,
-                inline: false,
+                inline: true,
             },
             {
                 name: `Alerts`,

@@ -19,7 +19,7 @@ export default class PermissionsCommand extends Command {
         let isAdmin = message.guild.member(user).hasPermission(Permissions.FLAGS.ADMINISTRATOR);
         let permString = 'member permissions';
         if (isSuperPerms && isAdmin) {
-            permString = 'both super and administrator permissions';
+            permString = 'both super and admin permissions';
         }
 
         if (isSuperPerms && !isAdmin) {
@@ -27,7 +27,7 @@ export default class PermissionsCommand extends Command {
         }
 
         if (!isSuperPerms && isAdmin) {
-            permString = 'administrator permissions';
+            permString = 'admin permissions';
         }
 
         let embed = new MessageEmbed()
