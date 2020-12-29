@@ -21,7 +21,9 @@ import {
     ReactCommand,
     SayCommand,
     StimmyCommand,
-    StonksCommand
+    StonksCommand,
+    XpBoardCommand,
+    XpRankCommand
 } from './commands'; 
 
 import {
@@ -53,6 +55,8 @@ commandCenter.registerCommand('react', new ReactCommand());
 commandCenter.registerCommand('say', new SayCommand());
 commandCenter.registerCommand('stimmy', new StimmyCommand());
 commandCenter.registerCommand('stonks', new StonksCommand());
+commandCenter.registerCommand('xpboard', new XpBoardCommand());
+commandCenter.registerCommand('xprank', new XpRankCommand());
 
 reactionCenter.registerHandler('delete', new DeleteMessageReactionHandler());
 reactionCenter.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());

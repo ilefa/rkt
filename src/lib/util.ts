@@ -21,6 +21,7 @@ import {
     PermissionFlags,
     User
 } from 'discord.js';
+import { XpBoardUser } from './xp';
 
 export const validRanges = ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max'];
 export const validIntervals = ['1m', '5m', '10m', '15m', '30m', '1h', '2h', '4h', 'D', 'W', 'M', 'Q', 'Y'];
@@ -242,6 +243,75 @@ export const getEmoteForPermissions = (superPerms: boolean, admin: boolean) => {
     return ':runner:';
 }
 
+export const getEmoteForXpPlacement = (placement: number) => {
+    if (placement == 1) return ':first_place:';
+    if (placement == 2) return ':second_place:';
+    if (placement == 3) return ':third_place:';
+
+    return `:${toWords(placement)}:`;
+}
+
+export const getUpwardXpDifference = (rankings: XpBoardUser[], placement: number) => {
+    return rankings[placement - 1].xp - rankings[placement].xp;
+}
+
+export const getDownwardXpDifference = (rankings: XpBoardUser[], placement: number) => {
+    return rankings[placement].xp - rankings[placement + 1].xp;
+}
+
+// https://gist.github.com/ForbesLindesay/5467742
+export const toWords = (num: number) => {
+    let ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+                'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
+                'seventeen', 'eighteen', 'nineteen'];
+
+    let tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty',
+                'ninety'];
+  
+    let numString = num.toString();
+    if (num < 0) return null;
+    if (num === 0) return 'zero';
+  
+    //the case of 1 - 20
+    if (num < 20) {
+        return ones[num];
+    }
+  
+    if (numString.length === 2) {
+        return tens[numString[0]] + ' ' + ones[numString[1]];
+    }
+  
+    //100 and more
+    if (numString.length == 3) {
+      if (numString[1] === '0' && numString[2] === '0')
+        return ones[numString[0]] + ' hundred';
+      else
+        return ones[numString[0]] + ' hundred and ' + toWords(+(numString[1] + numString[2]));
+    }
+  
+    if (numString.length === 4) {
+      var end = +(numString[1] + numString[2] + numString[3]);
+      if (end === 0) return ones[numString[0]] + ' thousand';
+      if (end < 100) return ones[numString[0]] + ' thousand and ' + toWords(end);
+      return ones[numString[0]] + ' thousand ' + toWords(end);
+    }
+}
+
+export const ordinalSuffix = (i: number) => {
+    let j = i % 10,
+        k = i % 100;
+    if (j == 1 && k != 11) {
+        return i + "st";
+    }
+    if (j == 2 && k != 12) {
+        return i + "nd";
+    }
+    if (j == 3 && k != 13) {
+        return i + "rd";
+    }
+    return i + "th";
+}
+
 export const toggleReactions = () => {
     env.react = !env.react;
     return env.react;
@@ -315,6 +385,18 @@ export const generateSimpleEmbed = (title: string, message: string) => {
 }
 
 /**
+ * Shorthand for generating a simple message embed.
+ * 
+ * @param title the title of the embed
+ * @param message the description for the embed
+ * @param image the thumbnail for the embed
+ */
+export const generateSimpleEmbedWithImage = (title: string, message: string, image: string) => {
+    return generateSimpleEmbed(title, message)
+        .setThumbnail(image);
+}
+
+/**
  * Shorthand for generating a complex message embed.
  * 
  * @param title the title of the embed
@@ -322,10 +404,7 @@ export const generateSimpleEmbed = (title: string, message: string) => {
  * @param fields a list of EmbedFieldData for the embed
  */
 export const generateEmbed = (title: string, message: string, fields: EmbedFieldData[]) => {
-    return new MessageEmbed()
-        .setTitle(title)
-        .setColor(0x27AE60)
-        .setDescription(message)
+    return generateSimpleEmbed(title, message)
         .addFields(fields);
 }
 

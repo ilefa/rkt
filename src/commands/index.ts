@@ -13,6 +13,8 @@ import ReactCommand from './types/react';
 import SayCommand from './types/say';
 import StimmyCommand from './types/stimmy';
 import StonksCommand from './types/stonks';
+import XpBoardCommand from './types/xpboard';
+import XpRankCommand from './types/xprank';
 
 export {
     AlertsCommand,
@@ -29,5 +31,7 @@ export {
     ReactCommand,
     SayCommand,
     StimmyCommand,
-    StonksCommand
+    StonksCommand,
+    XpBoardCommand,
+    XpRankCommand
 };
