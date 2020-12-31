@@ -1,11 +1,11 @@
 import moment from 'moment';
-import env from '../../../env.json';
+import env from '../../../../env.json';
 
-import { getFutures } from '../../lib/repo';
-import { FuturesQuote } from '../../lib/stonk';
-import { Command, CommandReturn } from '../command';
+import { getFutures } from '../../../lib/repo';
+import { FuturesQuote } from '../../../lib/stonk';
+import { Command, CommandReturn } from '../../command';
 import { EmbedFieldData, Message, Permissions, User } from 'discord.js';
-import { bold, emboss, generateEmbed, getChangeString, getEmoteForIndicator } from '../../lib/util';
+import { bold, emboss, generateEmbed, getChangeString, getEmoteForIndicator } from '../../../lib/util';
 
 export default class FuturesCommand extends Command {
 

@@ -21,7 +21,7 @@ import {
     PermissionFlags,
     User
 } from 'discord.js';
-import { XpBoardUser } from './xp';
+import { XpBoardUser } from './integration/xp/struct';
 
 export const validRanges = ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max'];
 export const validIntervals = ['1m', '5m', '10m', '15m', '30m', '1h', '2h', '4h', 'D', 'W', 'M', 'Q', 'Y'];

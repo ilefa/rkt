@@ -5,6 +5,7 @@ import Announcer from './lib/announcer';
 import CommandManager from './commands/manager';
 import CountHerManager from './lib/counther/manager';
 import ReactionManager from './reactions/manager';
+import XpTracker from './lib/integration/xp/tracker';
 
 import {
     AlertsCommand,
@@ -23,7 +24,8 @@ import {
     StimmyCommand,
     StonksCommand,
     XpBoardCommand,
-    XpRankCommand
+    XpRankCommand,
+    XpTrackCommand
 } from './commands'; 
 
 import {
@@ -39,6 +41,7 @@ const announcer = new Announcer(client);
 const commandCenter = new CommandManager(client);
 const countHerManager = new CountHerManager(client);
 const reactionCenter = new ReactionManager();
+const xpTracker = new XpTracker();
 
 commandCenter.registerCommand('alerts', new AlertsCommand());
 commandCenter.registerCommand('bigjannie', new BigJannieCommand());
@@ -57,11 +60,13 @@ commandCenter.registerCommand('stimmy', new StimmyCommand());
 commandCenter.registerCommand('stonks', new StonksCommand());
 commandCenter.registerCommand('xpboard', new XpBoardCommand());
 commandCenter.registerCommand('xprank', new XpRankCommand());
+commandCenter.registerCommand('xptrack', new XpTrackCommand());
 
 reactionCenter.registerHandler('delete', new DeleteMessageReactionHandler());
 reactionCenter.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());
 
 announcer.init();
+xpTracker.init();
 
 client.on('ready', () => {
     console.log('Successfully connected to Discord.');

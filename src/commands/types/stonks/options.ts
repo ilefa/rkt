@@ -1,8 +1,8 @@
 import moment from 'moment';
 
-import { OptionsContract } from '../../lib/stonk';
-import { Command, CommandReturn } from '../command';
-import { getExpirationDates, getOptions } from '../../lib/repo';
+import { OptionsContract } from '../../../lib/stonk';
+import { Command, CommandReturn } from '../../command';
+import { getExpirationDates, getOptions } from '../../../lib/repo';
 import { EmbedFieldData, Message, MessageEmbed, Permissions, User } from 'discord.js';
 
 import {
@@ -13,7 +13,7 @@ import {
     getClosestDate,
     getExpDate,
     numberEnding
-} from '../../lib/util';
+} from '../../../lib/util';
 
 export default class OptionsCommand extends Command {
 

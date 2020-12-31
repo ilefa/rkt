@@ -1,8 +1,8 @@
-import { DataGranularity, PriceList, RangeGranularity } from '../../lib/stonk';
+import { DataGranularity, PriceList, RangeGranularity } from '../../../lib/stonk';
 import { User, Message, MessageEmbed, Permissions } from 'discord.js';
-import { Command, CommandReturn } from '../command';
-import { getOptions, quote } from '../../lib/repo';
-import { genPriceChart } from '../../lib/chart';
+import { Command, CommandReturn } from '../../command';
+import { getOptions, quote } from '../../../lib/repo';
+import { genPriceChart } from '../../../lib/chart';
 
 import {
     bold,
@@ -19,7 +19,7 @@ import {
     timeDiff,
     validRanges,
     validIntervals,
-} from '../../lib/util';
+} from '../../../lib/util';
 
 export default class QuoteCommand extends Command {
     
@@ -101,7 +101,7 @@ export default class QuoteCommand extends Command {
             })
         });
 
-        let chart = await genPriceChart(prices, volumes, prices[0].y)
+        let chart = await genPriceChart(prices, prices[0].y)
             .setWidth(1250)
             .setHeight(800)
             .setBackgroundColor('rgba(0, 0, 0, 0)')

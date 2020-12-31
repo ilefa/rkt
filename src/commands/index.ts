@@ -1,20 +1,21 @@
 import AlertsCommand from './types/alerts';
 import BigJannieCommand from './types/bigjannie';
-import ContractCommand from './types/contract';
+import ContractCommand from './types/stonks/contract';
 import CountHerCommand from './types/counther';
-import FuturesCommand from './types/futures';
+import FuturesCommand from './types/stonks/futures';
 import IsMarketOpenCommand from './types/isMarketOpen';
-import OptionsCommand from './types/options';
+import OptionsCommand from './types/stonks/options';
 import PermissionsCommand from './types/perms';
-import QuoteCommand from './types/quote';
+import QuoteCommand from './types/stonks/quote';
 import PrefsCommand from './types/prefs';
 import PurgeCommand from './types/purge';
 import ReactCommand from './types/react';
 import SayCommand from './types/say';
 import StimmyCommand from './types/stimmy';
-import StonksCommand from './types/stonks';
-import XpBoardCommand from './types/xpboard';
-import XpRankCommand from './types/xprank';
+import StonksCommand from './types/stonks/stonks';
+import XpBoardCommand from './types/xp/xpboard';
+import XpRankCommand from './types/xp/xprank';
+import XpTrackCommand from './types/xp/xptrack';
 
 export {
     AlertsCommand,
@@ -33,5 +34,6 @@ export {
     StimmyCommand,
     StonksCommand,
     XpBoardCommand,
-    XpRankCommand
+    XpRankCommand,
+    XpTrackCommand
 };

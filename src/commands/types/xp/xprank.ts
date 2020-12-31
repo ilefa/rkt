@@ -1,7 +1,6 @@
-import axios from 'axios';
-
-import { XpBoardUser } from '../../lib/xp';
-import { Command, CommandReturn } from '../command';
+import { XpBoardUser } from '../../../lib/integration/xp/struct';
+import { getLeaderboard } from '../../../lib/integration/xp/api';
+import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
 import {
     asMention,
@@ -11,7 +10,7 @@ import {
     getDownwardXpDifference,
     getUpwardXpDifference,
     ordinalSuffix
-} from '../../lib/util';
+} from '../../../lib/util';
 
 export default class XpRankCommand extends Command {
 
@@ -24,11 +23,7 @@ export default class XpRankCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        let res: XpBoardUser[] = await axios.get(`https://mee6.xyz/api/plugins/levels/leaderboard/${message.guild.id}`)
-            .then(res => res.data)
-            .then(data => data.players)
-            .catch(() => null);
-
+        let res: XpBoardUser[] = await getLeaderboard(message.guild.id);
         if (!res) {
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, 'Something went wrong while retrieving data from the web.'));
             return CommandReturn.EXIT;
@@ -52,7 +47,8 @@ export default class XpRankCommand extends Command {
                         ? ':upside_down: You are at the bottom of the leaderboard.' 
                         : `:arrow_up: You are ${bold(getDownwardXpDifference(res, idx).toLocaleString() + ' XP')} ahead of ${asMention(res[idx + 1].id)}`}`;
 
-        message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, str));
+        message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, str)
+            .setThumbnail(user.avatarURL()));
         return CommandReturn.EXIT;
     }
 
