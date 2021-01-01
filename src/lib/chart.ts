@@ -1,8 +1,8 @@
 import ChartJsImage from 'chartjs-to-image';
 
-import { TrackingType, XpComparePayload, XpRecord } from './xp/struct';
 import { PriceList } from './stonk';
 import { COMPARISON_COLORS } from './util';
+import { TrackingType, XpComparePayload, XpRecord } from './module/modules/xp/struct';
 
 export function genPriceChart(prices: PriceList[], open?: number): ChartJsImage {
     const chartColor = (open) && open > prices[prices.length - 1].y 
@@ -81,6 +81,10 @@ export function genXpChart(records: XpRecord[], type: TrackingType): ChartJsImag
         ? {
             label: 'Experience',
             data: records.map(record => {
+                if (!record[0]) {
+                    return;
+                }
+
                 let time = new Date(record[0].time);
                 time.setHours(time.getHours() - 5);
 
@@ -96,6 +100,10 @@ export function genXpChart(records: XpRecord[], type: TrackingType): ChartJsImag
             ? {
                 label: 'Messages',
                 data: records.map(record => {
+                    if (!record[0]) {
+                        return;
+                    }
+
                     let time = new Date(record[0].time);
                     time.setHours(time.getHours() - 5);
 
@@ -111,6 +119,10 @@ export function genXpChart(records: XpRecord[], type: TrackingType): ChartJsImag
                 ? {
                     label: 'Position',
                     data: records.map(record => {
+                        if (!record[0]) {
+                            return;
+                        }
+
                         let time = new Date(record[0].time);
                         time.setHours(time.getHours() - 5);
 
@@ -175,7 +187,11 @@ export function genXpCompareChart(records: XpComparePayload[], type: TrackingTyp
         ? records.map((record, i) => {
             return {
                 label: 'Experience',
-                data: record.data.map(record => {
+                data: record.data.filter(record => record[0] && record[0].time && record[0].experience).map(record => {
+                    if (!record[0]) {
+                        return;
+                    }
+
                     let time = new Date(record[0].time);
                     time.setHours(time.getHours() - 5);
 
@@ -192,13 +208,17 @@ export function genXpCompareChart(records: XpComparePayload[], type: TrackingTyp
             ? records.map((record, i) => {
                 return {
                     label: 'Messages',
-                    data: record.data.map(record => {
-                        let time = new Date(record[0].time);
+                    data: record.data.filter(record => record[0] && record[0].time && record[0].messages).map(record => {
+                        if (!record[0]) {
+                            return;
+                        }
+
+                        let time = new Date(record[0]?.time);
                         time.setHours(time.getHours() - 5);
     
                         return {
                             x: new Date(time.getTime()),
-                            y: record[0].message
+                            y: record[0].messages
                         }
                     }),
                     fill: false,
@@ -209,7 +229,11 @@ export function genXpCompareChart(records: XpComparePayload[], type: TrackingTyp
                 ? records.map((record, i) => {
                     return {
                         label: 'Positions',
-                        data: record.data.map(record => {
+                        data: record.data.filter(record => record[0] && record[0].time && record[0].position).map(record => {
+                            if (!record[0]) {
+                                return;
+                            }
+
                             let time = new Date(record[0].time);
                             time.setHours(time.getHours() - 5);
         

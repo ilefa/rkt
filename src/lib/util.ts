@@ -5,7 +5,7 @@ import MA from 'moving-average';
 
 import { Units } from 'parse-duration';
 import { MACD, RSI } from 'trading-signals';
-import { XpBoardUser } from './xp/struct';
+import { XpBoardUser } from './module/modules/xp/struct';
 import {
     PriceList,
     RangeGranularity,

@@ -1,11 +1,13 @@
 import discord from 'discord.js';
 import env from '../env.json';
 
-import Announcer from './lib/announcer';
-import CommandManager from './commands/manager';
-import CountHerManager from './lib/counther/manager';
-import ReactionManager from './reactions/manager';
-import XpTracker from './lib/xp/tracker';
+import Announcer from './lib/module/modules/announcer';
+import ModuleManager from './lib/module/manager';
+import CommandManager from './lib/module/modules/commands/manager';
+import CountHerManager from './lib/module/modules/counther/manager';
+import EventManager from './lib/module/modules/events';
+import ReactionManager from './lib/module/modules/reactions/manager';
+import XpTracker from './lib/module/modules/xp/tracker';
 
 import * as Logger from './lib/logger';
 
@@ -23,6 +25,7 @@ import {
     QuoteCommand,
     ReactCommand,
     SayCommand,
+    StackCommand,
     StimmyCommand,
     StonksCommand,
     XpBoardCommand,
@@ -30,23 +33,20 @@ import {
     XpRankCommand,
     XpTopCommand,
     XpTrackCommand
-} from './commands'; 
+} from './lib/module/modules/commands'; 
 
 import {
     DeleteMessageReactionHandler,
     OnlyGoesUpReactionHandler
-} from './reactions';
+} from './lib/module/modules/reactions';
 
-import { MessageReaction, User } from 'discord.js';
-import { getReactionPhrase } from './lib/util';
 import { printStartup } from './lib/startup';
 
 const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
-const announcer = new Announcer(client);
+const moduleManager = new ModuleManager(client);
 const commandCenter = new CommandManager(client);
 const countHerManager = new CountHerManager(client);
 const reactionCenter = new ReactionManager();
-const xpTracker = new XpTracker();
 
 commandCenter.registerCommand('alerts', new AlertsCommand());
 commandCenter.registerCommand('bigjannie', new BigJannieCommand());
@@ -61,6 +61,7 @@ commandCenter.registerCommand('prefs', new PrefsCommand());
 commandCenter.registerCommand('purge', new PurgeCommand());
 commandCenter.registerCommand('react', new ReactCommand());
 commandCenter.registerCommand('say', new SayCommand());
+commandCenter.registerCommand('stack', new StackCommand());
 commandCenter.registerCommand('stimmy', new StimmyCommand());
 commandCenter.registerCommand('stonks', new StonksCommand());
 commandCenter.registerCommand('xpboard', new XpBoardCommand());
@@ -74,10 +75,13 @@ reactionCenter.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());
 
 printStartup();
 
-announcer.init();
-xpTracker.init();
-commandCenter.postInit();
-reactionCenter.postInit();
+moduleManager.registerModule(commandCenter);
+moduleManager.registerModule(countHerManager);
+moduleManager.registerModule(reactionCenter);
+moduleManager.registerModule(new Announcer(client));
+moduleManager.registerModule(new EventManager(commandCenter, countHerManager, reactionCenter));
+moduleManager.registerModule(new XpTracker());
+moduleManager.init();
 
 client.on('ready', () => {
     Logger.info('Stonks', 'Successfully connected to Discord.');
@@ -88,38 +92,6 @@ client.on('ready', () => {
             name: 'buying high, selling low',
         }
     });
-});
-
-client.on('message', async message => {
-    if (message.author.bot) {
-        return;
-    }
-    
-    if (env.react) {
-        let phrase = getReactionPhrase(message);
-        if (phrase) {
-            await message.react(client.emojis.resolveID(phrase.response));
-        }
-    }
-
-    if (countHerManager.isLobby(message.channel.id)) {
-        await countHerManager.handleInput(message);
-    }
-
-    if (!message.content.startsWith(env.prefix)) {
-        return;
-    }
-
-    commandCenter.handle(message.author, message);
-});
-
-client.on('messageReactionAdd', async (reaction: MessageReaction, user: User) => {
-    if (user.bot) return;
-    if (reaction.partial) {
-        await reaction.fetch();
-    }
-
-    reactionCenter.handle(reaction, user, reaction.message.author.bot);
 });
 
 client.login(env.token);
