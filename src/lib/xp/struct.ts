@@ -28,6 +28,21 @@ export type XpPayload = {
     data: XpRecord[];
 }
 
+export type XpMoverVariance = {
+    client: string;
+    marker: number;
+    period: number;
+    exp: number;
+    level: number;
+    messages: number;
+    position: number;
+}
+
+export type XpComparePayload = {
+    target: string;
+    data: XpRecord[];
+}
+
 export type GraphPayload = {
     x: number;
     y: number;

@@ -14,8 +14,8 @@ export default class AlertsCommand extends Command {
         }
 
         let state = toggleAlerts();
-        let embed = generateSimpleEmbed('Announcer Preferences', `${bold('Alerts')} are ${state ? 'now' : 'no longer'} enabled.`);
-        message.reply(embed);
+        message.reply(generateSimpleEmbed('Announcer Preferences', `${bold('Alerts')} are ${state ? 'now' : 'no longer'} enabled.`));
+        
         return CommandReturn.EXIT;
     }
 

@@ -1,5 +1,5 @@
 import { Message, Permissions, User } from 'discord.js';
-import { Command, CommandReturn } from '../command';
+import { Command, CommandReturn } from '../../command';
 
 export default class BigJannieCommand extends Command {
 

@@ -1,5 +1,5 @@
-import { XpBoardUser } from '../../../lib/integration/xp/struct';
-import { getLeaderboard } from '../../../lib/integration/xp/api';
+import { XpBoardUser } from '../../../lib/xp/struct';
+import { getLeaderboard } from '../../../lib/xp/api';
 import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
 import {

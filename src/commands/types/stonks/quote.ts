@@ -27,7 +27,9 @@ export default class QuoteCommand extends Command {
         super('quote', `Invalid usage: ${emboss('.quote <ticker> <[range] [interval]>')}`, null, [
             {
                 name: 'Args',
-                value: `${bold('__ticker__')}: the ticker to retrieve data for\n${bold('__range__')}: the time period for the results\n${bold('__interval__')}: the granularity of those results`,
+                value: `${bold('__ticker__')}: the ticker to retrieve data for\n` 
+                     + `${bold('__range__')}: the time period for the results\n` 
+                     + `${bold('__interval__')}: the granularity of those results`,
                 inline: true
             },
             {

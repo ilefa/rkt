@@ -1,4 +1,4 @@
-import { Command, CommandReturn } from '../command';
+import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
 
 export default class IsMarketOpenCommand extends Command {

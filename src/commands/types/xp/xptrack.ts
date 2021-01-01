@@ -2,12 +2,13 @@ import moment from 'moment';
 
 import { genXpChart } from '../../../lib/chart';
 import { Command, CommandReturn } from '../../command';
-import { Client, Message, MessageEmbed, Permissions, User } from 'discord.js';
-import { TrackingType, XpRecord } from '../../../lib/integration/xp/struct';
-import { collectEntries, getNameForType } from '../../../lib/integration/xp/tracker';
+import { Message, MessageEmbed, Permissions, User } from 'discord.js';
+import { TrackingType, XpRecord } from '../../../lib/xp/struct';
+import { collectEntries, getNameForType } from '../../../lib/xp/tracker';
 import {
     asMention,
     bold,
+    DAY_MILLIS,
     emboss,
     generateEmbed,
     generateSimpleEmbed,
@@ -17,10 +18,30 @@ import {
     getLatestTimeValue,
 } from '../../../lib/util';
 
+const snowflakeRegex = /^\d{18,}$/;
+
 export default class XpTrackCommand extends Command {
 
     constructor() {
-        super('xptrack', `Invalid usage: ${emboss('.xptrack <@member|snowflakeId> <xp|messages|position> [time:diff]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('xptrack', `Invalid usage: ${emboss('.xptrack <target> <type> [range]')}`, null, [
+            {
+                name: 'Args',
+                value: `${bold('__target__')}: a mentioned member or a member's snowflake id\n` 
+                     + `${bold('__type__')}: the tracking type of the results to fetch\n` 
+                     + `${bold('__range__')}: the relevent time period for these results`,
+                inline: false
+            },
+            {
+                name: 'Valid Types',
+                value: emboss('xp, messages, position'),
+                inline: false
+            },
+            {
+                name: 'Valid Range Specification',
+                value: emboss('[#](s|m|d|h|mo|y)'),
+                inline: false
+            }
+        ], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -28,10 +49,10 @@ export default class XpTrackCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        if (!args[0].match(/^\d{18,}$/) && message.mentions.members.size != 1) {
+        if (!args[0].match(snowflakeRegex) && message.mentions.members.size != 1) {
             message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, `Missing target parameter.`, [
                 {
-                    name: 'Valid Args',
+                    name: 'Valid Target',
                     value: `Please ${emboss('@mention')} or provide a ${emboss('#<snowflakeId>')} for exactly one member.`,
                     inline: true
                 }
@@ -53,7 +74,7 @@ export default class XpTrackCommand extends Command {
         }
 
         let type = args[1] as TrackingType;
-        let target = args[0].match(/^\d{18,}$/)
+        let target = args[0].match(snowflakeRegex)
             ? await message.client.users.fetch(args[0]) 
             : message.mentions.members.first();
 
@@ -62,14 +83,14 @@ export default class XpTrackCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        let range = 86400000; // 1d default
+        let range = DAY_MILLIS;
         if (args[2]) {
             let customRange = getDurationWithUnit(args[1], 'millisecond');
             if (!customRange) {
                 message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, `Invalid time specification: ${emboss(args[2])}.`, [
                     {
                         name: 'Valid Time Specification',
-                        value: emboss(`[#](m|d|h|mo|y)`),
+                        value: emboss(`[#](s|m|d|h|mo|y)`),
                         inline: true
                     }
                 ]))

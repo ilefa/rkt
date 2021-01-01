@@ -5,7 +5,9 @@ import Announcer from './lib/announcer';
 import CommandManager from './commands/manager';
 import CountHerManager from './lib/counther/manager';
 import ReactionManager from './reactions/manager';
-import XpTracker from './lib/integration/xp/tracker';
+import XpTracker from './lib/xp/tracker';
+
+import * as Logger from './lib/logger';
 
 import {
     AlertsCommand,
@@ -24,7 +26,9 @@ import {
     StimmyCommand,
     StonksCommand,
     XpBoardCommand,
+    XpCompareCommand,
     XpRankCommand,
+    XpTopCommand,
     XpTrackCommand
 } from './commands'; 
 
@@ -35,6 +39,7 @@ import {
 
 import { MessageReaction, User } from 'discord.js';
 import { getReactionPhrase } from './lib/util';
+import { printStartup } from './lib/startup';
 
 const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const announcer = new Announcer(client);
@@ -59,24 +64,30 @@ commandCenter.registerCommand('say', new SayCommand());
 commandCenter.registerCommand('stimmy', new StimmyCommand());
 commandCenter.registerCommand('stonks', new StonksCommand());
 commandCenter.registerCommand('xpboard', new XpBoardCommand());
+commandCenter.registerCommand('xpcompare', new XpCompareCommand());
 commandCenter.registerCommand('xprank', new XpRankCommand());
+commandCenter.registerCommand('xptop', new XpTopCommand());
 commandCenter.registerCommand('xptrack', new XpTrackCommand());
 
 reactionCenter.registerHandler('delete', new DeleteMessageReactionHandler());
 reactionCenter.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());
 
+printStartup();
+
 announcer.init();
 xpTracker.init();
+commandCenter.postInit();
+reactionCenter.postInit();
 
 client.on('ready', () => {
-    console.log('Successfully connected to Discord.');
+    Logger.info('Stonks', 'Successfully connected to Discord.');
     client.user.setPresence({
         status: 'online',
         activity: {
             type: 'COMPETING',
             name: 'buying high, selling low',
         }
-    })
+    });
 });
 
 client.on('message', async message => {

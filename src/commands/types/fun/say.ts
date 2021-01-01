@@ -1,6 +1,6 @@
 import { Message, User } from 'discord.js';
-import { CUSTOM_PERMS, emboss } from '../../lib/util';
-import { Command, CommandReturn } from '../command';
+import { CUSTOM_PERMS, emboss } from '../../../lib/util';
+import { Command, CommandReturn } from '../../command';
 
 export default class SayCommand extends Command {
 

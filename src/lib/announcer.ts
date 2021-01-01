@@ -1,7 +1,10 @@
 import env from '../../env.json';
 import scheduler from 'node-schedule';
 
+import * as Logger from './logger';
+
 import { Client, MessageEmbed } from 'discord.js';
+import { timeDiff } from './util';
 
 export default class Announcer {
 
@@ -12,6 +15,7 @@ export default class Announcer {
     }   
 
     init() {
+        let start = Date.now();
         env.schedules.forEach(schedule => scheduler.scheduleJob(schedule.cron, async () => {
             if (!env.alerts) {
                 return;
@@ -31,6 +35,8 @@ export default class Announcer {
             channel.send(`<@&${env.alertsRoleId}>`)
             channel.send(message);
         }));
+
+        Logger.info('Announcer', `Enabled in ${timeDiff(start)}ms.`);
     }
 
 }

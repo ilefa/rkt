@@ -1,5 +1,11 @@
 import CountHerManager from './manager';
-import { Client, Message, TextChannel, User } from 'discord.js';
+
+import {
+    Client,
+    Message,
+    TextChannel,
+    User
+} from 'discord.js';
 
 export class CountHer {
 

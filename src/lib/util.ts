@@ -5,6 +5,7 @@ import MA from 'moving-average';
 
 import { Units } from 'parse-duration';
 import { MACD, RSI } from 'trading-signals';
+import { XpBoardUser } from './xp/struct';
 import {
     PriceList,
     RangeGranularity,
@@ -21,7 +22,29 @@ import {
     PermissionFlags,
     User
 } from 'discord.js';
-import { XpBoardUser } from './integration/xp/struct';
+
+export const DAY_MILLIS = 86400000;
+export const COMPARISON_COLORS = [
+    "rgba(231, 76, 60,1.0)",
+    "rgba(243, 156, 18,1.0)",
+    "rgba(241, 196, 15,1.0)",
+    "rgba(46, 204, 113,1.0)",
+    "rgba(22, 160, 133,1.0)",
+    "rgba(52, 152, 219,1.0)",
+    "rgba(41, 128, 185,1.0)",
+    "rgba(155, 89, 182,1.0)",
+    "rgba(142, 68, 173,1.0)",
+    "rgba(149, 165, 166,1.0)"
+];
+
+export const COMPARISON_LEGEND = [
+    ":red_circle:",
+    ":orange_circle:",
+    ":yellow_circle:",
+    ":green_circle:",
+    ":blue_circle:",
+    ":purple_circle:"
+]
 
 export const validRanges = ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max'];
 export const validIntervals = ['1m', '5m', '10m', '15m', '30m', '1h', '2h', '4h', 'D', 'W', 'M', 'Q', 'Y'];
@@ -247,6 +270,7 @@ export const getEmoteForXpPlacement = (placement: number) => {
     if (placement == 1) return ':first_place:';
     if (placement == 2) return ':second_place:';
     if (placement == 3) return ':third_place:';
+    if (placement == 10) return ':keycap_ten:';
 
     return `:${toWords(placement)}:`;
 }

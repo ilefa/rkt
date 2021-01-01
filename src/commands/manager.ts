@@ -1,8 +1,10 @@
 import env from '../../env.json';
 
+import * as Logger from '../lib/logger';
+
 import { User, Message, MessageEmbed, Client } from 'discord.js';
 import { Command, CommandEntry, CommandReturn } from './command';
-import { generateEmbed, generateSimpleEmbed, italic } from '../lib/util';
+import { codeBlock, generateEmbed, generateSimpleEmbed, italic, numberEnding } from '../lib/util';
 
 export default class CommandManager {
     
@@ -23,6 +25,10 @@ export default class CommandManager {
     registerCommand(name: string, command: Command) {
         command.manager = this;
         this.commands.push(new CommandEntry(name, command));
+    }
+
+    postInit() {
+        Logger.info('Commands', `Registered ${this.commands.length} command${numberEnding(this.commands.length)}.`)
     }
 
     /**
@@ -47,7 +53,13 @@ export default class CommandManager {
         for (const cmd of this.commands) {
             if (cmd.name.toLowerCase() === name) {
                 try {
-                    if (!message.guild.member(user).hasPermission(cmd.command.permission) && !env.superPerms.some(id => user.id === id)) {
+                    if (!message
+                            .guild
+                            .member(user)
+                            .hasPermission(cmd.command.permission) 
+                            && !env
+                                .superPerms
+                                .some(id => user.id === id)) {
                         message.reply(generateSimpleEmbed('Whoops', `You don't have permission to do this.`));
                         break;
                     }
@@ -70,14 +82,31 @@ export default class CommandManager {
                     message.reply(helpEmbed);
                     break;
                 } catch (e) {
-                    if (message.guild.id in env.reportErrors) {
-                        message.reply(generateEmbed('Huh? That wasn\'t supposed to happen..', `Something went wrong while processing your command. ${italic('(check the console for more info)')}`, [
+                    if (env.reportErrors.includes(message.guild.id)) {
+                        message.reply(generateEmbed('Huh? That wasn\'t supposed to happen..', `Something went wrong while processing your command.`, [
+                            {
+                                name: 'Command',
+                                value: codeBlock('', name),
+                                inline: true
+                            },
+                            {
+                                name: 'Arguments',
+                                value: codeBlock('json', JSON.stringify(args)),
+                                inline: true
+                            },
                             {
                                 name: 'Error',
-                                value: e.message,
-                                inline: true
+                                value: codeBlock('', e.message),
+                                inline: false
+                            },
+                            {
+                                name: 'Stacktrace',
+                                value: codeBlock('', e.stack),
+                                inline: false
                             }
                         ]));
+
+                        console.error(e);
                         return;
                     }
 

@@ -18,7 +18,13 @@ import {
 export default class OptionsCommand extends Command {
 
     constructor() {
-        super('options', `Invalid usage: ${emboss('.options <ticker> <c|p> [<expDate>]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('options', `Invalid usage: ${emboss('.options <ticker> <c|p> [expDate]')}`, null, [
+            {
+                name: 'Args',
+                value: ``,
+                inline: false
+            }
+        ], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
