@@ -18,6 +18,7 @@ import {
     CountHerCommand,
     FuturesCommand,
     IsMarketOpenCommand,
+    JackCommand,
     OptionsCommand,
     PermissionsCommand,
     PrefsCommand,
@@ -54,6 +55,7 @@ commandCenter.registerCommand('contract', new ContractCommand());
 commandCenter.registerCommand('counther', new CountHerCommand(countHerManager));
 commandCenter.registerCommand('futures', new FuturesCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
+commandCenter.registerCommand('jack', new JackCommand());
 commandCenter.registerCommand('options', new OptionsCommand());
 commandCenter.registerCommand('perms', new PermissionsCommand());
 commandCenter.registerCommand('quote', new QuoteCommand());

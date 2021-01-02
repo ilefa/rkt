@@ -4,6 +4,7 @@ import ContractCommand from './types/stonks/contract';
 import CountHerCommand from './types/fun/counther';
 import FuturesCommand from './types/stonks/futures';
 import IsMarketOpenCommand from './types/stonks/isMarketOpen';
+import JackCommand from './types/fun/jack'
 import OptionsCommand from './types/stonks/options';
 import PermissionsCommand from './types/perms';
 import QuoteCommand from './types/stonks/quote';
@@ -41,5 +42,6 @@ export {
     XpCompareCommand,
     XpRankCommand,
     XpTopCommand,
-    XpTrackCommand
+    XpTrackCommand,
+    JackCommand
 };
