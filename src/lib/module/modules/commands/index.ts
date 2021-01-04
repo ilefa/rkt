@@ -2,6 +2,7 @@ import AlertsCommand from './types/alerts';
 import BigJannieCommand from './types/fun/bigjannie';
 import ContractCommand from './types/stonks/contract';
 import CountHerCommand from './types/fun/counther';
+import CourseSearchCommand from './types/csearch';
 import FuturesCommand from './types/stonks/futures';
 import IsMarketOpenCommand from './types/stonks/isMarketOpen';
 import JackCommand from './types/fun/jack'
@@ -26,8 +27,10 @@ export {
     BigJannieCommand,
     ContractCommand,
     CountHerCommand,
+    CourseSearchCommand,
     FuturesCommand,
     IsMarketOpenCommand,
+    JackCommand,
     OptionsCommand,
     PermissionsCommand,
     QuoteCommand,
@@ -43,5 +46,4 @@ export {
     XpRankCommand,
     XpTopCommand,
     XpTrackCommand,
-    JackCommand
 };

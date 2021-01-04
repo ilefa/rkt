@@ -113,7 +113,9 @@ export default class CommandManager extends Module {
                             }
                         ]));
 
-                        return Logger.except(e, this.name, 'Encountered an exception while processing a command');
+                        Logger.except(e, this.name, 'Encountered an exception while processing a command');
+                        console.error(e.stack);
+                        return;
                     }
 
                     message.reply(generateSimpleEmbed('Huh? That wasn\'t supposed to happen..', 'Something went wrong while processing your command.'));

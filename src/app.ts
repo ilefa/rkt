@@ -16,6 +16,7 @@ import {
     BigJannieCommand,
     ContractCommand,
     CountHerCommand,
+    CourseSearchCommand,
     FuturesCommand,
     IsMarketOpenCommand,
     JackCommand,
@@ -53,6 +54,7 @@ commandCenter.registerCommand('alerts', new AlertsCommand());
 commandCenter.registerCommand('bigjannie', new BigJannieCommand());
 commandCenter.registerCommand('contract', new ContractCommand());
 commandCenter.registerCommand('counther', new CountHerCommand(countHerManager));
+commandCenter.registerCommand('csearch', new CourseSearchCommand());
 commandCenter.registerCommand('futures', new FuturesCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
 commandCenter.registerCommand('jack', new JackCommand());

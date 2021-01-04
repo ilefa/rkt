@@ -53,6 +53,7 @@ export const emboss = (message: any) => `\`\`${message}\`\``;
 export const cond = (cond: boolean, t: string, f: string) => cond ? t : f;
 export const bold = (message: any) => `**${message}**`;
 export const italic = (message: any) => `*${message}*`;
+export const link = (display: string, link: string) => `[${display}](${link})`;
 export const numberEnding = (num: number) => num === 1 ? '' : 's';
 export const timeDiff = (start: number) => (Date.now() - start).toFixed(2);
 export const conforms = (regex: RegExp, target: string) => regex.test(target);
@@ -63,6 +64,7 @@ export const resolveEmote = (client: Client, id: string) => client.emojis.cache.
 export const mentionChannel = (id: string) => `<#${id}>`;
 export const getDuration = (input: string) => df(input, 's');
 export const getDurationWithUnit = (input: string, unit: Units) => df(input, unit);
+export const capitalizeFirst = (input: string) => input.split(' ').map(str => str.charAt(0).toUpperCase() + str.slice(1)).join('');
 
 export interface PermissionAddons extends PermissionFlags {
     SUPERMAN: number;
