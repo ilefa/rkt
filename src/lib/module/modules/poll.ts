@@ -79,8 +79,8 @@ export default class PollManager extends Module {
         let responses = message.embeds[0].description.split('Responses')[1].split('**')[1].split('\n').slice(1);
         let map = new Map<string, string>();
         responses.forEach((str)=>{
-            let [key, value] = str.split(' ');
-            map.set(RESPONSE_GROUP_EMOJI_RAW[RESPONSE_GROUP_EMOJI.indexOf(key)], value);
+            let [key, ...value] = str.split(' ');
+            map.set(RESPONSE_GROUP_EMOJI_RAW[RESPONSE_GROUP_EMOJI.indexOf(key)], value.join(' '));
         })
         return map;
     }
