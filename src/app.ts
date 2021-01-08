@@ -19,6 +19,7 @@ import {
     CountHerCommand,
     CourseSearchCommand,
     FuturesCommand,
+    HelpCommand,
     IsMarketOpenCommand,
     JackCommand,
     OptionsCommand,
@@ -32,6 +33,7 @@ import {
     StackCommand,
     StimmyCommand,
     StonksCommand,
+    StopCommand,
     XpBoardCommand,
     XpCompareCommand,
     XpRankCommand,
@@ -50,7 +52,7 @@ const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 const moduleManager = new ModuleManager(client);
 const commandCenter = new CommandManager(client);
 const countHerManager = new CountHerManager(client);
-const reactionCenter = new ReactionManager();
+const reactionManager = new ReactionManager();
 const pollManager = new PollManager();
 
 commandCenter.registerCommand('alerts', new AlertsCommand());
@@ -59,6 +61,7 @@ commandCenter.registerCommand('contract', new ContractCommand());
 commandCenter.registerCommand('counther', new CountHerCommand(countHerManager));
 commandCenter.registerCommand('csearch', new CourseSearchCommand());
 commandCenter.registerCommand('futures', new FuturesCommand());
+commandCenter.registerCommand('help', new HelpCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
 commandCenter.registerCommand('jack', new JackCommand());
 commandCenter.registerCommand('options', new OptionsCommand());
@@ -72,23 +75,27 @@ commandCenter.registerCommand('say', new SayCommand());
 commandCenter.registerCommand('stack', new StackCommand());
 commandCenter.registerCommand('stimmy', new StimmyCommand());
 commandCenter.registerCommand('stonks', new StonksCommand());
+commandCenter.registerCommand('stop', new StopCommand());
 commandCenter.registerCommand('xpboard', new XpBoardCommand());
 commandCenter.registerCommand('xpcompare', new XpCompareCommand());
 commandCenter.registerCommand('xprank', new XpRankCommand());
 commandCenter.registerCommand('xptop', new XpTopCommand());
 commandCenter.registerCommand('xptrack', new XpTrackCommand());
 
-reactionCenter.registerHandler('delete', new DeleteMessageReactionHandler());
-reactionCenter.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());
+reactionManager.registerHandler('delete', new DeleteMessageReactionHandler());
+reactionManager.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());
 
 printStartup();
 
 moduleManager.registerModule(commandCenter);
 moduleManager.registerModule(countHerManager);
-moduleManager.registerModule(reactionCenter);
-moduleManager.registerModule(pollManager);
+moduleManager.registerModule(reactionManager);
 moduleManager.registerModule(new Announcer(client));
-moduleManager.registerModule(new EventManager(commandCenter, countHerManager, reactionCenter, pollManager));
+moduleManager.registerModule(new EventManager(commandCenter,
+                                              countHerManager,
+                                              reactionManager,
+                                              pollManager));
+
 moduleManager.registerModule(new XpTracker());
 moduleManager.init();
 

@@ -63,6 +63,10 @@ export default class PollManager extends Module {
         await message.edit(generateEmbed('Polls', questionString, fields));
     }
 
+    async handleSimple(message: Message) {
+        this.basicMap.forEach((_,emote)=>message.react(emote));
+    }
+
     private getQuestionString(message: Message): string {
         return message.embeds[0].description;
     }

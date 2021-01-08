@@ -5,7 +5,7 @@ import { Command, CommandReturn } from '../../command';
 export default class SayCommand extends Command {
 
     constructor() {
-        super('say', `Invalid usage: ${emboss('.say <statement>')}`, null, [], CUSTOM_PERMS.SUPERMAN);
+        super('say', `Invalid usage: ${emboss('.say <message..>')}`, null, [], CUSTOM_PERMS.SUPERMAN);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

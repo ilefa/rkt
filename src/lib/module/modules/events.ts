@@ -13,19 +13,23 @@ export default class EventManager extends Module {
 
     commandCenter: CommandManager;
     countHerManager: CountHerManager;
-    reactionCenter: ReactionManager;
+    reactionManager: ReactionManager;
     pollManager: PollManager;
 
-    constructor(commandCenter: CommandManager, countHerManager: CountHerManager, reactionCenter: ReactionManager, pollManager: PollManager) {
+    constructor(commandCenter: CommandManager,
+                countHerManager: CountHerManager,
+                reactionManager: ReactionManager,
+                pollManager: PollManager) {
         super('Events');
+        
         this.commandCenter = commandCenter;
         this.countHerManager = countHerManager;
-        this.reactionCenter = reactionCenter;
+        this.reactionManager = reactionManager;
         this.pollManager = pollManager;
     }
 
     start() {
-        const { client, commandCenter, countHerManager, reactionCenter } = this;
+        const { client, commandCenter, countHerManager, reactionManager, pollManager } = this;
         client.on('message', async message => {
             if (message.author.bot) {
                 return;
@@ -42,6 +46,10 @@ export default class EventManager extends Module {
                 await countHerManager.handleInput(message);
             }
         
+            if (message.content.toLowerCase().startsWith('poll: ')) {
+                await pollManager.handleSimple(message);
+            }
+
             if (!message.content.startsWith(env.prefix)) {
                 return;
             }
@@ -58,7 +66,7 @@ export default class EventManager extends Module {
                 await this.pollManager.handleAdd(reaction, user);
             }
 
-            reactionCenter.handle(reaction, user, reaction.message.author.bot);
+            reactionManager.handle(reaction, user, reaction.message.author.bot);
         });
 
         client.on('messageReactionRemove', async (reaction: MessageReaction, user: User) => {

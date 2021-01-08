@@ -14,6 +14,7 @@ export abstract class Command {
     helpFields: EmbedFieldData[];
     permission: number;
     deleteMessage: boolean;
+    hideFromHelp: boolean;
     manager: CommandManager;
 
     /**
@@ -24,19 +25,23 @@ export abstract class Command {
      * @param helpTitle the custom title of the help embed
      * @param helpFields the fields of the help message embed
      * @param permission the required permission
+     * @param deleteMessage whether or not to delete the original command message
+     * @param hideFromHelp whether or not to hide this command from the help menu
      */
     constructor(name: string,
                 help: string,
                 helpTitle: string,
                 helpFields: EmbedFieldData[],
                 permission: number,
-                deleteMessage = true) {
+                deleteMessage = true,
+                hideFromHelp = false) {
         this.name = name;
         this.help = help;
         this.helpTitle = helpTitle;
         this.helpFields = helpFields;
-        this.deleteMessage = deleteMessage;
         this.permission = permission;
+        this.deleteMessage = deleteMessage;
+        this.hideFromHelp = hideFromHelp;
     }
 
     /**
