@@ -4,6 +4,7 @@ import Module from '../module';
 import CommandManager from './commands/manager';
 import CountHerManager from './counther/manager';
 import ReactionManager from './reactions/manager';
+import PollManager from './poll';
 
 import { getReactionPhrase } from '../../util';
 import { MessageReaction, User } from 'discord.js';
@@ -12,17 +13,23 @@ export default class EventManager extends Module {
 
     commandCenter: CommandManager;
     countHerManager: CountHerManager;
-    reactionCenter: ReactionManager;
+    reactionManager: ReactionManager;
+    pollManager: PollManager;
 
-    constructor(commandCenter: CommandManager, countHerManager: CountHerManager, reactionCenter: ReactionManager) {
+    constructor(commandCenter: CommandManager,
+                countHerManager: CountHerManager,
+                reactionManager: ReactionManager,
+                pollManager: PollManager) {
         super('Events');
+        
         this.commandCenter = commandCenter;
         this.countHerManager = countHerManager;
-        this.reactionCenter = reactionCenter;
+        this.reactionManager = reactionManager;
+        this.pollManager = pollManager;
     }
 
     start() {
-        const { client, commandCenter, countHerManager, reactionCenter } = this;
+        const { client, commandCenter, countHerManager, reactionManager, pollManager } = this;
         client.on('message', async message => {
             if (message.author.bot) {
                 return;
@@ -39,6 +46,10 @@ export default class EventManager extends Module {
                 await countHerManager.handleInput(message);
             }
         
+            if (message.content.toLowerCase().startsWith('poll: ')) {
+                await pollManager.handle(message);
+            }
+
             if (!message.content.startsWith(env.prefix)) {
                 return;
             }
@@ -52,7 +63,7 @@ export default class EventManager extends Module {
                 await reaction.fetch();
             }
         
-            reactionCenter.handle(reaction, user, reaction.message.author.bot);
+            reactionManager.handle(reaction, user, reaction.message.author.bot);
         });
     }
 

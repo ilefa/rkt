@@ -4,11 +4,13 @@ import ContractCommand from './types/stonks/contract';
 import CountHerCommand from './types/fun/counther';
 import CourseSearchCommand from './types/csearch';
 import FuturesCommand from './types/stonks/futures';
+import HelpCommand from './types/help';
 import IsMarketOpenCommand from './types/stonks/isMarketOpen';
 import JackCommand from './types/fun/jack'
 import OptionsCommand from './types/stonks/options';
 import PermissionsCommand from './types/perms';
 import QuoteCommand from './types/stonks/quote';
+import PollCommand from './types/fun/poll';
 import PrefsCommand from './types/prefs';
 import PurgeCommand from './types/purge';
 import ReactCommand from './types/react';
@@ -16,6 +18,7 @@ import SayCommand from './types/fun/say';
 import StackCommand from './types/fun/stack';
 import StimmyCommand from './types/fun/stimmy';
 import StonksCommand from './types/stonks/stonks';
+import StopCommand from './types/stop';
 import XpBoardCommand from './types/xp/xpboard';
 import XpCompareCommand from './types/xp/xpcompare';
 import XpRankCommand from './types/xp/xprank';
@@ -29,11 +32,13 @@ export {
     CountHerCommand,
     CourseSearchCommand,
     FuturesCommand,
+    HelpCommand,
     IsMarketOpenCommand,
     JackCommand,
     OptionsCommand,
     PermissionsCommand,
     QuoteCommand,
+    PollCommand,
     PrefsCommand,
     PurgeCommand,
     ReactCommand,
@@ -41,6 +46,7 @@ export {
     StackCommand,
     StimmyCommand,
     StonksCommand,
+    StopCommand,
     XpBoardCommand,
     XpCompareCommand,
     XpRankCommand,

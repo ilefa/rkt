@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 import cheerio from 'cheerio';
 import tableparse from 'cheerio-tableparser';
 
@@ -11,7 +12,8 @@ import {
     generateEmbed,
     generateSimpleEmbed,
     italic,
-    link
+    link,
+    replaceAll
 } from '../../../../util';
 
 const identifierRegex = /^[a-zA-Z]{2,4}\d{4}(Q|E|W)*$/;
@@ -98,7 +100,7 @@ export default class CourseSearchCommand extends Command {
 
         let name = $('.single-course > h3:nth-child(2)')
             .text()
-            .split(/\d{4}(?:Q|E|W)\.\s/)[1];
+            .split(/\d{4}(?:Q|E|W)*\.\s/)[1];
             
         let grading = $('.grading-basis')
             .text()
@@ -108,14 +110,21 @@ export default class CourseSearchCommand extends Command {
         let credits = $('.credits')
             .text()
             .trim()
-            .split(' ')[0];
+            .split(' ')[0] || 'Unknown Credits';
 
         let prereqs = $('.prerequisites')
-            .text()
-            .trim()
-            .split('Prerequisites: ')[1]
-            .split('Prerequisite: ')[1]
-            .split('Recommended Preparation')[0] || 'There are no prerequisites for this course.';
+            .text()?.
+            trim()?.
+            split('Prerequisites: ')[1]?.
+            split('Prerequisite: ')[1]?.
+            split('Recommended Preparation')[0] || 'There are no prerequisites for this course.';
+
+        let lastDataRaw = $('.last-refresh').text() || moment().format('DD-MMM-YY h.mm.ss.[123456] a').toUpperCase();
+        if (lastDataRaw.includes('.')) {
+            lastDataRaw = replaceAll(lastDataRaw, '.', ':');
+        }
+
+        let lastDataMarker = new Date(lastDataRaw.split(/:\d{6}/).join(''));      
 
         let desc = $('.description').text() || 'There is no description provided for this course.';
         let sections: SectionData[] = [];
@@ -148,14 +157,14 @@ export default class CourseSearchCommand extends Command {
                 .split(', ')
                 .reverse()
                 .join(' ');
-            let section = data[5][i];
 
+            let section = data[5][i];
             let schedule = data[7][i];
             schedule = schedule.substring(0, schedule.length - 4);
 
             let location: string | any = data[8][i];
             let locationPayload = {} as any;
-            if (location.includes('classrooms.uconn.edu')) {
+            if (location?.includes('classrooms.uconn.edu')) {
                 location = cheerio.load(location);
                 locationPayload.name = location('a').text();
                 locationPayload.url = location('a').attr('href');
@@ -296,8 +305,13 @@ export default class CourseSearchCommand extends Command {
             // + `There are ${bold(sectionCount + ` section${numberEnding(sectionCount)}`)} being offered this semester${campus !== 'any' ? ` at ${bold(capitalizeFirst(campus.replace('_', ' ')))}` : ''}.\n\n
             [
                 {
+                    name: 'Last Data Marker',
+                    value: moment(lastDataMarker).format('MMMM Do YYYY, h:mm:ss a'),
+                    inline: false
+                },
+                {
                     name: 'Prerequisites',
-                    value: prereqs + '\n',
+                    value: prereqs,
                     inline: false
                 },
                 {
@@ -306,6 +320,7 @@ export default class CourseSearchCommand extends Command {
                     inline: false
                 }
             ]));
+
         return CommandReturn.EXIT;
     }
 

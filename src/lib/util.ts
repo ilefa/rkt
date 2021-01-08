@@ -37,6 +37,39 @@ export const COMPARISON_COLORS = [
     "rgba(149, 165, 166,1.0)"
 ];
 
+export const RESPONSE_GROUP_EMOJI = [
+    ":regional_indicator_a:",
+    ":regional_indicator_b:",
+    ":regional_indicator_c:",
+    ":regional_indicator_d:",
+    ":regional_indicator_e:",
+    ":regional_indicator_f:",
+    ":regional_indicator_g:",
+    ":regional_indicator_h:",
+    ":regional_indicator_i:",
+    ":regional_indicator_j:",
+    ":regional_indicator_k:",
+    ":regional_indicator_l:",
+    ":regional_indicator_m:",
+    ":regional_indicator_n:",
+    ":regional_indicator_o:",
+    ":regional_indicator_p:",
+    ":regional_indicator_q:",
+    ":regional_indicator_r:",
+    ":regional_indicator_s:",
+    ":regional_indicator_t:",
+];
+
+export const RESPONSE_GROUP_EMOJI_RAW = [
+    '🇦', '🇧', '🇨',
+    '🇩', '🇪', '🇫',
+    '🇬', '🇭', '🇮',
+    '🇯', '🇰', '🇱',
+    '🇲', '🇳', '🇴',
+    '🇵', '🇶', '🇷',
+    '🇸', '🇹'
+]
+
 export const COMPARISON_LEGEND = [
     ":red_circle:",
     ":orange_circle:",
@@ -65,6 +98,18 @@ export const mentionChannel = (id: string) => `<#${id}>`;
 export const getDuration = (input: string) => df(input, 's');
 export const getDurationWithUnit = (input: string, unit: Units) => df(input, unit);
 export const capitalizeFirst = (input: string) => input.split(' ').map(str => str.charAt(0).toUpperCase() + str.slice(1)).join('');
+export const replaceAll = (input: string, search: string, replace: string) => {
+    let copy = String(input);
+    if (!copy.includes(search)) {
+        return copy;
+    }
+
+    while (copy.includes(search)) {
+        copy = copy.replace(search, replace);
+    }
+
+    return copy;
+}
 
 export interface PermissionAddons extends PermissionFlags {
     SUPERMAN: number;

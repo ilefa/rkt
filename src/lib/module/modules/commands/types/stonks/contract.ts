@@ -6,6 +6,7 @@ import { Message, Permissions, User } from 'discord.js';
 import { getExpirationDates, getOptions } from '../../../../../repo';
 
 import {
+    bold,
     conforms,
     emboss,
     generateEmbed,
@@ -17,7 +18,15 @@ import {
 export default class ContractCommand extends Command {
 
     constructor() {
-        super('contract', `Invalid usage: ${emboss('.contract <ticker> <strike:C|P> <expDate>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('contract', `Invalid usage: ${emboss('.contract <ticker> <strike> <expDate>')}`, null, [
+            {
+                name: 'Args',
+                value: `${bold('__ticker__')}: the ticker to retrieve information for\n` 
+                     + `${bold('__strike__')}: the $<strike>[C|P] to retrieve the contract for\n`
+                     + `${bold('__expDate__')}: the expiration date to retrieve the contract for`,
+                inline: false
+            }
+        ], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

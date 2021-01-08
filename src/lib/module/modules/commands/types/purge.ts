@@ -5,7 +5,7 @@ import { emboss, generateSimpleEmbed, numberEnding, timeDiff } from '../../../..
 export default class PurgeCommand extends Command {
 
     constructor() {
-        super('purge', `Invalid usage: ${emboss('.purge <amt>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
+        super('purge', `Invalid usage: ${emboss('.purge <amount>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

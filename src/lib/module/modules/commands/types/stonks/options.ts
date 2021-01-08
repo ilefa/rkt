@@ -21,7 +21,9 @@ export default class OptionsCommand extends Command {
         super('options', `Invalid usage: ${emboss('.options <ticker> <c|p> [expDate]')}`, null, [
             {
                 name: 'Args',
-                value: ``,
+                value: `${bold('__ticker__')}: the ticker to retrieve options for\n` 
+                     + `${bold('__type__')}: the contract type (c[all]/p[ut]) to retrieve\n`
+                     + `${bold('__expDate__')}: the expiration date for the contracts`,
                 inline: false
             }
         ], Permissions.FLAGS.SEND_MESSAGES);

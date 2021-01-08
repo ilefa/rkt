@@ -1,22 +1,26 @@
-import { Message, MessageAttachment, Permissions, User } from 'discord.js';
-import { Command, CommandReturn } from '../../command';
-import Jimp, { MIME_PNG } from 'jimp'
-
+import Jimp from 'jimp'
 import mergeImage from 'merge-img';
+
+import { MIME_PNG } from 'jimp';
+import { emboss } from '../../../../../util';
+import { Command, CommandReturn } from '../../command';
+import { Message, MessageAttachment, Permissions, User } from 'discord.js';
 
 export default class JackCommand extends Command {
 
     constructor() {
-        super('jack', `jack stack`, 'jack is a stack', [], Permissions.FLAGS.SEND_MESSAGES, false);
+        super('jack', `Invalid usage: ${emboss('.jack st<a..>ck')}`, 'jack do be stackin tho :flushed: :flushed: :flushed:', [], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
         if (args.length !== 1) {
             return CommandReturn.HELP_MENU;
         }
+        
         if (!/sta*ck/g.test(args[0])) {
             return CommandReturn.HELP_MENU;
         }
+
         let numA = (args[0].match(/a/g) || []).length;
         let imageList = ['src/lib/module/modules/commands/types/fun/assets/top.png'];
         for (; numA > 0; numA--) {
