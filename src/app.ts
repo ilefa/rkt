@@ -6,6 +6,7 @@ import ModuleManager from './lib/module/manager';
 import CommandManager from './lib/module/modules/commands/manager';
 import CountHerManager from './lib/module/modules/counther/manager';
 import EventManager from './lib/module/modules/events';
+import PollManager from './lib/module/modules/poll';
 import ReactionManager from './lib/module/modules/reactions/manager';
 import XpTracker from './lib/module/modules/xp/tracker';
 
@@ -22,6 +23,7 @@ import {
     JackCommand,
     OptionsCommand,
     PermissionsCommand,
+    PollCommand,
     PrefsCommand,
     PurgeCommand,
     QuoteCommand,
@@ -49,6 +51,7 @@ const moduleManager = new ModuleManager(client);
 const commandCenter = new CommandManager(client);
 const countHerManager = new CountHerManager(client);
 const reactionCenter = new ReactionManager();
+const pollManager = new PollManager();
 
 commandCenter.registerCommand('alerts', new AlertsCommand());
 commandCenter.registerCommand('bigjannie', new BigJannieCommand());
@@ -61,6 +64,7 @@ commandCenter.registerCommand('jack', new JackCommand());
 commandCenter.registerCommand('options', new OptionsCommand());
 commandCenter.registerCommand('perms', new PermissionsCommand());
 commandCenter.registerCommand('quote', new QuoteCommand());
+commandCenter.registerCommand('poll', new PollCommand());
 commandCenter.registerCommand('prefs', new PrefsCommand());
 commandCenter.registerCommand('purge', new PurgeCommand());
 commandCenter.registerCommand('react', new ReactCommand());
@@ -82,8 +86,9 @@ printStartup();
 moduleManager.registerModule(commandCenter);
 moduleManager.registerModule(countHerManager);
 moduleManager.registerModule(reactionCenter);
+moduleManager.registerModule(pollManager);
 moduleManager.registerModule(new Announcer(client));
-moduleManager.registerModule(new EventManager(commandCenter, countHerManager, reactionCenter));
+moduleManager.registerModule(new EventManager(commandCenter, countHerManager, reactionCenter, pollManager));
 moduleManager.registerModule(new XpTracker());
 moduleManager.init();
 

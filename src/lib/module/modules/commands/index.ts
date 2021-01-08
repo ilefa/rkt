@@ -9,6 +9,7 @@ import JackCommand from './types/fun/jack'
 import OptionsCommand from './types/stonks/options';
 import PermissionsCommand from './types/perms';
 import QuoteCommand from './types/stonks/quote';
+import PollCommand from './types/poll';
 import PrefsCommand from './types/prefs';
 import PurgeCommand from './types/purge';
 import ReactCommand from './types/react';
@@ -34,6 +35,7 @@ export {
     OptionsCommand,
     PermissionsCommand,
     QuoteCommand,
+    PollCommand,
     PrefsCommand,
     PurgeCommand,
     ReactCommand,

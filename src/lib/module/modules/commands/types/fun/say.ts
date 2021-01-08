@@ -5,10 +5,11 @@ import { Command, CommandReturn } from '../../command';
 export default class SayCommand extends Command {
 
     constructor() {
-        super('say', `Invalid usage: ${emboss('.stonks')}`, null, [], CUSTOM_PERMS.SUPERMAN);
+        super('say', `Invalid usage: ${emboss('.say <statement>')}`, null, [], CUSTOM_PERMS.SUPERMAN);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
+        if (args.length < 1) return CommandReturn.HELP_MENU;
         message.channel.send(args.join(' '));
         return CommandReturn.EXIT;
     }
