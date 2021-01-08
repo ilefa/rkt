@@ -1,5 +1,6 @@
 import AlertsCommand from './types/alerts';
 import BigJannieCommand from './types/fun/bigjannie';
+import BirthdayCommand from './types/fun/birthday';
 import ContractCommand from './types/stonks/contract';
 import CountHerCommand from './types/fun/counther';
 import CourseSearchCommand from './types/csearch';
@@ -28,6 +29,7 @@ import XpTrackCommand from './types/xp/xptrack';
 export {
     AlertsCommand,
     BigJannieCommand,
+    BirthdayCommand,
     ContractCommand,
     CountHerCommand,
     CourseSearchCommand,

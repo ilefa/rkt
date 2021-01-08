@@ -421,6 +421,17 @@ export const getJoinedList = (list: any[], delimiter: string) => {
     return str;
 }
 
+export const join = <U, T>(list: U[], delimiter: string, apply: (val: U) => T) => {
+    let str = '';
+    list
+        .map(apply)
+        .forEach((range, i) => {
+            str += range + (i === list.length - 1 ? '' : delimiter);
+        });
+    
+    return str;
+}
+
 /**
  * Computes the moving average, moving variance,
  * moving deviation, and general forecast for
@@ -492,7 +503,8 @@ export const getExpDate = (input: string): Date => {
     }
 
     let customDate: any = moment(new Date(input), false);
-    if (customDate._d === 'Invalid Date') {
+    if (customDate._d === 'Invalid Date'
+        || customDate._d === 'Invalid date') {
         return null;
     }
 

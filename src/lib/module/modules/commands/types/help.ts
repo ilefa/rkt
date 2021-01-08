@@ -6,13 +6,14 @@ import {
     generateSimpleEmbedWithImage,
     replaceAll
 } from '../../../../util';
+import MultiCommand from '../components/multi';
 
 export default class HelpCommand extends Command {
     
     constructor() {
         super('help', `Invalid usage: ${emboss('.help')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
     }
-    
+
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
         if (args.length !== 0) {
             return CommandReturn.HELP_MENU;
@@ -28,6 +29,10 @@ export default class HelpCommand extends Command {
                 let command = _cmd.command;
                 let help = replaceAll(command.help.split('Invalid usage: ')[1], '``', '');
                 if (help === '.' + command.name) {
+                    help = null;
+                }
+
+                if (command instanceof MultiCommand) {
                     help = null;
                 }
 

@@ -1,9 +1,9 @@
-import env from '../../../../../env.json';
 import Module from '../../module';
+import env from '../../../../../env.json';
 
-import { Client, Message, TextChannel, User } from 'discord.js';
-import { CountHer } from './counther';
 import { bold } from '../../../util';
+import { CountHer } from './counther';
+import { Client, Message, PermissionOverwrites, Permissions, TextChannel, User } from 'discord.js';
 
 export default class CountHerManager extends Module {
 
@@ -107,19 +107,24 @@ export default class CountHerManager extends Module {
      * @param user the user who sent the input
      */
     async handleInput(message: Message) {
+        console.log(message);
         if (!this.isLobby(message.channel.id)) {
+            console.log('trap 1');
             return;
         }
-
+        
         let lobby = this.getLobby(message.channel.id);
         if (!lobby) {
+            console.log('trap 2');
             return;
         }
-
+        
         if (!lobby.active) {
+            console.log('trap 3');
             return;
         }
 
+        console.log('ok');
         await lobby.advance(message, message.content, message.author);
     }
 
@@ -138,7 +143,19 @@ export default class CountHerManager extends Module {
                 .toString()
                 .substring(date.toString().length - 4)}`, {
                     parent: env.countHerCategory,
-                    topic: `CountHer Lobby | Count to ${target}`
+                    topic: `CountHer Lobby | Count to ${target}`,
+                    permissionOverwrites: [
+                        {
+                            allow: Permissions.FLAGS.SEND_MESSAGES + Permissions.FLAGS.VIEW_CHANNEL,
+                            type: 'role',
+                            id: '786736076852035595'
+                        },
+                        {
+                            allow: Permissions.FLAGS.SEND_MESSAGES + Permissions.FLAGS.VIEW_CHANNEL + Permissions.FLAGS.ADD_REACTIONS,
+                            type: 'member',
+                            id: '759293931589599282'
+                        },
+                    ]
                 });
     }
 

@@ -1,20 +1,22 @@
 import discord from 'discord.js';
 import env from '../env.json';
 
-import Announcer from './lib/module/modules/announcer';
 import ModuleManager from './lib/module/manager';
+import PollManager from './lib/module/modules/poll';
+import EventManager from './lib/module/modules/events';
+import Announcer from './lib/module/modules/announcer';
+import XpTracker from './lib/module/modules/xp/tracker';
+import BirthdayManager from './lib/module/modules/birthday';
 import CommandManager from './lib/module/modules/commands/manager';
 import CountHerManager from './lib/module/modules/counther/manager';
-import EventManager from './lib/module/modules/events';
-import PollManager from './lib/module/modules/poll';
 import ReactionManager from './lib/module/modules/reactions/manager';
-import XpTracker from './lib/module/modules/xp/tracker';
 
 import * as Logger from './lib/logger';
 
 import {
     AlertsCommand,
     BigJannieCommand,
+    BirthdayCommand,
     ContractCommand,
     CountHerCommand,
     CourseSearchCommand,
@@ -52,11 +54,13 @@ const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 const moduleManager = new ModuleManager(client);
 const commandCenter = new CommandManager(client);
 const countHerManager = new CountHerManager(client);
+const birthdayManager = new BirthdayManager(client);
 const reactionManager = new ReactionManager();
 const pollManager = new PollManager();
 
 commandCenter.registerCommand('alerts', new AlertsCommand());
 commandCenter.registerCommand('bigjannie', new BigJannieCommand());
+commandCenter.registerCommand('birthday', new BirthdayCommand(birthdayManager));
 commandCenter.registerCommand('contract', new ContractCommand());
 commandCenter.registerCommand('counther', new CountHerCommand(countHerManager));
 commandCenter.registerCommand('csearch', new CourseSearchCommand());
@@ -89,6 +93,7 @@ printStartup();
 
 moduleManager.registerModule(commandCenter);
 moduleManager.registerModule(countHerManager);
+moduleManager.registerModule(birthdayManager);
 moduleManager.registerModule(reactionManager);
 moduleManager.registerModule(new Announcer(client));
 moduleManager.registerModule(new EventManager(commandCenter,
