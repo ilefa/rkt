@@ -1,12 +1,16 @@
+import MultiCommand from '../components/multi';
+
 import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
 import {
     bold,
+    CUSTOM_PERMS,
     emboss,
-    generateSimpleEmbedWithImage,
+    generateEmbedWithFieldsAndImage,
+    getEmoteForCommandPermission,
+    has,
     replaceAll
 } from '../../../../util';
-import MultiCommand from '../components/multi';
 
 export default class HelpCommand extends Command {
     
@@ -24,7 +28,18 @@ export default class HelpCommand extends Command {
 
         commands
             .filter(_cmd => !_cmd.command.hideFromHelp)
-            .sort((a, b) => a.name.localeCompare(b.name))
+            .filter(_cmd => has(user, _cmd.command.permission, message.guild))
+            .sort((a, b) => {
+                let ap = a.command.permission === CUSTOM_PERMS.SUPERMAN 
+                    ? -a.command.permission 
+                    : a.command.permission;
+                
+                let bp = b.command.permission === CUSTOM_PERMS.SUPERMAN
+                    ? -b.command.permission
+                    : b.command.permission;
+
+                return bp - ap;
+            })
             .map(_cmd => {
                 let command = _cmd.command;
                 let help = replaceAll(command.help.split('Invalid usage: ')[1], '``', '');
@@ -41,13 +56,32 @@ export default class HelpCommand extends Command {
                     help = null;
                 }
 
-                helpList += `${bold('.' + command.name + (help ? ':' : ''))} ${help ? help : ''}\n`;
+                let perm = getEmoteForCommandPermission(command.permission);
+                helpList += `${perm + ' ' + bold('.' + command.name + (help ? ':' : ''))} ${help ? help : ''}\n`;
             });
 
-        message.reply(generateSimpleEmbedWithImage('Stonks Help', `${bold('Stonks')} version 0.1 (master)\n` 
+        let legend = '';
+        if (has(user, CUSTOM_PERMS.SUPERMAN, message.guild)) {
+            legend += `${getEmoteForCommandPermission(CUSTOM_PERMS.SUPERMAN)} Super User\n\tStonksBot developers and other select cool people\n\n`;
+        }
+
+        if (has(user, Permissions.FLAGS.ADMINISTRATOR, message.guild)) {
+            legend += `${getEmoteForCommandPermission(Permissions.FLAGS.ADMINISTRATOR)} Administrator\n\t${bold(message.guild.name)} server administrators\n\n`;
+        }
+
+        legend += `${getEmoteForCommandPermission(Permissions.FLAGS.SEND_MESSAGES)} Member\n\t${bold(message.guild.name)} server members`;
+
+        message.reply(generateEmbedWithFieldsAndImage('Stonks Help', `${bold('Stonks')} version 0.1 (master)\n` 
             + `Made with lots of :blue_heart: and :rocket: by <@177167251986841600> & <@268044207854190604>.\n\n`
-            + `${bold('Command List')}\n`
-            + `${helpList}`, message.client.user.avatarURL()));
+            + `${bold(`Command List (${commands.length})`)}\n` 
+            + helpList.trim(),
+            [
+                {
+                    name: 'Permissions Legend',
+                    value: legend.trim(),
+                    inline: false
+                }    
+            ], message.client.user.avatarURL()));
 
         return CommandReturn.EXIT;
     }

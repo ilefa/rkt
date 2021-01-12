@@ -22,7 +22,6 @@ import {
     replaceAll,
     timeDiff
 } from '../../util';
-import { Repository } from 'typeorm';
 
 type BirthdayGuild = {
     guild: string;

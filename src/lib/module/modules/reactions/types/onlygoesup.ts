@@ -9,6 +9,9 @@ export default class OnlyGoesUpReactionHandler extends ReactionHandler {
 
     async execute(user: User, message: Message, isBot: boolean, reactionClass: MessageReaction) {
         if (isBot) return;
+
+
+
         await message.react(this.emote);
     }
 

@@ -1,13 +1,13 @@
 import env from '../../../../env.json';
 
 import Module from '../module';
+import PollManager from './poll';
 import CommandManager from './commands/manager';
 import CountHerManager from './counther/manager';
-import PollManager from './poll';
 import ReactionManager from './reactions/manager';
 
-import { getReactionPhrase } from '../../util';
-import { MessageReaction, User } from 'discord.js';
+import { codeBlock, generateEmbed, getReactionPhrase } from '../../util';
+import { MessageReaction, TextChannel, User } from 'discord.js';
 
 export default class EventManager extends Module {
 
@@ -28,8 +28,10 @@ export default class EventManager extends Module {
         this.pollManager = pollManager;
     }
 
-    start() {
+    async start() {
         const { client, commandCenter, countHerManager, reactionManager, pollManager } = this;
+        const commandDeck = await client.channels.fetch(env.commandDeck, false) as TextChannel;
+            
         client.on('message', async message => {
             if (message.author.bot) {
                 return;
@@ -46,7 +48,7 @@ export default class EventManager extends Module {
                 await countHerManager.handleInput(message);
             }
         
-            if (message.content.toLowerCase().startsWith('poll: ')) {
+            if (message.content.toLowerCase().startsWith('poll:')) {
                 await pollManager.handleSimple(message);
             }
 
@@ -78,6 +80,22 @@ export default class EventManager extends Module {
             if (reaction.message.embeds.length && reaction.message.embeds[0].title === "Polls") {
                 await this.pollManager.handle(reaction);
             }
+        });
+
+        process.on('uncaughtException', async (err: any) => {
+            if (err.fatal) commandDeck.send('@everyone');
+            commandDeck.send(generateEmbed('Severe', `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception.${err.fatal ? `\nStonksBot cannot recover from this incident and will now shutdown.` : ''}`, [
+                {
+                    name: 'Error',
+                    value: err.message,
+                    inline: false
+                },
+                {
+                    name: 'Stack',
+                    value: codeBlock('', err.stack),
+                    inline: false
+                }
+            ]));
         });
     }
 

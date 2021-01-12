@@ -5,7 +5,7 @@ import * as Logger from '../../../logger';
 
 import { User, Message, MessageEmbed, Client } from 'discord.js';
 import { Command, CommandEntry, CommandReturn } from './command';
-import { codeBlock, generateEmbed, generateSimpleEmbed, italic, numberEnding } from '../../../util';
+import { codeBlock, generateEmbed, generateSimpleEmbed, has, italic, numberEnding } from '../../../util';
 
 export default class CommandManager extends Module {
     
@@ -60,13 +60,7 @@ export default class CommandManager extends Module {
         for (const cmd of this.commands) {
             if (cmd.name.toLowerCase() === name) {
                 try {
-                    if (!message
-                            .guild
-                            .member(user)
-                            .hasPermission(cmd.command.permission) 
-                            && !env
-                                .superPerms
-                                .some(id => user.id === id)) {
+                    if (!has(user, cmd.command.permission, message.guild)) {
                         message.reply(generateSimpleEmbed('Whoops', `You don't have permission to do this.`));
                         break;
                     }

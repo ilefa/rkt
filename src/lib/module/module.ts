@@ -11,7 +11,14 @@ export default abstract class Module {
         this.name = name;
     }
 
-    abstract start();
-    abstract end();
+    /**
+     * Called when the module is enabled.
+     */
+    abstract start(): void;
+
+    /**
+     * Called when the module is disabled.
+     */
+    abstract end(): void;
 
 }

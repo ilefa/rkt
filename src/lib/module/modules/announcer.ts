@@ -4,8 +4,8 @@ import Module from '../module';
 
 import * as Logger from '../../logger';
 
-import { Client, MessageEmbed } from 'discord.js';
 import { timeDiff } from '../../util';
+import { Client, MessageEmbed } from 'discord.js';
 
 export default class Announcer extends Module {
 

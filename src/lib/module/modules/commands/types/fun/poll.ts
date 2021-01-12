@@ -14,7 +14,26 @@ import {
 export default class PollCommand extends Command {
 
     constructor() {
-        super('poll', `Invalid usage: ${emboss('.poll <[question]> <[responses..]> ')} or ${emboss('.poll <question>')} `, null, [], Permissions.FLAGS.ADMINISTRATOR);
+        super('poll', `Invalid usage: ${emboss('.poll <[question]> [responses..]')}`, null, [
+            {
+                name: 'Simple Polls',
+                value: 'If you just want a poll with standard 👍, 👎, 🤷 responses, you may just supply a question prompt wrapped in brackets.',
+                inline: false
+            },
+            {
+                name: 'Advanced Polls',
+                value: 'If you would like to fully utilize the power of StonksBot polling, supply a question prompt wrapped in brackets, followed by up to twenty custom response prompts.',
+                inline: false
+            },
+            {
+                name: 'Advanced Poll Example',
+                value: `The following command will create a poll asking the question ${bold('do stonks go brrr?')}\n` +
+                       `This poll will have four responses, ${emboss('of course')}, ${emboss('yes')}, ${emboss('~~no~~')}, and ${emboss('pee')}.\n\n` +
+                       `${emboss(`.poll [do stonks go brrr?] [of course]   [yes]   [~~noo~~]   [pee]`)}\n` +
+                       `${emboss(`         question prompt        a          b         c         d  `)}\n`,
+                inline: false
+            }
+        ], Permissions.FLAGS.ADMINISTRATOR);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -54,7 +73,7 @@ export default class PollCommand extends Command {
                 },
                 {
                     name: 'Valid Example',
-                    value: emboss('.poll [do stonks go brrr?] [of course] [yes] [~~no~~]'),
+                    value: emboss('.poll [do stonks go brrr?] [of course] [yes] [~~no~~] [pee]'),
                     inline: false
                 }
             ]));

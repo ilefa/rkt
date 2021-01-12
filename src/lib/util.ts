@@ -20,7 +20,8 @@ import {
     MessageEmbed,
     Permissions,
     PermissionFlags,
-    User
+    User,
+    Guild
 } from 'discord.js';
 
 export const DAY_MILLIS = 86400000;
@@ -98,6 +99,18 @@ export const mentionChannel = (id: string) => `<#${id}>`;
 export const getDuration = (input: string) => df(input, 's');
 export const getDurationWithUnit = (input: string, unit: Units) => df(input, unit);
 export const capitalizeFirst = (input: string) => input.split(' ').map(str => str.charAt(0).toUpperCase() + str.slice(1)).join('');
+export const isFC = (guild: Guild | string) => guild instanceof Guild 
+    ? guild.id === '749978305549041734' 
+    : guild === '749978305549041734';
+
+export const has = (user: User, permission: number, guild: Guild) => 
+    guild
+        .member(user)
+        .hasPermission(permission) 
+            || env
+                .superPerms
+                .some(id => user.id === id)
+
 export const replaceAll = (input: string, search: string, replace: string) => {
     let copy = String(input);
     if (!copy.includes(search)) {
@@ -145,14 +158,13 @@ export const getLatestTimeValue = (time: number) => {
     if (days !== 0) result += d + ', ';
     if (hrs !== 0) result += h + ', ';
     if (min !== 0) result += m + ', ';
-    if (sec !== 0) result += s + ', ';
     
     result = result.substring(0, Math.max(0, result.length - 2));
     if ((yrs !== 0 || mon !== 0 || days !== 0 || min !== 0 || hrs !== 0) && sec !== 0) {
         result += ', ' + s;
     }
 
-    if (yrs === 0 && mon === 0 && days === 0 && hrs === 0 && min === 0 && sec === 0) {
+    if (yrs === 0 && mon === 0 && days === 0 && hrs === 0 && min === 0) {
         result += s;
     }
 
@@ -275,6 +287,14 @@ export const getChangeString = (input: string | number, seperator: string, digit
             .toFixed(digits);
 }
 
+/**
+ * Returns the indicator emote for a given value.
+ * 
+ * @param indicator the indicator value
+ * @param upThreshold the threshold for an upwards arrow to appear
+ * @param downThreshold the threshold for a downwards arrow to appear
+ * @param stagnent the threshold for a stagnant arrow to appear
+ */
 export const getEmoteForIndicator = (indicator: number | string, upThreshold: number, downThreshold: number, stagnent: number) => {
     if (indicator === stagnent) return ':arrow_right:';
     if (indicator > upThreshold) return ':arrow_upper_right:';
@@ -283,54 +303,73 @@ export const getEmoteForIndicator = (indicator: number | string, upThreshold: nu
     return ':twisted_rightwards_arrows:';
 }
 
-export const getEmoteForEPS = (eps: number | string) => {
-    return getEmoteForIndicator(eps, 0, 0, 0);
-}
+/**
+ * Returns the arrow emote for a given EPS value.
+ * @param eps the eps value for a stock
+ */
+export const getEmoteForEPS = (eps: number | string) => getEmoteForIndicator(eps, 0, 0, 0);
 
-export const getEmoteForStatus = (state: string) => {
-    switch (state) {
-        case 'PRE':
-        case 'POST':
-            return '<:idle:493263553101430795>';
-        case 'OPEN':
-            return '<:online:313956277808005120>';
-        case 'CLOSED':
-            return '<:dnd:493263553260945419>';
-        default:
-            return '<:offline:493263553378385931>';
-    }
-}
-
+/**
+ * Returns an emote for a user's permission level.
+ * 
+ * @param superPerms whether the user has super permissions
+ * @param admin whether the user has administrator permissions
+ */
 export const getEmoteForPermissions = (superPerms: boolean, admin: boolean) => {
-    if (superPerms) {
-        return ':tools:';
-    }
-
-    if (admin) {
-        return ':sauropod:';
-    }
-
+    if (superPerms) return ':tools:';
+    if (admin) return ':sauropod:';
     return ':runner:';
 }
 
+export const getEmoteForCommandPermission = (permission: number) => {
+    if (permission === CUSTOM_PERMS.SUPERMAN) return ':eight_spoked_asterisk:';
+    if (permission === Permissions.FLAGS.ADMINISTRATOR) return ':a:';
+    return ':regional_indicator_m:';
+}
+
+/**
+ * Returns an emote for the XP placement leaderboard.
+ * @param placement the xp placement
+ */
 export const getEmoteForXpPlacement = (placement: number) => {
     if (placement == 1) return ':first_place:';
     if (placement == 2) return ':second_place:';
     if (placement == 3) return ':third_place:';
     if (placement == 10) return ':keycap_ten:';
+    if (placement > 10) return '';
 
     return `:${toWords(placement)}:`;
 }
 
+/**
+ * Returns the upwards XP difference
+ * for a given placement.
+ * 
+ * @param rankings a list of xp rankings
+ * @param placement the placement to query
+ */
 export const getUpwardXpDifference = (rankings: XpBoardUser[], placement: number) => {
     return rankings[placement - 1].xp - rankings[placement].xp;
 }
 
+/**
+ * Returns the downwards XP difference
+ * for a given placement.
+ * 
+ * @param rankings a list of xp rankings
+ * @param placement the placement to query
+ */
 export const getDownwardXpDifference = (rankings: XpBoardUser[], placement: number) => {
     return rankings[placement].xp - rankings[placement + 1].xp;
 }
 
-// https://gist.github.com/ForbesLindesay/5467742
+/**
+ * Returns a word form of a provided
+ * number. Useful for number emotes.
+ * 
+ * @param num the number to convert
+ * @see https://gist.github.com/ForbesLindesay/5467742
+ */
 export const toWords = (num: number) => {
     let ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
                 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
@@ -354,32 +393,34 @@ export const toWords = (num: number) => {
   
     //100 and more
     if (numString.length == 3) {
-      if (numString[1] === '0' && numString[2] === '0')
-        return ones[numString[0]] + ' hundred';
-      else
-        return ones[numString[0]] + ' hundred and ' + toWords(+(numString[1] + numString[2]));
+        if (numString[1] === '0' && numString[2] === '0')
+            return ones[numString[0]] + ' hundred';
+        else
+            return ones[numString[0]] + ' hundred and ' + toWords(+(numString[1] + numString[2]));
     }
   
     if (numString.length === 4) {
-      var end = +(numString[1] + numString[2] + numString[3]);
-      if (end === 0) return ones[numString[0]] + ' thousand';
-      if (end < 100) return ones[numString[0]] + ' thousand and ' + toWords(end);
-      return ones[numString[0]] + ' thousand ' + toWords(end);
+        var end = +(numString[1] + numString[2] + numString[3]);
+        if (end === 0) return ones[numString[0]] + ' thousand';
+        if (end < 100) return ones[numString[0]] + ' thousand and ' + toWords(end);
+        return ones[numString[0]] + ' thousand ' + toWords(end);
     }
 }
 
+/**
+ * Returns a number and it's appropriate suffix
+ * appended to the end of the string.
+ * 
+ * @param i the number to convert
+ */
 export const ordinalSuffix = (i: number) => {
     let j = i % 10,
         k = i % 100;
-    if (j == 1 && k != 11) {
-        return i + "st";
-    }
-    if (j == 2 && k != 12) {
-        return i + "nd";
-    }
-    if (j == 3 && k != 13) {
-        return i + "rd";
-    }
+
+    if (j == 1 && k != 11) return i + "st";
+    if (j == 2 && k != 12) return i + "nd";
+    if (j == 3 && k != 13) return i + "rd";
+    
     return i + "th";
 }
 
@@ -421,6 +462,13 @@ export const getJoinedList = (list: any[], delimiter: string) => {
     return str;
 }
 
+/**
+ * Creates a joined string from a list of objects.
+ * 
+ * @param list a list of elements of type U
+ * @param delimiter the delimiter for the joined elements
+ * @param apply applies the given function to each element of the list
+ */
 export const join = <U, T>(list: U[], delimiter: string, apply: (val: U) => T) => {
     let str = '';
     list
@@ -488,6 +536,19 @@ export const generateSimpleEmbedWithImage = (title: string, message: string, ima
 export const generateEmbed = (title: string, message: string, fields: EmbedFieldData[]) => {
     return generateSimpleEmbed(title, message)
         .addFields(fields);
+}
+
+/**
+ * Shorthand for generating a complex message embed.
+ * 
+ * @param title the title of the embed
+ * @param message the description for the embed
+ * @param fields a list of EmbedFieldData for the embed
+ */
+export const generateEmbedWithFieldsAndImage = (title: string, message: string, fields: EmbedFieldData[], image: string) => {
+    return generateSimpleEmbed(title, message)
+        .addFields(fields)
+        .setThumbnail(image);
 }
 
 /**

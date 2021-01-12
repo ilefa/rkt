@@ -8,3 +8,5 @@ temp/
 env.json
 xprepo.json
 birthdays.json
+stonkboard.json
+database.sqlite

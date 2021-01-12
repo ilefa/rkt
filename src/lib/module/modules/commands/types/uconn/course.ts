@@ -3,7 +3,7 @@ import moment from 'moment';
 import cheerio from 'cheerio';
 import tableparse from 'cheerio-tableparser';
 
-import { Command, CommandReturn } from '../command';
+import { Command, CommandReturn } from '../../command';
 import { decode as decodeEntity } from 'html-entities';
 import { Message, Permissions, User } from 'discord.js';
 import {
@@ -14,14 +14,14 @@ import {
     italic,
     link,
     replaceAll
-} from '../../../../util';
+} from '../../../../../util';
 
 const identifierRegex = /^[a-zA-Z]{2,4}\d{4}(Q|E|W)*$/;
 
-export default class CourseSearchCommand extends Command {
+export default class CourseCommand extends Command {
 
     constructor() {
-        super('csearch', `Invalid usage: ${emboss('.csearch <course> [campus]')}`, null, [
+        super('course', `Invalid usage: ${emboss('.course <course> [campus]')}`, null, [
             {
                 name: 'Args',
                 value: `${bold('__course__')}: the course to retrieve data for\n` 

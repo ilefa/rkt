@@ -1,6 +1,7 @@
-import Module from '../../../module';
-import { Message, User } from 'discord.js';
 import MultiCommand from './multi';
+import Module from '../../../module';
+
+import { Message, User } from 'discord.js';
 
 export default abstract class CommandComponent<M extends Module> {
 

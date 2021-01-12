@@ -50,8 +50,8 @@ let dates = str
     .trim()
     .split('\n')
     .map(s => s.trim()
-    .split(':')
-    .map(s => s.trim()));
+        .split(':')
+        .map(s => s.trim()));
 
 let result: BirthdayPayload[] = [];
 

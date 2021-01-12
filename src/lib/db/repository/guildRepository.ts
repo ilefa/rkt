@@ -1,5 +1,5 @@
 import { Guild } from "discord.js";
-import { Guild as StonksGuild } from "../entity/Guild";
+import { Guild as StonksGuild } from "../entity/guild/Guild";
 import { EntityRepository, AbstractRepository } from "typeorm";
 
 @EntityRepository(StonksGuild)

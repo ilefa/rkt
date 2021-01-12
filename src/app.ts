@@ -1,5 +1,5 @@
-import discord from 'discord.js';
 import env from '../env.json';
+import discord from 'discord.js';
 
 import ModuleManager from './lib/module/manager';
 import PollManager from './lib/module/modules/poll';
@@ -19,12 +19,14 @@ import {
     BirthdayCommand,
     ContractCommand,
     CountHerCommand,
-    CourseSearchCommand,
+    CourseCommand,
     FuturesCommand,
     HelpCommand,
     IsMarketOpenCommand,
     JackCommand,
+    MinorCommand,
     OptionsCommand,
+    PassFailCommand,
     PermissionsCommand,
     PollCommand,
     PrefsCommand,
@@ -36,6 +38,7 @@ import {
     StimmyCommand,
     StonksCommand,
     StopCommand,
+    UptimeCommand,
     XpBoardCommand,
     XpCompareCommand,
     XpRankCommand,
@@ -50,6 +53,7 @@ import {
 
 import { printStartup } from './lib/startup';
 
+const start = Date.now();
 const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const moduleManager = new ModuleManager(client);
 const commandCenter = new CommandManager(client);
@@ -63,14 +67,16 @@ commandCenter.registerCommand('bigjannie', new BigJannieCommand());
 commandCenter.registerCommand('birthday', new BirthdayCommand(birthdayManager));
 commandCenter.registerCommand('contract', new ContractCommand());
 commandCenter.registerCommand('counther', new CountHerCommand(countHerManager));
-commandCenter.registerCommand('csearch', new CourseSearchCommand());
+commandCenter.registerCommand('csearch', new CourseCommand());
 commandCenter.registerCommand('futures', new FuturesCommand());
 commandCenter.registerCommand('help', new HelpCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
 commandCenter.registerCommand('jack', new JackCommand());
+commandCenter.registerCommand('minor', new MinorCommand());
 commandCenter.registerCommand('options', new OptionsCommand());
 commandCenter.registerCommand('perms', new PermissionsCommand());
 commandCenter.registerCommand('quote', new QuoteCommand());
+commandCenter.registerCommand('pf', new PassFailCommand());
 commandCenter.registerCommand('poll', new PollCommand());
 commandCenter.registerCommand('prefs', new PrefsCommand());
 commandCenter.registerCommand('purge', new PurgeCommand());
@@ -80,6 +86,7 @@ commandCenter.registerCommand('stack', new StackCommand());
 commandCenter.registerCommand('stimmy', new StimmyCommand());
 commandCenter.registerCommand('stonks', new StonksCommand());
 commandCenter.registerCommand('stop', new StopCommand());
+commandCenter.registerCommand('uptime', new UptimeCommand(start));
 commandCenter.registerCommand('xpboard', new XpBoardCommand());
 commandCenter.registerCommand('xpcompare', new XpCompareCommand());
 commandCenter.registerCommand('xprank', new XpRankCommand());

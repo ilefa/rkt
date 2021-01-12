@@ -1,9 +1,9 @@
 import ListBirthdaysCommand from './list';
-import BirthdayManager from '../../../../birthday';
-import MultiCommand from '../../../components/multi';
-
 import NextBirthdayCommand from './next';
 import SetBirthdayCommand from './set';
+
+import BirthdayManager from '../../../../birthday';
+import MultiCommand from '../../../components/multi';
 
 import { Permissions } from 'discord.js';
 

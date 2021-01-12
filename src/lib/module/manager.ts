@@ -14,6 +14,10 @@ export default class ModuleManager {
         this.modules = [];
     }
 
+    /**
+     * Registers a module into the manager.
+     * @param module the module
+     */
     registerModule(module: Module) {
         module.client = this.client;
         module.manager = this;

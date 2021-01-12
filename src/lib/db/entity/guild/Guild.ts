@@ -13,7 +13,9 @@ export class Guild {
     @Column()
     joinedTime: number;
 
-    @OneToOne(() => GuildPreferences)
+    @OneToOne(() => GuildPreferences,  {
+        cascade: true,
+    })
     @JoinColumn()
     prefs: GuildPreferences;
 

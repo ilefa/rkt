@@ -2,8 +2,8 @@ import Module from '../../../module';
 import CommandComponent from './component';
 import env from '../../../../../../env.json';
 
-import { EmbedFieldData, Message, User } from 'discord.js';
 import { Command, CommandReturn } from '../command';
+import { EmbedFieldData, Message, User } from 'discord.js';
 import { bold, generateSimpleEmbed } from '../../../../util';
 
 export default abstract class MultiCommand<M extends Module> extends Command {
@@ -25,7 +25,11 @@ export default abstract class MultiCommand<M extends Module> extends Command {
         this.generateHelpFields();
     }
 
-    abstract registerComponents();
+    /**
+     * Intended to be used to register all
+     * known components for a MultiCommand.
+     */
+    abstract registerComponents(): void;
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
         let component = this.getComponent(args);
@@ -71,7 +75,7 @@ export default abstract class MultiCommand<M extends Module> extends Command {
         let helpStr = '';
         this.components.forEach((v, k) => {
             if (v.help === v.name) {
-                helpStr = bold('.' + this.base + ' ' + v.name) + '\n';
+                helpStr += bold('.' + this.base + ' ' + v.name) + '\n';
                 return;
             }
 
