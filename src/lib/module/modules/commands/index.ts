@@ -22,6 +22,7 @@ import StackCommand from './types/fun/stack';
 import StimmyCommand from './types/fun/stimmy';
 import StonksCommand from './types/stonks/stonks';
 import StopCommand from './types/stop';
+import TestGameEmbedCommand from './types/fun/testGame';
 import UptimeCommand from './types/uptime';
 import XpBoardCommand from './types/xp/xpboard';
 import XpCompareCommand from './types/xp/xpcompare';
@@ -54,6 +55,7 @@ export {
     StimmyCommand,
     StonksCommand,
     StopCommand,
+    TestGameEmbedCommand,
     UptimeCommand,
     XpBoardCommand,
     XpCompareCommand,

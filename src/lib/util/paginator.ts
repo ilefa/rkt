@@ -1,6 +1,6 @@
 import TinyGradient from 'tinygradient';
 
-import { generateEmbed } from './util';
+import { generateEmbed } from '.';
 import { Instance as TGInst } from 'tinygradient';
 import {
     EmbedFieldData,

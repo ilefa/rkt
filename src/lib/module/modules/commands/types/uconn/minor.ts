@@ -6,7 +6,7 @@ import * as Logger from '../../../../../logger';
 
 import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, TextChannel, User } from 'discord.js';
-import { PageContent, PaginatedEmbed } from '../../../../../paginator';
+import { PageContent, PaginatedEmbed } from '../../../../../util/paginator';
 import { bold, emboss, generateSimpleEmbed, link } from '../../../../../util';
 
 export type MinorData = {

@@ -38,6 +38,7 @@ import {
     StimmyCommand,
     StonksCommand,
     StopCommand,
+    TestGameEmbedCommand,
     UptimeCommand,
     XpBoardCommand,
     XpCompareCommand,
@@ -86,6 +87,7 @@ commandCenter.registerCommand('stack', new StackCommand());
 commandCenter.registerCommand('stimmy', new StimmyCommand());
 commandCenter.registerCommand('stonks', new StonksCommand());
 commandCenter.registerCommand('stop', new StopCommand());
+commandCenter.registerCommand('tge', new TestGameEmbedCommand());
 commandCenter.registerCommand('uptime', new UptimeCommand(start));
 commandCenter.registerCommand('xpboard', new XpBoardCommand());
 commandCenter.registerCommand('xpcompare', new XpCompareCommand());
