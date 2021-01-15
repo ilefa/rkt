@@ -1,6 +1,6 @@
 import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
-import { bold, generateSimpleEmbed, isFC, italic } from '../../../../../util';
+import { bold, EmbedIconType, generateSimpleEmbed, isFC, italic } from '../../../../../util';
 
 const SOE_ROLES = [
     "770717116633448449",
@@ -24,7 +24,7 @@ export default class PassFailCommand extends Command {
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
         if (!isFC(message.guild)) {
-            message.reply(generateSimpleEmbed('.pf | Error', `You cannot run this command in ${bold(message.guild.name)}.`));
+            message.reply(generateSimpleEmbed('.pf | Error', EmbedIconType.UCONN, `You cannot run this command in ${bold(message.guild.name)}.`));
             return CommandReturn.EXIT;
         }
 

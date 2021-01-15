@@ -2,16 +2,18 @@ import moment from 'moment';
 
 import { genXpChart } from '../../../../../chart';
 import { Command, CommandReturn } from '../../command';
-import { Message, MessageEmbed, Permissions, User } from 'discord.js';
+import { Message, Permissions, User } from 'discord.js';
 import { TrackingType, XpRecord } from '../../../xp/struct';
 import { collectEntries, getNameForType } from '../../../xp/tracker';
 import {
     asMention,
     bold,
     DAY_MILLIS,
+    EmbedIconType,
     emboss,
     generateEmbed,
     generateSimpleEmbed,
+    generateSimpleEmbedWithImage,
     getChangeString,
     getDurationWithUnit,
     getEmoteForIndicator,
@@ -50,7 +52,7 @@ export default class XpTrackCommand extends Command {
         }
 
         if (!args[0].match(snowflakeRegex) && message.mentions.members.size != 1) {
-            message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, `Missing target parameter.`, [
+            message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Missing target parameter.`, [
                 {
                     name: 'Valid Target',
                     value: `Please ${emboss('@mention')} or provide a ${emboss('#<snowflakeId>')} for exactly one member.`,
@@ -62,7 +64,7 @@ export default class XpTrackCommand extends Command {
         }
 
         if (!args[1] || !['xp', 'messages', 'position'].includes(args[1].toLowerCase())) {
-            message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, `Invalid type parameter: ${emboss(args[1] ? args[1] : '[missing]')}.`, [
+            message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Invalid type parameter: ${emboss(args[1] ? args[1] : '[missing]')}.`, [
                 {
                     name: 'Valid Types',
                     value: emboss('xp, messages, position'),
@@ -79,7 +81,7 @@ export default class XpTrackCommand extends Command {
             : message.mentions.members.first();
 
         if (!target) {
-            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Tracking`, `Invalid or unknown target: ${emboss(args[0])}.`));
+            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Invalid or unknown target: ${emboss(args[0])}.`));
             return CommandReturn.EXIT;
         }
 
@@ -87,7 +89,7 @@ export default class XpTrackCommand extends Command {
         if (args[2]) {
             let customRange = getDurationWithUnit(args[1], 'millisecond');
             if (!customRange) {
-                message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, `Invalid time specification: ${emboss(args[2])}.`, [
+                message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Invalid time specification: ${emboss(args[2])}.`, [
                     {
                         name: 'Valid Time Specification',
                         value: emboss(`[#](s|m|d|h|mo|y)`),
@@ -102,7 +104,7 @@ export default class XpTrackCommand extends Command {
 
         let entries: XpRecord[] = collectEntries(target.id, range);
         if (!entries) {
-            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Tracking`, `Failed to find historical data for ${asMention(target.id)}.`))
+            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Failed to find historical data for ${asMention(target.id)}.`))
             return CommandReturn.EXIT;
         }
         
@@ -120,7 +122,7 @@ export default class XpTrackCommand extends Command {
         let latest = entries[entries.length - 1][0];
 
         if (!initial || !latest) {
-            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Tracking`, `Failed to find historical data for ${asMention(target.id)}.`))
+            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Failed to find historical data for ${asMention(target.id)}.`))
             return CommandReturn.EXIT;
         }
 
@@ -128,19 +130,14 @@ export default class XpTrackCommand extends Command {
         let msgVariance = latest.messages - initial.messages;
         let posVariance = latest.position - initial.position;
 
-        let embed = new MessageEmbed()
-            .setTitle(`${message.guild.name} - Experience Tracking`)
-            .setImage(chart)
-            .setColor(0x27AE60)
-            .setDescription(`Tracking ${asMention(target.id)}'s ${getNameForType(type)} progression for the last ${bold(getLatestTimeValue(range))}.\n\n`
-                + `**Indicators**\n` 
-                + `${getEmoteForIndicator(xpVariance, 0, 0, 0)} Experience Change: ${bold('+' + xpVariance + ' XP')}\n`
-                + `${getEmoteForIndicator(msgVariance, 0, 0, 0)} Messages Change: ${bold('+' + msgVariance + ' :incoming_envelope:')}\n`
-                + `${getEmoteForIndicator(posVariance, 0, 0, 0)} Position Change: ${bold(posVariance === 0 ? 'None' : getChangeString(posVariance, '', 1, true))}\n\n`
-                + `**Latest Data Marker**\n`
-                + `${moment(latest.time).format('MMMM Do YYYY, h:mm:ss a')}`);
-
-        message.reply(embed);
+        message.reply(generateSimpleEmbedWithImage(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP,
+            `Tracking ${asMention(target.id)}'s ${getNameForType(type)} progression for the last ${bold(getLatestTimeValue(range))}.\n\n`
+            + `**Indicators**\n` 
+            + `${getEmoteForIndicator(xpVariance, 0, 0, 0)} Experience Change: ${bold('+' + xpVariance + ' XP')}\n`
+            + `${getEmoteForIndicator(msgVariance, 0, 0, 0)} Messages Change: ${bold('+' + msgVariance + ' :incoming_envelope:')}\n`
+            + `${getEmoteForIndicator(posVariance, 0, 0, 0)} Position Change: ${bold(posVariance === 0 ? 'None' : getChangeString(posVariance, '', 1, true))}\n\n`
+            + `**Latest Data Marker**\n`
+            + `${moment(latest.time).format('MMMM Do YYYY, h:mm:ss a')}`, chart));
         return CommandReturn.EXIT;
     }
 

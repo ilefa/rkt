@@ -2,7 +2,7 @@ import * as Logger from '../../../../logger';
 
 import { Command, CommandReturn } from "../command";
 import { Message, MessageAttachment, User } from "discord.js";
-import { bold, CUSTOM_PERMS, emboss, generateSimpleEmbed } from "../../../../util";
+import { bold, CUSTOM_PERMS, EmbedIconType, emboss, generateSimpleEmbed } from "../../../../util";
 
 export default class StopCommand extends Command {
 
@@ -15,7 +15,7 @@ export default class StopCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        message.reply(generateSimpleEmbed('Stonks', `Please confirm shutdown by responding with ${bold('Y(ES)')}.`));
+        message.reply(generateSimpleEmbed('Stonks', EmbedIconType.PREFS, `Please confirm shutdown by responding with ${bold('Y(ES)')}.`));
         message.channel.awaitMessages((message: Message) => message && message.author.id === user.id,
             {
                 max: 1,
@@ -27,7 +27,7 @@ export default class StopCommand extends Command {
                 if (!msg 
                         || msg.content.toLowerCase() !== 'y' 
                         && msg.content.toLowerCase() !== 'yes') {
-                    msg.reply(generateSimpleEmbed('Stonks', 'Shutdown cancelled.'));
+                    msg.reply(generateSimpleEmbed('Stonks', EmbedIconType.PREFS, 'Shutdown cancelled.'));
                     return;
                 }
 
@@ -41,7 +41,7 @@ export default class StopCommand extends Command {
                     process.exit();
                 }, 5000);
             })
-            .catch(() => message.channel.send(generateSimpleEmbed('Stonks', 'Shutdown confirmation timed out.')))
+            .catch(() => message.channel.send(generateSimpleEmbed('Stonks', EmbedIconType.PREFS, 'Shutdown confirmation timed out.')))
         return CommandReturn.EXIT;
     }
 

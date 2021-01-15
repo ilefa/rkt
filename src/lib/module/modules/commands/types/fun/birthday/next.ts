@@ -7,6 +7,7 @@ import { Message, Permissions, User } from 'discord.js';
 import {
     asMention,
     bold,
+    EmbedIconType,
     generateSimpleEmbed,
     join
 } from '../../../../../../util';
@@ -23,10 +24,9 @@ export default class NextBirthdayCommand extends CommandComponent<BirthdayManage
         }
 
         let loading = await message.reply('<a:loading:788890776444207194> Working on that..');
-        let next = this.manager.getNextBirthday(message.guild.id);
-
+        let next = await this.manager.getNextBirthday(message.guild.id);
         if (!next) {
-            message.reply(generateSimpleEmbed('Next Birthday', 'There aren\'t any birthdays coming up :('));
+            message.reply(generateSimpleEmbed('Next Birthday', EmbedIconType.BIRTHDAY, 'There aren\'t any birthdays coming up :('));
             return CommandReturn.EXIT;
         }
 
@@ -34,7 +34,7 @@ export default class NextBirthdayCommand extends CommandComponent<BirthdayManage
         let str = join(users, ', ', user => asMention(user) + ', ');
         str = str.substring(0, str.length - 2).replace(/\,(?!.*\,)/, ' and');
 
-        message.reply(generateSimpleEmbed('Birthday List', `${str}'s birthday is up next on ${bold(moment(next.date).format('MMMM Do'))}.`))
+        message.reply(generateSimpleEmbed('Birthday List', EmbedIconType.BIRTHDAY, `${str}'s birthday is up next on ${bold(moment(next.date).format('MMMM Do'))}.`))
         loading.delete();
         return CommandReturn.EXIT;
     }

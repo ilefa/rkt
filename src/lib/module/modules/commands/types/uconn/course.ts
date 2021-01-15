@@ -8,6 +8,7 @@ import { decode as decodeEntity } from 'html-entities';
 import { Message, Permissions, User } from 'discord.js';
 import {
     bold,
+    EmbedIconType,
     emboss,
     generateEmbed,
     generateSimpleEmbed,
@@ -48,7 +49,7 @@ export default class CourseCommand extends Command {
 
         let identifier = args[0].toUpperCase();
         if (!identifierRegex.test(identifier)) {
-            message.reply(generateEmbed('Course Search', `Invalid or malformed course name: ${emboss(identifier)}`, [
+            message.reply(generateEmbed('Course Search', `Invalid or malformed course name: ${emboss(identifier)}`, EmbedIconType.UCONN, [
                 {
                     name: 'Valid Course Name',
                     value: emboss('<course prefix><course number>[Q,E,W]'),
@@ -66,7 +67,7 @@ export default class CourseCommand extends Command {
 
         let campus: CampusType = args[1] as CampusType || 'any';
         if (!campus) {
-            message.reply(generateEmbed('Course Search', `Invalid or malformed campus specification: ${emboss(args[1])}`, [
+            message.reply(generateEmbed('Course Search', `Invalid or malformed campus specification: ${emboss(args[1])}`, EmbedIconType.UCONN, [
                 {
                     name: 'Valid Campuses',
                     value: emboss(['any', 'storrs', 'hartford', 'stamford', 'waterbury', 'avery_point'].join(', ')),
@@ -90,7 +91,7 @@ export default class CourseCommand extends Command {
             });
 
         if (!res) {
-            message.reply(generateSimpleEmbed('Course Search', `Failed to lookup courses matching descriptor ${emboss(identifier)}.`));
+            message.reply(generateSimpleEmbed('Course Search', EmbedIconType.UCONN, `Failed to lookup courses matching descriptor ${emboss(identifier)}.`));
             return CommandReturn.EXIT;
         }
 
@@ -132,7 +133,7 @@ export default class CourseCommand extends Command {
         let data: string[][] = ($('.tablesorter') as any).parsetable();
         if (!data[0]) {
             loading.delete();
-            message.reply(generateSimpleEmbed(`Course Search » ${identifier}`,
+            message.reply(generateSimpleEmbed(`Course Search » ${identifier}`, EmbedIconType.UCONN,
                 `${bold(name)}\n\n`
                 + `:arrow_right: ${link('Course Catalog', target)}\n`
                 + `:hash: Credits: ${bold(credits)}\n` 
@@ -295,7 +296,7 @@ export default class CourseCommand extends Command {
         });
 
         loading.delete();
-        message.reply(generateEmbed(`Course Search » ${identifier}`,
+        message.reply(generateEmbed(`Course Search » ${identifier}`, EmbedIconType.UCONN,
             `${bold(name)}\n\n`
             + `:arrow_right: ${link('Course Catalog', target)}\n`
             + `:hash: Credits: ${bold(credits)}\n` 

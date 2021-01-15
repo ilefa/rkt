@@ -4,7 +4,7 @@ import env from '../../../../../../env.json';
 
 import { Command, CommandReturn } from '../command';
 import { EmbedFieldData, Message, User } from 'discord.js';
-import { bold, generateSimpleEmbed } from '../../../../util';
+import { bold, EmbedIconType, generateSimpleEmbed } from '../../../../util';
 
 export default abstract class MultiCommand<M extends Module> extends Command {
     
@@ -44,7 +44,7 @@ export default abstract class MultiCommand<M extends Module> extends Command {
                 && !env
                     .superPerms
                     .some(id => user.id === id)) {
-            message.reply(generateSimpleEmbed('Whoops', `You don't have permission to do this.`));
+            message.reply(generateSimpleEmbed('Whoops', EmbedIconType.ERROR, `You don't have permission to do this.`));
             return CommandReturn.EXIT;
         }
 

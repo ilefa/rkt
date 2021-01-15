@@ -1,6 +1,7 @@
 import {
     asMention,
     bold,
+    EmbedIconType,
     generateEmbed,
     generateSimpleEmbed,
     getLatestTimeValue,
@@ -152,7 +153,7 @@ export class GameEmbedAwaiter {
     }
 
     private generateMessage(): MessageEmbed {
-        return generateEmbed(this.title,
+        return generateEmbed(this.title, EmbedIconType.TEST, 
             this.canStart() 
                 ? `The game will start in ${bold(getLatestTimeValue(this.countdown * 1000))}.` 
                 : `Waiting for ${bold(this.min - this.users.length)} more player${numberEnding(this.min - this.users.length)}.` 
@@ -178,7 +179,7 @@ export class GameEmbedAwaiter {
             return;
         }
 
-        await this.message.edit(generateSimpleEmbed(this.title, ':hourglass_flowing_sand: The game has timed out waiting for new players.'));
+        await this.message.edit(generateSimpleEmbed(this.title, EmbedIconType.TEST, ':hourglass_flowing_sand: The game has timed out waiting for new players.'));
     }
 
     private canStart(): boolean {

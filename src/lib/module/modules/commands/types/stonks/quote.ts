@@ -19,6 +19,9 @@ import {
     timeDiff,
     validRanges,
     validIntervals,
+    EmbedIconType,
+    generateEmbed,
+    generateEmbedWithFieldsAndImage,
 } from '../../../../../util';
 
 export default class QuoteCommand extends Command {
@@ -60,7 +63,7 @@ export default class QuoteCommand extends Command {
         let res = await quote(ticker, range, interval);
         if (!res) {
             loading.delete();
-            message.reply(generateSimpleEmbed('.quote | Error', `Couldn't find any results for ticker ${emboss(ticker)}.`));
+            message.reply(generateSimpleEmbed('.quote | Error', EmbedIconType.STONKS, `Couldn't find any results for ticker ${emboss(ticker)}.`));
             return CommandReturn.EXIT;
         }
 
@@ -68,7 +71,7 @@ export default class QuoteCommand extends Command {
         let payload = res.indicators.quote[0].close;
         if (!payload) {
             loading.delete();
-            message.reply(generateSimpleEmbed('.quote | Error', `An unknown error occurred while quoting ${emboss(ticker)}.`));
+            message.reply(generateSimpleEmbed('.quote | Error', EmbedIconType.STONKS, `An unknown error occurred while quoting ${emboss(ticker)}.`));
             return CommandReturn.EXIT;
         }
 
@@ -119,13 +122,11 @@ export default class QuoteCommand extends Command {
 
         let state = opt.quote.marketState;
         state = state.substring(state.indexOf(state));
-
-        let embed = new MessageEmbed()
-            .setTitle(`${opt.quote.displayName ? opt.quote.displayName : ticker}`)
-            .setColor(0x27AE60)
-            .setImage(chart)
-            .setDescription(`Retrieved quote data for ${bold(ticker)} for the last ${emboss(`${range} (${interval})`)}.\nThis operation took ${emboss(timeDiff(start) + 'ms')} to complete.`)
-            .addFields([
+        
+        loading.delete();
+        message.reply(generateEmbedWithFieldsAndImage(`${opt.quote.displayName ? opt.quote.displayName : ticker}`, EmbedIconType.STONKS,
+            `Retrieved quote data for ${bold(ticker)} for the last ${emboss(`${range} (${interval})`)}.\nThis operation took ${emboss(timeDiff(start) + 'ms')} to complete.`,
+            [
                 {
                     name: 'Price',
                     value: `$${res.meta.regularMarketPrice}`,
@@ -171,10 +172,7 @@ export default class QuoteCommand extends Command {
                     value: `${getEmoteForIndicator(rsi, 40, 40, 40) + ' ' + rsi}`,
                     inline: true
                 }
-            ]);
-        
-        loading.delete();
-        message.reply(embed);
+            ], chart));
         return CommandReturn.EXIT;
     }
 

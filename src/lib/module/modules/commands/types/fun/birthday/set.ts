@@ -7,6 +7,7 @@ import { Message, Permissions, User } from 'discord.js';
 import {
     asMention,
     bold,
+    EmbedIconType,
     emboss,
     generateEmbed,
     generateSimpleEmbed,
@@ -28,7 +29,7 @@ export default class SetBirthdayCommand extends CommandComponent<BirthdayManager
         if (args[0]) {
             let date = getExpDate(args[0]);
             if (!date || date.toString() === 'Invalid Date') {
-                message.reply(generateEmbed('.birthday | Argument Error', `Invalid birthdate: ${emboss(args[0])}.`, [
+                message.reply(generateEmbed('.birthday | Argument Error', EmbedIconType.BIRTHDAY, `Invalid birthdate: ${emboss(args[0])}.`, [
                     {
                         name: 'Valid Date Specification',
                         value: emboss(`mm/dd`),
@@ -43,7 +44,7 @@ export default class SetBirthdayCommand extends CommandComponent<BirthdayManager
         }
 
         this.manager.store(message.guild, user, expDate.getTime());
-        message.reply(generateSimpleEmbed('Birthdays', `${asMention(user)}'s birthday has been updated to ${bold(moment(expDate).format('MMMM Do'))}.`))
+        message.reply(generateSimpleEmbed('Birthdays', EmbedIconType.BIRTHDAY, `${asMention(user)}'s birthday has been updated to ${bold(moment(expDate).format('MMMM Do'))}.`))
         return CommandReturn.EXIT;
     }
     

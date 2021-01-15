@@ -3,6 +3,7 @@ import { Message, Permissions, User } from 'discord.js';
 import {
     asMention,
     bold,
+    EmbedIconType,
     emboss,
     generateEmbed,
     generateSimpleEmbed,
@@ -51,7 +52,7 @@ export default class PollCommand extends Command {
 
         // Simple polls
         if (components.length === 1) {
-            let reply = await message.reply(generateSimpleEmbed('Polls', `${italic(prompt)}\nby ${asMention(user)}`));
+            let reply = await message.reply(generateSimpleEmbed('Polls', EmbedIconType.POLL, `${italic(prompt)}\nby ${asMention(user)}`));
             ['👍', '👎', '🤷'].map(async emote => await reply.react(emote));
 
             return CommandReturn.EXIT;
@@ -65,7 +66,7 @@ export default class PollCommand extends Command {
         let question = components[0].trim();
         let responses = components.slice(1);
         if (responses.length < 2 || responses.length > 20) {
-            message.reply(generateEmbed('Polls', `${responses.length < 2 ? 'Too few response groups, must have have atleast two.' : 'Too many response groups, can have twenty at most.'}`, [
+            message.reply(generateEmbed('Polls', EmbedIconType.POLL, `${responses.length < 2 ? 'Too few response groups, must have have atleast two.' : 'Too many response groups, can have twenty at most.'}`, [
                 {
                     name: 'Valid Response Specification',
                     value: emboss('[<response>]'),
@@ -88,7 +89,7 @@ export default class PollCommand extends Command {
             emotes.push(RESPONSE_GROUP_EMOJI_RAW[i]);
         })
 
-        let reply = await message.reply(generateSimpleEmbed('Polls', `${italic(question)}\n` 
+        let reply = await message.reply(generateSimpleEmbed('Polls', EmbedIconType.POLL, `${italic(question)}\n` 
             + `by ${asMention(user)}\n\n` 
             + `${bold('Responses')}\n` 
             + `${str.trim()}`));

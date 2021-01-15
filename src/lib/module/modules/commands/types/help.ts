@@ -5,6 +5,7 @@ import { Message, Permissions, User } from 'discord.js';
 import {
     bold,
     CUSTOM_PERMS,
+    EmbedIconType,
     emboss,
     generateEmbedWithFieldsAndImage,
     getEmoteForCommandPermission,
@@ -71,7 +72,7 @@ export default class HelpCommand extends Command {
 
         legend += `${getEmoteForCommandPermission(Permissions.FLAGS.SEND_MESSAGES)} Member\n\t${bold(message.guild.name)} server members`;
 
-        message.reply(generateEmbedWithFieldsAndImage('Stonks Help', `${bold('Stonks')} version 0.1 (master)\n` 
+        message.reply(generateEmbedWithFieldsAndImage('Stonks Help', EmbedIconType.HELP, `${bold('Stonks')} version 0.1 (master)\n` 
             + `Made with lots of :blue_heart: and :rocket: by <@177167251986841600> & <@268044207854190604>.\n\n`
             + `${bold(`Command List (${commands.length})`)}\n` 
             + helpList.trim(),

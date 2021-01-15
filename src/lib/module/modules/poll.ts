@@ -3,6 +3,7 @@ import Module from '../module';
 import { Message, MessageReaction, User } from 'discord.js';
 import {
     asMention,
+    EmbedIconType,
     generateEmbed,
     RESPONSE_GROUP_EMOJI,
     RESPONSE_GROUP_EMOJI_RAW
@@ -72,7 +73,7 @@ export default class PollManager extends Module {
             value: 'No Responses :('
         });
 
-        await message.edit(generateEmbed('Polls', questionString, fields));
+        await message.edit(generateEmbed('Polls', EmbedIconType.POLL, questionString, fields));
     }
 
     async handleSimple(message: Message) {

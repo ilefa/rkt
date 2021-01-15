@@ -1,6 +1,6 @@
 import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
-import { bold, emboss, generateSimpleEmbed, toggleAlerts } from '../../../../util';
+import { bold, EmbedIconType, emboss, generateSimpleEmbed, toggleAlerts } from '../../../../util';
 
 export default class AlertsCommand extends Command {
 
@@ -14,7 +14,7 @@ export default class AlertsCommand extends Command {
         }
 
         let state = toggleAlerts();
-        message.reply(generateSimpleEmbed('Announcer Preferences', `${bold('Alerts')} are ${state ? 'now' : 'no longer'} enabled.`));
+        message.reply(generateSimpleEmbed('Announcer Preferences', EmbedIconType.PREFS, `${bold('Alerts')} are ${state ? 'now' : 'no longer'} enabled.`));
         
         return CommandReturn.EXIT;
     }

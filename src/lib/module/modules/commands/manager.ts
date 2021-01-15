@@ -5,7 +5,7 @@ import * as Logger from '../../../logger';
 
 import { User, Message, MessageEmbed, Client } from 'discord.js';
 import { Command, CommandEntry, CommandReturn } from './command';
-import { codeBlock, generateEmbed, generateSimpleEmbed, has, italic, numberEnding } from '../../../util';
+import { codeBlock, EmbedIconType, generateEmbed, generateSimpleEmbed, has, italic, numberEnding } from '../../../util';
 
 export default class CommandManager extends Module {
     
@@ -61,7 +61,7 @@ export default class CommandManager extends Module {
             if (cmd.name.toLowerCase() === name) {
                 try {
                     if (!has(user, cmd.command.permission, message.guild)) {
-                        message.reply(generateSimpleEmbed('Whoops', `You don't have permission to do this.`));
+                        message.reply(generateSimpleEmbed('Whoops', EmbedIconType.ERROR, `You don't have permission to do this.`));
                         break;
                     }
 
@@ -75,16 +75,16 @@ export default class CommandManager extends Module {
                     }
 
                     let helpEmbed = new MessageEmbed()
-                        .setTitle(cmd.command.helpTitle ? cmd.command.helpTitle : `.${cmd.command.name} | Help Menu`)    
+                        .setAuthor(cmd.command.helpTitle ? cmd.command.helpTitle : `.${cmd.command.name} | Help Menu`, EmbedIconType.HELP)    
                         .setColor(0x27AE60)
                         .setDescription(cmd.command.help)
-                        .addFields(cmd.command.helpFields)
+                        .addFields(cmd.command.helpFields);
 
                     message.reply(helpEmbed);
                     break;
                 } catch (e) {
                     if (env.reportErrors.includes(message.guild.id)) {
-                        message.reply(generateEmbed('Huh? That wasn\'t supposed to happen..', `Something went wrong while processing your command.`, [
+                        message.reply(generateEmbed('Huh? That wasn\'t supposed to happen..', EmbedIconType.ERROR, `Something went wrong while processing your command.`, [
                             {
                                 name: 'Command',
                                 value: codeBlock('', name),
@@ -112,7 +112,7 @@ export default class CommandManager extends Module {
                         return;
                     }
 
-                    message.reply(generateSimpleEmbed('Huh? That wasn\'t supposed to happen..', 'Something went wrong while processing your command.'));
+                    message.reply(generateSimpleEmbed('Huh? That wasn\'t supposed to happen..', EmbedIconType.ERROR, 'Something went wrong while processing your command.'));
                     Logger.except(e, this.name, 'Encountered an exception while processing a command');
                 }
             }

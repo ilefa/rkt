@@ -8,6 +8,7 @@ import {
     asMention,
     bold,
     CUSTOM_PERMS,
+    EmbedIconType,
     emboss,
     generateEmbed,
     italic,
@@ -54,7 +55,7 @@ export default class PrefsCommand extends Command {
             verbose += ` • ${emboss(server)}\n`;
         });
 
-        let embed = generateEmbed('Stonks Bot Preferences', '', [
+        let embed = generateEmbed('Stonks Bot Preferences', EmbedIconType.PREFS, '', [
             {
                 name: 'Futures Tickers',
                 value: futures,

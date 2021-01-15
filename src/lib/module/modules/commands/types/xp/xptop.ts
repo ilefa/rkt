@@ -7,10 +7,11 @@ import {
     asMention,
     bold,
     DAY_MILLIS,
+    EmbedIconType,
     emboss,
     generateEmbed,
     generateSimpleEmbed,
-    generateSimpleEmbedWithImage,
+    generateSimpleEmbedWithThumbnail,
     getDurationWithUnit,
     getEmoteForXpPlacement,
     getLatestTimeValue
@@ -33,7 +34,7 @@ export default class XpTopCommand extends Command {
         if (args[0]) {
             let customRange = getDurationWithUnit(args[0], 'millisecond');
             if (!customRange) {
-                message.reply(generateEmbed(`${message.guild.name} - Experience Top Movers`, `Invalid time specification: ${emboss(args[0])}.`, [
+                message.reply(generateEmbed(`${message.guild.name} - Experience Top Movers`, EmbedIconType.XP, `Invalid time specification: ${emboss(args[0])}.`, [
                     {
                         name: 'Valid Time Specification',
                         value: emboss(`[#](m|d|h|mo|y)`),
@@ -50,7 +51,7 @@ export default class XpTopCommand extends Command {
         if (args[1]) {
             let customLimit = parseInt(args[1]);
             if (isNaN(customLimit) || customLimit <= 0) {
-                message.reply(generateEmbed(`${message.guild.name} - Experience Top Movers`, `Invalid or Non-Numeric Limit: ${emboss(args[1])}.`, [
+                message.reply(generateEmbed(`${message.guild.name} - Experience Top Movers`, EmbedIconType.XP, `Invalid or Non-Numeric Limit: ${emboss(args[1])}.`, [
                     {
                         name: 'Reason',
                         value: 'Limit must be a non-zero positive integer.',
@@ -63,7 +64,7 @@ export default class XpTopCommand extends Command {
 
         let res = await getTopMovers(message.guild.id, limit, range);
         if (!res) {
-            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Top Movers`, `Something went wrong while retrieving historical data.`));
+            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Top Movers`, EmbedIconType.XP, `Something went wrong while retrieving historical data.`));
             return CommandReturn.EXIT;
         }
 
@@ -76,7 +77,7 @@ export default class XpTopCommand extends Command {
             str += `${getEmoteForXpPlacement(i + 1)} ${asMention(user.client)} with ${bold('+' + user.exp + ' XP')} and ${bold('+' + user.messages.toLocaleString())} :incoming_envelope:\n`;
         })
 
-        message.reply(generateSimpleEmbedWithImage(`${message.guild.name} - Experience Top Movers`, str, message.guild.iconURL()));
+        message.reply(generateSimpleEmbedWithThumbnail(`${message.guild.name} - Experience Top Movers`, EmbedIconType.XP, str, message.guild.iconURL()));
         return CommandReturn.EXIT;
     }
 

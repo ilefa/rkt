@@ -1,7 +1,7 @@
 import env from '../../../../../../env.json';
 
 import { Message, MessageEmbed, Permissions, User } from 'discord.js';
-import { bold, emboss, getEmoteForPermissions } from '../../../../util';
+import { bold, EmbedIconType, emboss, getEmoteForPermissions } from '../../../../util';
 import { Command, CommandReturn } from '../command';
 
 export default class PermissionsCommand extends Command {
@@ -31,7 +31,7 @@ export default class PermissionsCommand extends Command {
         }
 
         let embed = new MessageEmbed()
-            .setTitle(`${user.username}#${user.discriminator}'s Permissions`)
+            .setAuthor(`${user.username}#${user.discriminator}'s Permissions`, EmbedIconType.TEST)
             .setColor(0x27AE60)
             .setDescription(`${getEmoteForPermissions(isSuperPerms, isAdmin)} ${bold(user.username + '#' + user.discriminator)} has ${permString}.`)
             .setThumbnail(user.avatarURL());

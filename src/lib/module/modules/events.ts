@@ -6,7 +6,7 @@ import CommandManager from './commands/manager';
 import CountHerManager from './counther/manager';
 import ReactionManager from './reactions/manager';
 
-import { codeBlock, generateEmbed, getReactionPhrase } from '../../util';
+import { codeBlock, EmbedIconType, generateEmbed, getReactionPhrase } from '../../util';
 import { MessageReaction, TextChannel, User } from 'discord.js';
 
 export default class EventManager extends Module {
@@ -64,7 +64,7 @@ export default class EventManager extends Module {
             if (reaction.partial) {
                 await reaction.fetch();
             }
-            if (reaction.message.embeds.length && reaction.message.embeds[0].title === "Polls") {
+            if (reaction.message.embeds.length && reaction.message.embeds[0].author.name === "Polls") {
                 await this.pollManager.handleAdd(reaction, user);
             }
 
@@ -77,14 +77,14 @@ export default class EventManager extends Module {
                 await reaction.fetch();
             }
         
-            if (reaction.message.embeds.length && reaction.message.embeds[0].title === "Polls") {
+            if (reaction.message.embeds.length && reaction.message.embeds[0].author.name === "Polls") {
                 await this.pollManager.handle(reaction);
             }
         });
 
         process.on('uncaughtException', async (err: any) => {
             if (err.fatal) commandDeck.send('@everyone');
-            commandDeck.send(generateEmbed('Severe', `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception.${err.fatal ? `\nStonksBot cannot recover from this incident and will now shutdown.` : ''}`, [
+            commandDeck.send(generateEmbed('Severe', EmbedIconType.ERROR, `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception.${err.fatal ? `\nStonksBot cannot recover from this incident and will now shutdown.` : ''}`, [
                 {
                     name: 'Error',
                     value: err.message,

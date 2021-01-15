@@ -7,7 +7,7 @@ import * as Logger from '../../../../../logger';
 import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, TextChannel, User } from 'discord.js';
 import { PageContent, PaginatedEmbed } from '../../../../../util/paginator';
-import { bold, emboss, generateSimpleEmbed, link } from '../../../../../util';
+import { bold, EmbedIconType, emboss, generateSimpleEmbed, link } from '../../../../../util';
 
 export type MinorData = {
     name: string;
@@ -44,7 +44,7 @@ export default class MinorCommand extends Command {
                 temp.push(minor);
             }
 
-            new PaginatedEmbed(message.channel as TextChannel, user, `UConn Minors (${minors.length})`,
+            new PaginatedEmbed(message.channel as TextChannel, user, `UConn Minors (${minors.length})`, EmbedIconType.UCONN,
                 pages, 600000, 'https://avatars0.githubusercontent.com/u/70737187?s=200&v=4');
 
             return CommandReturn.EXIT;
@@ -63,7 +63,7 @@ export default class MinorCommand extends Command {
             });
 
         if (!data) {
-            message.reply(generateSimpleEmbed('Minor Search', `Couldn't locate any minors by descriptor ${emboss(args.join(' '))}.`));
+            message.reply(generateSimpleEmbed('Minor Search', EmbedIconType.UCONN, `Couldn't locate any minors by descriptor ${emboss(args.join(' '))}.`));
             return CommandReturn.EXIT;
         }
 
@@ -76,7 +76,7 @@ export default class MinorCommand extends Command {
             str += element.text() + '\n\n';
         });
 
-        message.reply(generateSimpleEmbed(`Minors » ${title.split(' Minor')[0]}`, `${bold(title)}\n\n`
+        message.reply(generateSimpleEmbed(`Minors » ${title.split(' Minor')[0]}`, EmbedIconType.UCONN, `${bold(title)}\n\n`
             + `:arrow_right: ${link('Course Catalog', `https://catalog.uconn.edu/minors/${query}/`)}\n\n`
             + `${bold('Description')}\n` 
             + `${str

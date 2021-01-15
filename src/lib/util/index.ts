@@ -1,11 +1,14 @@
 import moment from 'moment';
-import env from '../../../env.json';
 import df from 'parse-duration';
 import MA from 'moving-average';
+import env from '../../../env.json';
 
 import { Units } from 'parse-duration';
+import { GameEmbedAwaiter } from './game';
+import { PaginatedEmbed } from './paginator';
 import { MACD, RSI } from 'trading-signals';
 import { XpBoardUser } from '../module/modules/xp/struct';
+
 import {
     PriceList,
     RangeGranularity,
@@ -24,13 +27,26 @@ import {
     Guild
 } from 'discord.js';
 
-import { GameEmbedAwaiter } from './game';
-import { PaginatedEmbed } from './paginator';
 
 export { PaginatedEmbed, GameEmbedAwaiter };
 
 export const LOADER = '<a:loading:788890776444207194>';
 export const JOIN_BUTTON = '<:join:798763992813928469>';
+
+export enum EmbedIconType {
+    BIRTHDAY = 'https://storage.googleapis.com/stonks-cdn/birthday.png',
+    COUNTHER = 'https://storage.googleapis.com/stonks-cdn/counther.png',
+    ERROR = 'https://storage.googleapis.com/stonks-cdn/error.png',
+    HELP = 'https://storage.googleapis.com/stonks-cdn/help.png',
+    JACK = 'https://storage.googleapis.com/stonks-cdn/jack.png',
+    MESSAGE = 'https://storage.googleapis.com/stonks-cdn/message.png',
+    POLL = 'https://storage.googleapis.com/stonks-cdn/poll.png',
+    PREFS = 'https://storage.googleapis.com/stonks-cdn/prefs.png',
+    STONKS = 'https://storage.googleapis.com/stonks-cdn/stonks.png',
+    TEST = 'https://storage.googleapis.com/stonks-cdn/test.png',
+    UCONN = 'https://storage.googleapis.com/stonks-cdn/univ.png',
+    XP = 'https://storage.googleapis.com/stonks-cdn/xp.png'
+}
 
 export const DAY_MILLIS = 86400000;
 export const COMPARISON_COLORS = [
@@ -515,9 +531,9 @@ export const getMovingAverage = (range: RangeGranularity, prices: PriceList[]) =
  * @param title the title of the embed
  * @param message the description for the embed
  */
-export const generateSimpleEmbed = (title: string, message: string) => {
+export const generateSimpleEmbed = (title: string, icon: EmbedIconType | string, message: string) => {
     return new MessageEmbed()
-        .setTitle(title)
+        .setAuthor(title, icon)
         .setColor(0x27AE60)
         .setDescription(message);
 }
@@ -529,9 +545,21 @@ export const generateSimpleEmbed = (title: string, message: string) => {
  * @param message the description for the embed
  * @param image the thumbnail for the embed
  */
-export const generateSimpleEmbedWithImage = (title: string, message: string, image: string) => {
-    return generateSimpleEmbed(title, message)
+export const generateSimpleEmbedWithThumbnail = (title: string, icon: EmbedIconType | string, message: string, image: string) => {
+    return generateSimpleEmbed(title, icon, message)
         .setThumbnail(image);
+}
+
+/**
+ * Shorthand for generating a simple message embed.
+ * 
+ * @param title the title of the embed
+ * @param message the description for the embed
+ * @param image the thumbnail for the embed
+ */
+export const generateSimpleEmbedWithImage = (title: string, icon: EmbedIconType | string, message: string, image: string) => {
+    return generateSimpleEmbed(title, icon, message)
+        .setImage(image);
 }
 
 /**
@@ -541,8 +569,8 @@ export const generateSimpleEmbedWithImage = (title: string, message: string, ima
  * @param message the description for the embed
  * @param fields a list of EmbedFieldData for the embed
  */
-export const generateEmbed = (title: string, message: string, fields: EmbedFieldData[]) => {
-    return generateSimpleEmbed(title, message)
+export const generateEmbed = (title: string, icon: EmbedIconType | string, message: string, fields: EmbedFieldData[]) => {
+    return generateSimpleEmbed(title, icon, message)
         .addFields(fields);
 }
 
@@ -553,10 +581,23 @@ export const generateEmbed = (title: string, message: string, fields: EmbedField
  * @param message the description for the embed
  * @param fields a list of EmbedFieldData for the embed
  */
-export const generateEmbedWithFieldsAndImage = (title: string, message: string, fields: EmbedFieldData[], image: string) => {
-    return generateSimpleEmbed(title, message)
+export const generateEmbedWithFieldsAndThumbnail = (title: string, icon: EmbedIconType | string, message: string, fields: EmbedFieldData[], image: string) => {
+    return generateSimpleEmbed(title, icon, message)
         .addFields(fields)
         .setThumbnail(image);
+}
+
+/**
+ * Shorthand for generating a complex message embed.
+ * 
+ * @param title the title of the embed
+ * @param message the description for the embed
+ * @param fields a list of EmbedFieldData for the embed
+ */
+export const generateEmbedWithFieldsAndImage = (title: string, icon: EmbedIconType | string, message: string, fields: EmbedFieldData[], image: string) => {
+    return generateSimpleEmbed(title, icon, message)
+        .addFields(fields)
+        .setImage(image);
 }
 
 /**

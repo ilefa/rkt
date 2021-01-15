@@ -7,6 +7,7 @@ import { Message, Permissions, User } from 'discord.js';
 import {
     asMention,
     bold,
+    EmbedIconType,
     generateSimpleEmbed,
     join
 } from '../../../../../../util';
@@ -23,7 +24,7 @@ export default class ListBirthdaysCommand extends CommandComponent<BirthdayManag
         }
 
         let loading = await message.reply('<a:loading:788890776444207194> Working on that..');
-        let birthdays = this.manager.getBirthdays(message.guild.id);
+        let birthdays = await this.manager.getBirthdays(message.guild.id);
         let content = '';
 
         for (let day of birthdays.records) {
@@ -33,7 +34,7 @@ export default class ListBirthdaysCommand extends CommandComponent<BirthdayManag
             content += bold(moment(day.date).format('MMMM Do')) + ': ' + str + '\n';
         }
 
-        message.reply(generateSimpleEmbed('Birthday List', content))
+        message.reply(generateSimpleEmbed('Birthday List', EmbedIconType.BIRTHDAY, content))
         loading.delete();
         return CommandReturn.EXIT;
     }

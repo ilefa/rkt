@@ -1,6 +1,6 @@
 import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
-import { emboss, generateSimpleEmbed, numberEnding, timeDiff } from '../../../../util';
+import { EmbedIconType, emboss, generateSimpleEmbed, numberEnding, timeDiff } from '../../../../util';
 
 export default class PurgeCommand extends Command {
 
@@ -14,13 +14,13 @@ export default class PurgeCommand extends Command {
         }
 
         if (isNaN(parseInt(args[0]))) {
-            message.reply(generateSimpleEmbed('.purge | Argument Error', `Non-Numeric Message Count ${emboss(args[0])}.`))
+            message.reply(generateSimpleEmbed('.purge | Argument Error', EmbedIconType.MESSAGE, `Non-Numeric Message Count ${emboss(args[0])}.`))
             return CommandReturn.EXIT;
         }
 
         let amount = parseInt(args[0]);
         if (amount > 100) {
-            message.reply(generateSimpleEmbed('.purge | Error', 'Cannot query more than 100 messages.'))
+            message.reply(generateSimpleEmbed('.purge | Error', EmbedIconType.MESSAGE, 'Cannot query more than 100 messages.'))
             return CommandReturn.EXIT;
         }
 

@@ -1,6 +1,6 @@
 import TinyGradient from 'tinygradient';
 
-import { generateEmbed } from '.';
+import { EmbedIconType, generateEmbed } from '.';
 import { Instance as TGInst } from 'tinygradient';
 import {
     EmbedFieldData,
@@ -18,6 +18,7 @@ export type PageContent = {
 export class PaginatedEmbed {
 
     title: string;
+    icon: EmbedIconType | string;
     pages: PageContent[];
     timeout: number;
     thumbnail: string;
@@ -31,6 +32,7 @@ export class PaginatedEmbed {
     constructor(channel: TextChannel,
                 author: User,
                 title: string,
+                icon: EmbedIconType | string,
                 pages: PageContent[],
                 timeout: number = 600000,
                 thumbnail: string = null,
@@ -39,6 +41,7 @@ export class PaginatedEmbed {
         this.channel = channel;
         this.author = author;
         this.title = title;
+        this.icon = icon;
         this.pages = pages;
         this.timeout = timeout;
         this.thumbnail = thumbnail;
@@ -53,7 +56,7 @@ export class PaginatedEmbed {
 
     private generatePage(pnum: number) {
         let pind = pnum - 1;
-        return generateEmbed(this.title, this.pages[pind].description, this.pages[pind].fields)
+        return generateEmbed(this.title, this.icon, this.pages[pind].description, this.pages[pind].fields)
                 .setTimestamp()
                 .setThumbnail(this.thumbnail)
                 .setFooter(`Page ${pnum} of ${this.pages.length}`, this.channel.guild.iconURL())

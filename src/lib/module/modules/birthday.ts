@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import Module from '../module';
 import scheduler from 'node-schedule';
-import birthdays from '../../../../birthdays.json';
+import repo from '../../../../birthdays.json';
 
 import * as Logger from '../../logger';
 
@@ -16,6 +16,7 @@ import {
 
 import {
     asMention,
+    EmbedIconType,
     generateSimpleEmbed,
     getClosestDate,
     join,
@@ -40,16 +41,18 @@ export default class BirthdayManager extends Module {
     
     tasks: Job[];
     client: Client;
+    birthdays: BirthdayGuild[];
 
     constructor(client: Client) {
         super('Birthdays');
         this.tasks = [];
         this.client = client;
+        this.birthdays = (repo as any) as BirthdayGuild[];
     }
 
     start() {
         let start = Date.now();
-        ((birthdays as any) as BirthdayGuild[]).map(guild => {
+        this.birthdays.map(guild => {
             Logger.info(this.name, `Activated task for ${guild.guild} with schedule [${guild.schedule}]`);
             this.tasks.push(scheduler.scheduleJob(guild.schedule, async () => {
                 let date = new Date();
@@ -81,18 +84,20 @@ export default class BirthdayManager extends Module {
                 str = str.substring(0, str.length - 2).replace(/\,(?!.*\,)/, " and");
 
                 let start = guild.messages[Math.floor(Math.random() * guild.messages.length)];
-                channel.send(generateSimpleEmbed('Happy Birthday!', `${replaceAll(start, '%s', str)}`.replace(' is ', (users.length > 1 ? ' are ' : ' is '))));
+                channel.send(generateSimpleEmbed('Happy Birthday!', EmbedIconType.BIRTHDAY, `${replaceAll(start, '%s', str)}`.replace(' is ', (users.length > 1 ? ' are ' : ' is '))));
             }));
-
-            Logger.info(this.name, `Enabled in ${timeDiff(start)}ms.`);
         });
+
+        Logger.info(this.name, `Enabled in ${timeDiff(start)}ms.`);
     }
 
-    getAllBirthdays() {
-        return (birthdays as any) as BirthdayGuild[];
+    async getAllBirthdays() {
+        let records = (await import('../../../../birthdays.json') as any).default as BirthdayGuild[];
+        this.birthdays = records;
+        return records;
     }
 
-    getBirthdays(guild: string | Guild) {
+    async getBirthdays(guild: string | Guild) {
         let id = guild instanceof Guild
             ? guild.id
             : guild;
@@ -101,12 +106,58 @@ export default class BirthdayManager extends Module {
             return null;
         }
 
-        let repo = (birthdays as any) as BirthdayGuild[];
+        let repo = await this.getAllBirthdays();
         return repo.find(g => g.guild === id);
     }
 
-    getNextBirthday(guild: string | Guild) {
-        let payload = this.getBirthdays(guild);
+    async getChannel(guild: string | Guild) {
+        let id = guild instanceof Guild
+            ? guild.id
+            : guild;
+            
+        if (!id) {
+            return null;
+        }
+
+        let repo = await this.getAllBirthdays();
+        let record = repo.find(g => g.guild === id);
+        
+        return this
+            .client
+            .channels
+            .cache
+            .find(channel => channel.id === record.channel);
+    }
+
+    async getSchedule(guild: string | Guild) {
+        let id = guild instanceof Guild
+            ? guild.id
+            : guild;
+            
+        if (!id) {
+            return null;
+        }
+
+        let repo = await this.getAllBirthdays();
+        let record = repo.find(g => g.guild === id);
+        return record.schedule;
+    }
+
+    getMessages(guild: string | Guild) {
+        let id = guild instanceof Guild
+            ? guild.id
+            : guild;
+            
+        if (!id) {
+            return null;
+        }
+
+        let repo = (this.birthdays as any) as BirthdayGuild[];
+        return repo.find(g => g.guild === id)?.messages;
+    }
+
+    async getNextBirthday(guild: string | Guild) {
+        let payload = await this.getBirthdays(guild);
         if (!payload) {
             return null;
         }
@@ -117,8 +168,8 @@ export default class BirthdayManager extends Module {
             .find(record => record.date === closest.getTime());
     }
 
-    getBirthday(guild: string | Guild, user: string | User) {
-        let birthdays = this.getBirthdays(guild);
+    async getBirthday(guild: string | Guild, user: string | User) {
+        let birthdays = await this.getBirthdays(guild);
         if (!birthdays) {
             return null;
         }
@@ -132,8 +183,8 @@ export default class BirthdayManager extends Module {
                     : user));
     }
 
-    store(guild: string | Guild, user: string | User, date: number) {
-        let payload = this.getBirthdays(guild);
+    async store(guild: string | Guild, user: string | User, date: number) {
+        let payload = await this.getBirthdays(guild);
         if (!payload) {
             return null;
         }
@@ -162,24 +213,63 @@ export default class BirthdayManager extends Module {
             flag: 'w+'
         });
 
-        this.clean();
+        await this.save();
     }
 
-    private clean() {
-        let payload = this.getAllBirthdays();
-        payload.forEach(p => {
-            p.records = p
-                .records
-                .filter(record => record.users
-                    && record.users.length)
+    async setChannel(guild: string | Guild, channel: string | TextChannel) {
+        let payload = await this.getBirthdays(guild);
+        if (!payload) {
+            return null;
+        }
+
+        payload.channel = channel instanceof TextChannel ? channel.id : channel;
+
+        fs.writeFileSync(path.join(__dirname, '../../../../../', 'birthdays.json'), payload, {
+            encoding: 'utf8',
+            flag: 'w+'
         });
 
-        if (payload !== this.getAllBirthdays()) {
-            fs.writeFileSync(path.join(__dirname, '../../../../../', 'birthdays.json'), payload, {
-                encoding: 'utf8',
-                flag: 'w+'
-            });
+        await this.save();
+    }
+
+    async setMessages(guild: string | Guild, messages: string[]) {
+        let payload = await this.getBirthdays(guild);
+        if (!payload) {
+            return null;
         }
+
+        payload.messages = messages;
+        
+        fs.writeFileSync(path.join(__dirname, '../../../../../', 'birthdays.json'), payload, {
+            encoding: 'utf8',
+            flag: 'w+'
+        });
+
+        await this.save();
+    }
+
+    async setSchedule(guild: string | Guild, schedule: string) {
+        let payload = await this.getBirthdays(guild);
+        if (!payload) {
+            return null;
+        }
+
+        payload.schedule = schedule;
+        
+        fs.writeFileSync(path.join(__dirname, '../../../../../', 'birthdays.json'), payload, {
+            encoding: 'utf8',
+            flag: 'w+'
+        });
+
+        await this.save();
+    }
+
+    async save() {
+        let payload = await this.getAllBirthdays();
+        fs.writeFileSync(path.join(__dirname, '../../../../../', 'birthdays.json'), payload, {
+            encoding: 'utf8',
+            flag: 'w+'
+        });
     }
 
     end() {

@@ -2,6 +2,7 @@ import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
 import {
     bold,
+    EmbedIconType,
     emboss,
     generateSimpleEmbed,
     getLatestTimeValue
@@ -21,7 +22,7 @@ export default class UptimeCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        message.reply(generateSimpleEmbed('Stonks Uptime', `StonksBot has been running for ${bold(getLatestTimeValue(Date.now() - this.uptime))}.`))
+        message.reply(generateSimpleEmbed('Stonks Uptime', EmbedIconType.PREFS, `StonksBot has been running for ${bold(getLatestTimeValue(Date.now() - this.uptime))}.`))
         return CommandReturn.EXIT;
     }
 
