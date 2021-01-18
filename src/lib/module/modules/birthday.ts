@@ -7,12 +7,7 @@ import repo from '../../../../birthdays.json';
 import * as Logger from '../../logger';
 
 import { Job } from 'node-schedule';
-import {
-    Client,
-    Guild,
-    TextChannel,
-    User
-} from 'discord.js';
+import { Client, Guild, TextChannel, User } from 'discord.js';
 
 import {
     asMention,

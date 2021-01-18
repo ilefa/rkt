@@ -7,7 +7,13 @@ import * as Logger from '../../../../../logger';
 import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, TextChannel, User } from 'discord.js';
 import { PageContent, PaginatedEmbed } from '../../../../../util/paginator';
-import { bold, EmbedIconType, emboss, generateSimpleEmbed, link } from '../../../../../util';
+import {
+    bold,
+    EmbedIconType,
+    emboss,
+    generateSimpleEmbed,
+    link
+} from '../../../../../util';
 
 export type MinorData = {
     name: string;

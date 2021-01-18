@@ -5,8 +5,8 @@ import env from '../../../env.json';
 
 import { Units } from 'parse-duration';
 import { GameEmbedAwaiter } from './game';
-import { PaginatedEmbed } from './paginator';
 import { MACD, RSI } from 'trading-signals';
+import { PaginatedEmbed } from './paginator';
 import { XpBoardUser } from '../module/modules/xp/struct';
 
 import {
@@ -32,6 +32,9 @@ export { PaginatedEmbed, GameEmbedAwaiter };
 
 export const LOADER = '<a:loading:788890776444207194>';
 export const JOIN_BUTTON = '<:join:798763992813928469>';
+
+export const SNOWFLAKE_REGEX = /^\d{18,}$/;
+export const USER_MENTION_REGEX = /^<@\!\d{18,}>$/;
 
 export enum EmbedIconType {
     BIRTHDAY = 'https://storage.googleapis.com/stonks-cdn/birthday.png',
@@ -630,4 +633,86 @@ export const getExpDate = (input: string): Date => {
  */
 export const getClosestDate = (input: Date, valid: Date[]) => {
     return valid.reduce((prev, cur) => (Math.abs(cur.getTime() - input.getTime()) < Math.abs(prev.getTime() - input.getTime())) ? cur : prev);
+}
+
+export const getClosestMatches = (input: string, valid: string[], limit?: number) => {
+    let results = valid
+        .map(record => {
+            return {
+                input,
+                valid: record,
+                score: getJWDistance(input, record)
+            }
+        })
+        .sort((a, b) => b.score - a.score);
+
+    if (limit) {
+        results = results.slice(0, Math.min(results.length, limit));
+    }
+
+    return results;
+}
+
+export const getJWDistance = (input: string, valid: string) => {
+    let m = 0;
+    let i, j;
+
+    if (input.length === 0 || valid.length === 0) {
+        return 0;
+    }
+
+    input = input.toUpperCase();
+    valid = valid.toUpperCase();
+
+    if (input === valid) {
+        return 1;
+    }
+
+    let range = (Math.floor(Math.max(input.length, valid.length) / 2)) - 1;
+    let inputMatches = new Array(input.length);
+    let validMatches = new Array(valid.length);
+
+    for (let i = 0; i < input.length; i++) {
+        let low = (i >= range) ? i - range : 0;
+        let high = (i + range <= (valid.length - 1)) ? (i + range) : (valid.length - 1);
+        for (let j = low; j <= high; j++) {
+            if (inputMatches[i] !== true && validMatches[j] !== true && inputMatches[i] === validMatches[j]) {
+                ++m;
+                inputMatches[i] = validMatches[j] = true;
+                break;
+            }
+        }
+    }
+
+    let k = 0;
+    let num = 0;
+
+    for (let i = 0; i < input.length; i++) {
+        if (inputMatches[i] === true) {
+            for (let j = k; j < valid.length; j++) {
+                if (validMatches[j] === true) {
+                    k = j + i;
+                    break;
+                }
+
+                if (input[i] !== valid[j]) {
+                    ++num;
+                }
+            }
+        }
+    }
+
+    let weight = (m / input.length + m / valid.length + (m - (num / 2)) / m) / 3;
+    let l = 0;
+    let p = 0.1;
+
+    if (weight > 0.7) {
+        while (input[l] === valid[l] && l < 4) {
+            ++l;
+        }
+
+        weight = weight + l * p * (1 - weight);
+    }
+
+    return weight;
 }

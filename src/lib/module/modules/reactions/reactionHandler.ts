@@ -1,4 +1,8 @@
-    import { User, Message, EmbedFieldData, MessageReaction } from 'discord.js';
+import {
+    User,
+    Message,
+    MessageReaction
+} from 'discord.js';
 
 export abstract class ReactionHandler {
     

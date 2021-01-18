@@ -18,9 +18,8 @@ import {
     getDurationWithUnit,
     getEmoteForIndicator,
     getLatestTimeValue,
+    SNOWFLAKE_REGEX,
 } from '../../../../../util';
-
-const snowflakeRegex = /^\d{18,}$/;
 
 export default class XpTrackCommand extends Command {
 
@@ -51,7 +50,7 @@ export default class XpTrackCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        if (!args[0].match(snowflakeRegex) && message.mentions.members.size != 1) {
+        if (!args[0].match(SNOWFLAKE_REGEX) && message.mentions.members.size != 1) {
             message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Missing target parameter.`, [
                 {
                     name: 'Valid Target',
@@ -76,7 +75,7 @@ export default class XpTrackCommand extends Command {
         }
 
         let type = args[1] as TrackingType;
-        let target = args[0].match(snowflakeRegex)
+        let target = args[0].match(SNOWFLAKE_REGEX)
             ? await message.client.users.fetch(args[0]) 
             : message.mentions.members.first();
 

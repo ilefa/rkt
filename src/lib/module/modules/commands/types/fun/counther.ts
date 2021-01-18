@@ -2,7 +2,13 @@ import CountHerManager from '../../../counther/manager';
 
 import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
-import { EmbedIconType, emboss, generateEmbed, generateSimpleEmbed, italic } from '../../../../../util';
+import { 
+    EmbedIconType,
+    emboss,
+    generateEmbed,
+    generateSimpleEmbed,
+    italic
+} from '../../../../../util';
 
 export default class CountHerCommand extends Command {
 

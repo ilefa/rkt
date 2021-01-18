@@ -6,8 +6,13 @@ import CommandManager from './commands/manager';
 import CountHerManager from './counther/manager';
 import ReactionManager from './reactions/manager';
 
-import { codeBlock, EmbedIconType, generateEmbed, getReactionPhrase } from '../../util';
 import { MessageReaction, TextChannel, User } from 'discord.js';
+import {
+    codeBlock,
+    EmbedIconType,
+    generateEmbed,
+    getReactionPhrase
+} from '../../util';
 
 export default class EventManager extends Module {
 
@@ -64,6 +69,7 @@ export default class EventManager extends Module {
             if (reaction.partial) {
                 await reaction.fetch();
             }
+
             if (reaction.message.embeds.length && reaction.message.embeds[0].author.name === "Polls") {
                 await this.pollManager.handleAdd(reaction, user);
             }

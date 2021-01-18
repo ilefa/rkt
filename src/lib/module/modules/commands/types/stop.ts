@@ -2,7 +2,14 @@ import * as Logger from '../../../../logger';
 
 import { Command, CommandReturn } from "../command";
 import { Message, MessageAttachment, User } from "discord.js";
-import { bold, CUSTOM_PERMS, EmbedIconType, emboss, generateSimpleEmbed } from "../../../../util";
+
+import {
+    bold,
+    CUSTOM_PERMS,
+    EmbedIconType,
+    emboss,
+    generateSimpleEmbed
+} from "../../../../util";
 
 export default class StopCommand extends Command {
 

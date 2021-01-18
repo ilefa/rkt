@@ -1,7 +1,9 @@
-import { XpBoardUser, XpComparePayload } from '../../../xp/struct';
 import { getLeaderboard } from '../../../xp/api';
+import { collectEntries } from '../../../xp/tracker';
 import { Command, CommandReturn } from '../../command';
-import { Message, MessageEmbed, Permissions, User } from 'discord.js';
+import { Message, Permissions, User } from 'discord.js';
+import { genXpCompareChart } from '../../../../../chart';
+import { XpBoardUser, XpComparePayload } from '../../../xp/struct';
 import {
     asMention,
     bold,
@@ -12,8 +14,6 @@ import {
     generateSimpleEmbedWithThumbnail,
     getEmoteForXpPlacement
 } from '../../../../../util';
-import { collectEntries } from '../../../xp/tracker';
-import { genXpCompareChart } from '../../../../../chart';
 
 export default class XpBoardCommand extends Command {
 

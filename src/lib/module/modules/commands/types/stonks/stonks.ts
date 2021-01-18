@@ -1,5 +1,5 @@
-import { Message, MessageEmbed, Permissions, User } from 'discord.js';
 import { Command, CommandReturn } from '../../command';
+import { Message, Permissions, User } from 'discord.js';
 import { EmbedIconType, emboss, generateSimpleEmbed } from '../../../../../util';
 
 export default class HelpCommand extends Command {

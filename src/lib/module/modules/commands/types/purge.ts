@@ -1,6 +1,12 @@
 import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
-import { EmbedIconType, emboss, generateSimpleEmbed, numberEnding, timeDiff } from '../../../../util';
+import {
+    EmbedIconType,
+    emboss,
+    generateSimpleEmbed,
+    numberEnding,
+    timeDiff
+} from '../../../../util';
 
 export default class PurgeCommand extends Command {
 

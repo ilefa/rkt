@@ -1,14 +1,15 @@
 import fs from 'fs';
 import path from 'path';
-import env from '../../../../../env.json';
 import Module from '../../module';
 import scheduler from 'node-schedule';
+import env from '../../../../../env.json';
 
 import * as Logger from '../../../logger';
 
 import { Job } from 'node-schedule';
 import { getLeaderboard } from './api';
 import { DAY_MILLIS, timeDiff } from '../../../util';
+
 import { 
     TrackingType,
     XpBoardUser,

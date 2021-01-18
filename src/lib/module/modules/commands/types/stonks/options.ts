@@ -3,7 +3,7 @@ import moment from 'moment';
 import { OptionsContract } from '../../../../../stonk';
 import { Command, CommandReturn } from '../../command';
 import { getExpirationDates, getOptions } from '../../../../../repo';
-import { EmbedFieldData, Message, MessageEmbed, Permissions, User } from 'discord.js';
+import { EmbedFieldData, Message, Permissions, User } from 'discord.js';
 
 import {
     bold,

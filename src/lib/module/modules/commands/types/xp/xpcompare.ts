@@ -1,10 +1,10 @@
 import moment from 'moment';
 
-import { genXpCompareChart } from '../../../../../chart';
 import { Command, CommandReturn } from '../../command';
+import { Message, Permissions, User } from 'discord.js';
+import { genXpCompareChart } from '../../../../../chart';
 import { collectEntries, getNameForType } from '../../../xp/tracker';
 import { TrackingType, XpComparePayload } from '../../../xp/struct';
-import { Message, MessageEmbed, Permissions, User } from 'discord.js';
 import {
     asMention,
     bold,
@@ -14,11 +14,10 @@ import {
     emboss,
     generateEmbed,
     generateSimpleEmbed,
-    generateSimpleEmbedWithThumbnail
+    generateSimpleEmbedWithThumbnail,
+    SNOWFLAKE_REGEX,
+    USER_MENTION_REGEX
 } from '../../../../../util';
-
-const snowflakeRegex = /^\d{18,}$/;
-const mentionedRegex = /^<@\!\d{18,}>$/;
 
 export default class XpCompareCommand extends Command {
 
@@ -52,11 +51,11 @@ export default class XpCompareCommand extends Command {
         let records = [] as XpComparePayload[];
         for (let client of args.slice(1)) {
             let target: User = null;
-            if (snowflakeRegex.test(client)) {
+            if (SNOWFLAKE_REGEX.test(client)) {
                 target = await message.client.users.fetch(client);
             }
 
-            if (mentionedRegex.test(client)) {
+            if (USER_MENTION_REGEX.test(client)) {
                 let id = client.slice(3, client.length - 1);
                 target = await message.client.users.fetch(id);
             }

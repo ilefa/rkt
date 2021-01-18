@@ -5,7 +5,14 @@ import * as Logger from '../../../logger';
 
 import { User, Message, MessageEmbed, Client } from 'discord.js';
 import { Command, CommandEntry, CommandReturn } from './command';
-import { codeBlock, EmbedIconType, generateEmbed, generateSimpleEmbed, has, italic, numberEnding } from '../../../util';
+import {
+    codeBlock,
+    EmbedIconType,
+    generateEmbed,
+    generateSimpleEmbed,
+    has, 
+    numberEnding
+} from '../../../util';
 
 export default class CommandManager extends Module {
     

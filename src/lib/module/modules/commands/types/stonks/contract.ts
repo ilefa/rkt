@@ -136,7 +136,7 @@ export default class ContractCommand extends Command {
             }
 
             return 1;
-        })
+        });
         
         let contract = contracts.find((contract: OptionsContract) => contract.strike === strike) as OptionsContract;
         if (!contract) {

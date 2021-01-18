@@ -1,5 +1,6 @@
-import { Client } from 'discord.js';
 import ModuleManager from './manager';
+
+import { Client } from 'discord.js';
 
 export default abstract class Module {
 

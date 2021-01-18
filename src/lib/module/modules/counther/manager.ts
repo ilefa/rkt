@@ -3,7 +3,13 @@ import env from '../../../../../env.json';
 
 import { bold } from '../../../util';
 import { CountHer } from './counther';
-import { Client, Message, PermissionOverwrites, Permissions, TextChannel, User } from 'discord.js';
+import {
+    Client,
+    Message, 
+    Permissions,
+    TextChannel,
+    User
+} from 'discord.js';
 
 export default class CountHerManager extends Module {
 

@@ -2,6 +2,7 @@ import TinyGradient from 'tinygradient';
 
 import { EmbedIconType, generateEmbed } from '.';
 import { Instance as TGInst } from 'tinygradient';
+
 import {
     EmbedFieldData,
     Message,

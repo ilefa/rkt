@@ -4,6 +4,7 @@ import BirthdayCommand from './types/fun/birthday';
 import ContractCommand from './types/stonks/contract';
 import CountHerCommand from './types/fun/counther';
 import CourseCommand from './types/uconn/course';
+import EvalCommand from './types/eval';
 import FuturesCommand from './types/stonks/futures';
 import HelpCommand from './types/help';
 import IsMarketOpenCommand from './types/stonks/isMarketOpen';
@@ -37,6 +38,7 @@ export {
     ContractCommand,
     CountHerCommand,
     CourseCommand,
+    EvalCommand,
     FuturesCommand,
     HelpCommand,
     IsMarketOpenCommand,

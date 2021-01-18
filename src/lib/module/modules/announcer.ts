@@ -1,9 +1,10 @@
-import env from '../../../../env.json';
-import scheduler, { Job } from 'node-schedule';
 import Module from '../module';
+import scheduler from 'node-schedule';
+import env from '../../../../env.json';
 
 import * as Logger from '../../logger';
 
+import { Job } from 'node-schedule';
 import { timeDiff } from '../../util';
 import { Client, MessageEmbed } from 'discord.js';
 

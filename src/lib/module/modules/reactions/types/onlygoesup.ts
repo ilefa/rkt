@@ -1,5 +1,5 @@
-import { Message, MessageReaction, Permissions, User } from 'discord.js';
 import { ReactionHandler } from '../reactionHandler';
+import { Message, MessageReaction, Permissions, User } from 'discord.js';
 
 export default class OnlyGoesUpReactionHandler extends ReactionHandler {
 

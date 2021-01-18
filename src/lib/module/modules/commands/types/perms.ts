@@ -1,8 +1,8 @@
 import env from '../../../../../../env.json';
 
+import { Command, CommandReturn } from '../command';
 import { Message, MessageEmbed, Permissions, User } from 'discord.js';
 import { bold, EmbedIconType, emboss, getEmoteForPermissions } from '../../../../util';
-import { Command, CommandReturn } from '../command';
 
 export default class PermissionsCommand extends Command {
 

@@ -20,6 +20,7 @@ import {
     ContractCommand,
     CountHerCommand,
     CourseCommand,
+    EvalCommand,
     FuturesCommand,
     HelpCommand,
     IsMarketOpenCommand,
@@ -69,6 +70,7 @@ commandCenter.registerCommand('birthday', new BirthdayCommand(birthdayManager));
 commandCenter.registerCommand('contract', new ContractCommand());
 commandCenter.registerCommand('counther', new CountHerCommand(countHerManager));
 commandCenter.registerCommand('csearch', new CourseCommand());
+commandCenter.registerCommand('eval', new EvalCommand());
 commandCenter.registerCommand('futures', new FuturesCommand());
 commandCenter.registerCommand('help', new HelpCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());

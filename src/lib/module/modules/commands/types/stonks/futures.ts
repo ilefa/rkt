@@ -5,7 +5,15 @@ import { getFutures } from '../../../../../repo';
 import { FuturesQuote } from '../../../../../stonk';
 import { Command, CommandReturn } from '../../command';
 import { EmbedFieldData, Message, Permissions, User } from 'discord.js';
-import { bold, EmbedIconType, emboss, generateEmbed, getChangeString, getEmoteForIndicator } from '../../../../../util';
+
+import {
+    bold,
+    EmbedIconType,
+    emboss,
+    generateEmbed,
+    getChangeString,
+    getEmoteForIndicator
+} from '../../../../../util';
 
 export default class FuturesCommand extends Command {
 

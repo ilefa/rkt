@@ -1,8 +1,8 @@
-import { DataGranularity, PriceList, RangeGranularity } from '../../../../../stonk';
-import { User, Message, MessageEmbed, Permissions } from 'discord.js';
+import { genPriceChart } from '../../../../../chart';
 import { Command, CommandReturn } from '../../command';
 import { getOptions, quote } from '../../../../../repo';
-import { genPriceChart } from '../../../../../chart';
+import { User, Message, Permissions } from 'discord.js';
+import { DataGranularity, PriceList, RangeGranularity } from '../../../../../stonk';
 
 import {
     bold,

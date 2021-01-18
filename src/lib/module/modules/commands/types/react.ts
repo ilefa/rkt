@@ -1,6 +1,12 @@
 import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
-import { bold, EmbedIconType, emboss, generateSimpleEmbed, toggleReactions } from '../../../../util';
+import {
+    bold,
+    EmbedIconType,
+    emboss,
+    generateSimpleEmbed,
+    toggleReactions
+} from '../../../../util';
 
 export default class ReactCommand extends Command {
 

@@ -1,6 +1,12 @@
 import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
-import { bold, EmbedIconType, emboss, generateSimpleEmbed, toggleAlerts } from '../../../../util';
+import {
+    bold,
+    EmbedIconType,
+    emboss,
+    generateSimpleEmbed,
+    toggleAlerts
+} from '../../../../util';
 
 export default class AlertsCommand extends Command {
 

@@ -1,26 +1,30 @@
 import { XpBoardUser } from '../../../xp/struct';
 import { getLeaderboard } from '../../../xp/api';
+import { getTopMovers } from '../../../xp/tracker';
 import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
 import {
     asMention,
     bold,
+    DAY_MILLIS,
     EmbedIconType,
     emboss,
     generateSimpleEmbed,
     getDownwardXpDifference,
     getUpwardXpDifference,
-    ordinalSuffix
+    ordinalSuffix,
+    SNOWFLAKE_REGEX,
+    USER_MENTION_REGEX
 } from '../../../../../util';
 
 export default class XpRankCommand extends Command {
 
     constructor() {
-        super('xprank', `Invalid usage: ${emboss('.xprank [@target]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
+        super('xprank', `Invalid usage: ${emboss('.xprank [target]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
-        if (args.length !== 0 && message.mentions.members.size === 0) {
+        if (args.length > 1) {
             return CommandReturn.HELP_MENU;
         }
 
@@ -35,28 +39,58 @@ export default class XpRankCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        let mention = message.mentions.members.array()[0];
-        let id = mention?.id || user.id;
-        let target = res.find(u => u.id === id);
-        if (!target && (id !== user.id && args.length > 0)) {
-            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, `Unknown target: ${emboss(mention.user.username + '#' + mention.user.discriminator)}`));
-            return CommandReturn.EXIT;
+        // let mention = message.mentions.members.array()[0];
+        // let id = mention?.id || user.id;
+        // let target = res.find(u => u.id === id);
+        // if (!target && (id !== user.id && args.length > 0)) {
+        //     message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, `Unknown target: ${emboss(mention.user.username + '#' + mention.user.discriminator)}`));
+        //     return CommandReturn.EXIT;
+        // }
+
+        let target: User = user;
+        if (args[0]) {
+            let client = args[0];
+            let temp = null;
+            if (SNOWFLAKE_REGEX.test(client)) {
+                temp = await message.client.users.fetch(client);
+            }
+    
+            if (USER_MENTION_REGEX.test(client)) {
+                let id = client.slice(3, client.length - 1);
+                temp = await message.client.users.fetch(id);
+            }
+    
+            if (!temp) {
+                message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, `Invalid or unknown target: ${emboss(client)}`));
+                return CommandReturn.EXIT;
+            }
+
+            target = temp;
         }
 
-        if (!target && (id === user.id)) {
+        let id = target.id;
+        let record = res.find(r => r.id === id);
+        if (!record && (id === user.id)) {
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, 'You are not on the experience leaderboard.'));
             return CommandReturn.EXIT;
         }
 
+        if (!record) {
+            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, `${asMention(target)} is not on the experience board.`));
+            return CommandReturn.EXIT;
+        }
+
+        let member = message.guild.member(target);
+        console.log(member);
         let who = id !== user.id
-            ? bold(mention.displayName) 
+            ? bold(member?.displayName || asMention(target)) 
             : 'You';
 
         let after = who === 'You'
             ? 'are'
             : 'is';
 
-        let idx = res.indexOf(target);
+        let idx = res.indexOf(record);
         let position = idx + 1;
         let str = `${bold('Leaderboard Position')}` 
                 + `\n${who} ${after} ${bold(ordinalSuffix(position))} on the leaderboard.` 
@@ -68,8 +102,23 @@ export default class XpRankCommand extends Command {
                         ? `:upside_down: ${who} ${after} at the bottom of the leaderboard.` 
                         : `:arrow_up: ${who} ${after} ${bold(getDownwardXpDifference(res, idx).toLocaleString() + ' XP')} ahead of ${asMention(res[idx + 1].id)}`}`;
 
-        message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, str)
-            .setThumbnail(id === user.id ? user.avatarURL() : mention.user.avatarURL()));
+        let mover = '\n\n';
+        if (position <= 10) {
+            let res = await getTopMovers(message.guild.id, 10, DAY_MILLIS);
+            let record = res?.find(record => record.client === id);
+            if (!res || !record) {
+                return;
+            }
+
+            mover += `${bold('Activity Insights')}\n` 
+                    + `:asterisk: ${bold('#' + (res.indexOf(record) + 1))} in Top Movers (1d)`;
+
+            str += mover; 
+        }
+
+        await message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, str)
+            .setThumbnail(id === user.id ? user.avatarURL() : target.avatarURL()));
+
         return CommandReturn.EXIT;
     }
 
