@@ -55,6 +55,18 @@ export class PaginatedEmbed {
             .then(msg => this.init(msg));
     }
 
+    static of(channel: TextChannel,
+        author: User,
+        title: string,
+        icon: EmbedIconType | string,
+        pages: PageContent[],
+        timeout: number = 600000,
+        thumbnail: string = null,
+        beginColor: string = 'black',
+        endColor: string = 'green'): PaginatedEmbed {
+            return new PaginatedEmbed(channel, author, title, icon, pages, timeout, thumbnail, beginColor, endColor);
+    }
+
     private generatePage(pnum: number) {
         let pind = pnum - 1;
         return generateEmbed(this.title, this.icon, this.pages[pind].description, this.pages[pind].fields)
@@ -70,6 +82,10 @@ export class PaginatedEmbed {
         const filter = (reaction, user) => {
             if (user.bot) return false;
             return true;
+        }
+
+        if (this.pages.length === 1) {
+            return;
         }
 
         this.collector = message.createReactionCollector(filter, { time: this.timeout });

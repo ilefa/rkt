@@ -716,3 +716,37 @@ export const getJWDistance = (input: string, valid: string) => {
 
     return weight;
 }
+
+export const getHighestDivisor = (number: number, max: number = number) => {
+    let highest = 0;
+    for (let i = 0; i < max; i++) {
+        if (number % i === 0) {
+            highest = i;
+        }
+    }
+
+    return highest;
+}
+
+export const getDivisors = (number: number, max: number = number) => {
+    let arr = [];
+    for (let i = 0; i < max; i++) {
+        if (number % i === 0) {
+            arr.push(i);
+        }
+    }
+
+    return arr;
+}
+
+export const getCampusIndicator = (campus: string) => {
+    campus = campus.toLowerCase();
+    if (campus === 'storrs') return 'S';
+    if (campus === 'hartford') return 'H';
+    if (campus === 'stamford') return 'Z';
+    if (campus === 'waterbury') return 'W';
+    if (campus === 'avery point') return 'A';
+    if (campus === 'off-campus') return 'O';
+
+    return '?';
+}

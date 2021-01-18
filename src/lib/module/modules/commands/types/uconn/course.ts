@@ -5,15 +5,20 @@ import tableparse from 'cheerio-tableparser';
 
 import { Command, CommandReturn } from '../../command';
 import { decode as decodeEntity } from 'html-entities';
-import { Message, Permissions, User } from 'discord.js';
+import { PageContent } from '../../../../../util/paginator';
+import { Message, Permissions, TextChannel, User } from 'discord.js';
+
 import {
     bold,
     EmbedIconType,
     emboss,
     generateEmbed,
     generateSimpleEmbed,
+    getCampusIndicator,
+    getHighestDivisor,
     italic,
     link,
+    PaginatedEmbed,
     replaceAll
 } from '../../../../../util';
 
@@ -206,6 +211,10 @@ export default class CourseCommand extends Command {
                 notes
             }
 
+            if (virtual.campus.toLowerCase() === 'off-campus') {
+                continue;
+            }
+
             sections.push(virtual);
         }
 
@@ -219,7 +228,6 @@ export default class CourseCommand extends Command {
         }
         
         let profs: ProfessorData[] = [];
-        let profList = '';
         sections = sections.slice(1, sections.length);
 
         for (let section of sections) {
@@ -238,8 +246,9 @@ export default class CourseCommand extends Command {
 
             let teaching = sections
                 .filter(section => section.instructor === prof)
-                .map(section => section.section)
-                .sort();
+                .sort((a, b) => a.section.localeCompare(b.section));
+
+            prof = decodeEntity(replaceAll(prof, '<br>', ' '));
 
             if (!$) {
                 profs.push({
@@ -267,61 +276,89 @@ export default class CourseCommand extends Command {
             });
         }
 
-        profs.sort((a, b) => a.name.length - b.name.length).forEach((prof: ProfessorData, i: number) => {
-            if (profList.endsWith('...*') || profList.endsWith('more*')) {
-                return;
-            }
+        let divisor = getHighestDivisor(profs.length);
+        let pages: PageContent[] = [];
+        let tempPage: PageContent;
+        let profList = '';
 
-            let rmpList = '';
-            prof
-                .rmpIds
-                .slice(0, Math.min(prof.rmpIds.length, 10))
-                .forEach((id, i) => rmpList += link(`[${i + 1}]`, `https://www.ratemyprofessors.com/ShowRatings.jsp?tid=${id}`));
+        // TODO: Broken for larger course offerings.
+        if (profs.length <= 10) divisor = profs.length;
+        if (divisor > 10) divisor = 10;
 
-            let toAppend = ` • ${prof.name}${rmpList.length !== 0 ? ` ${rmpList}` : ''}\n     ${prof.sections.join(', ')}\n`;
-            let diff = 1024 - (profList.length + toAppend.length);
-            if (diff < 0) {
-                let andMore = italic(`+ ${profs.length - (i + 1)} more`);
-                if (diff < andMore.length) {
-                    andMore = italic('...');
+        let counter = 0;
+
+        profs
+            .sort((a, b) => a.name.length - b.name.length)
+            .forEach((prof: ProfessorData, i) => {
+                counter++;
+
+                if (counter >= divisor && i !== 0) {
+                    tempPage.fields[2].value = profList;
+                    pages.push(tempPage);
+                    counter = 0;
+                    profList = '';
+                    tempPage = null;
                 }
 
-                diff = 1024 - (profList.length + toAppend.length);
-                if (diff < 0) {
+                if (!tempPage) {
+                    tempPage = {
+                        description: `${bold(name)}\n\n`
+                                    + `:arrow_right: ${link('Course Catalog', target)}\n`
+                                    + `:hash: Credits: ${bold(credits)}\n` 
+                                    + `:asterisk: Grading Type: ${bold(grading)}\n\n`
+                                    + `${bold('Description')}\n` 
+                                    + `${italic(desc)}\n\n`,
+                        fields: [
+                            {
+                                name: 'Last Data Marker',
+                                value: moment(lastDataMarker).format('MMMM Do YYYY, h:mm:ss a'),
+                                inline: false
+                            },
+                            {
+                                name: 'Prerequisites',
+                                value: prereqs,
+                                inline: false
+                            },
+                            {
+                                name: 'Professors',
+                                value: profList.trimEnd(),
+                                inline: false
+                            }
+                        ]
+                    }
+                }
+
+                let rmpList = '';
+                prof
+                    .rmpIds
+                    .slice(0, Math.min(prof.rmpIds.length, 10))
+                    .forEach((id, i) => rmpList += link(`[${i + 1}]`, `https://www.ratemyprofessors.com/ShowRatings.jsp?tid=${id}`));
+
+                let campuses = [];
+                prof.sections.forEach(section => {
+                    if (!campuses.includes(section.campus)) {
+                        campuses.push(section.campus);
+                    }
+                });
+
+                let campusIndicator = '';
+                campuses.forEach(campus => campusIndicator += getCampusIndicator(campus));
+                
+                let toAppend = ` • ${bold(`[${campusIndicator}]`)} ${prof.name}${rmpList.length !== 0 ? ` ${rmpList}` : ''}\n     ${prof.sections.map(data => data.section).join(', ')}\n`;
+                
+                // Happens in rare cases such as ENGR1166 wherein same sections and data repeated many times.
+                if (profList.includes(toAppend)) {
                     return;
                 }
-            }
 
-            profList += toAppend;
-        });
+                profList += toAppend;
+            });
 
+        PaginatedEmbed.of(message.channel as TextChannel,
+            user, `Course Search » ${identifier}`,
+            EmbedIconType.UCONN, pages, 600000);
+                
         loading.delete();
-        message.reply(generateEmbed(`Course Search » ${identifier}`, EmbedIconType.UCONN,
-            `${bold(name)}\n\n`
-            + `:arrow_right: ${link('Course Catalog', target)}\n`
-            + `:hash: Credits: ${bold(credits)}\n` 
-            + `:asterisk: Grading Type: ${bold(grading)}\n\n`
-            + `${bold('Description')}\n` 
-            + `${italic(desc)}\n\n`,
-            // + `There are ${bold(sectionCount + ` section${numberEnding(sectionCount)}`)} being offered this semester${campus !== 'any' ? ` at ${bold(capitalizeFirst(campus.replace('_', ' ')))}` : ''}.\n\n
-            [
-                {
-                    name: 'Last Data Marker',
-                    value: moment(lastDataMarker).format('MMMM Do YYYY, h:mm:ss a'),
-                    inline: false
-                },
-                {
-                    name: 'Prerequisites',
-                    value: prereqs,
-                    inline: false
-                },
-                {
-                    name: 'Professors',
-                    value: profList.trimEnd(),
-                    inline: false
-                }
-            ]));
-
         return CommandReturn.EXIT;
     }
 
@@ -355,7 +392,7 @@ type SectionData = {
 
 type ProfessorData = {
     name: string;
-    sections: string[];
+    sections: SectionData[];
     rmpIds: string[];
 }
 
