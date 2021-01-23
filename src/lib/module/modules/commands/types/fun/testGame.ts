@@ -5,7 +5,7 @@ import { codeBlock, CUSTOM_PERMS, GameEmbedAwaiter } from "../../../../../util";
 export default class TestGameEmbedCommand extends Command {
 
     constructor() {
-        super('tge', '[min] [max]', null, [], CUSTOM_PERMS.SUPERMAN);
+        super('tge', '[min] [max]', null, [], CUSTOM_PERMS.SUPERMAN, true, true);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

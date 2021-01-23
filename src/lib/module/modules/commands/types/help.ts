@@ -7,7 +7,7 @@ import {
     CUSTOM_PERMS,
     EmbedIconType,
     emboss,
-    generateEmbedWithFieldsAndImage,
+    generateEmbed,
     getEmoteForCommandPermission,
     has,
     replaceAll
@@ -72,7 +72,7 @@ export default class HelpCommand extends Command {
 
         legend += `${getEmoteForCommandPermission(Permissions.FLAGS.SEND_MESSAGES)} Member\n\t${bold(message.guild.name)} server members`;
 
-        message.reply(generateEmbedWithFieldsAndImage('Stonks Help', EmbedIconType.HELP, `${bold('Stonks')} version 0.1 (master)\n` 
+        message.reply(generateEmbed('Stonks Help', EmbedIconType.HELP, `${bold('Stonks')} version 0.1 (master)\n` 
             + `Made with lots of :blue_heart: and :rocket: by <@177167251986841600> & <@268044207854190604>.\n\n`
             + `${bold(`Command List (${commands.length})`)}\n` 
             + helpList.trim(),
@@ -82,7 +82,7 @@ export default class HelpCommand extends Command {
                     value: legend.trim(),
                     inline: false
                 }    
-            ], message.client.user.avatarURL()));
+            ]));
 
         return CommandReturn.EXIT;
     }

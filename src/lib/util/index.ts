@@ -27,7 +27,6 @@ import {
     Guild
 } from 'discord.js';
 
-
 export { PaginatedEmbed, GameEmbedAwaiter };
 
 export const LOADER = '<a:loading:788890776444207194>';
@@ -53,16 +52,16 @@ export enum EmbedIconType {
 
 export const DAY_MILLIS = 86400000;
 export const COMPARISON_COLORS = [
-    "rgba(231, 76, 60,1.0)",
-    "rgba(243, 156, 18,1.0)",
-    "rgba(241, 196, 15,1.0)",
-    "rgba(46, 204, 113,1.0)",
-    "rgba(22, 160, 133,1.0)",
-    "rgba(52, 152, 219,1.0)",
-    "rgba(41, 128, 185,1.0)",
-    "rgba(155, 89, 182,1.0)",
-    "rgba(142, 68, 173,1.0)",
-    "rgba(149, 165, 166,1.0)"
+    "rgba(231, 76, 60, 1.0)",
+    "rgba(243, 156, 18, 1.0)",
+    "rgba(241, 196, 15, 1.0)",
+    "rgba(46, 204, 113, 1.0)",
+    "rgba(22, 160, 133, 1.0)",
+    "rgba(52, 152, 219, 1.0)",
+    "rgba(41, 128, 185, 1.0)",
+    "rgba(155, 89, 182, 1.0)",
+    "rgba(142, 68, 173, 1.0)",
+    "rgba(149, 165, 166, 1.0)"
 ];
 
 export const RESPONSE_GROUP_EMOJI = [

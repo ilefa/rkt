@@ -1,8 +1,8 @@
 import { XpBoardUser } from '../../../xp/struct';
 import { getLeaderboard } from '../../../xp/api';
-import { getTopMovers } from '../../../xp/tracker';
 import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
+import { getTopMovers, nextLevelData } from '../../../xp/tracker';
 import {
     asMention,
     bold,
@@ -39,14 +39,6 @@ export default class XpRankCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        // let mention = message.mentions.members.array()[0];
-        // let id = mention?.id || user.id;
-        // let target = res.find(u => u.id === id);
-        // if (!target && (id !== user.id && args.length > 0)) {
-        //     message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, `Unknown target: ${emboss(mention.user.username + '#' + mention.user.discriminator)}`));
-        //     return CommandReturn.EXIT;
-        // }
-
         let target: User = user;
         if (args[0]) {
             let client = args[0];
@@ -80,10 +72,12 @@ export default class XpRankCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        let member = message.guild.member(target);
-        console.log(member);
+        let data = nextLevelData(record);
+        let amount = Math.floor((data.percent * 10));
+        let leveling = `:left_right_arrow: ${data.now.toLocaleString()}/${data.total.toLocaleString()} XP [${'▰'.repeat(amount)}${'▱'.repeat((10 - amount))}] (${(data.percent * 100).toFixed(2)}%)`;
+
         let who = id !== user.id
-            ? bold(member?.displayName || asMention(target)) 
+            ? asMention(target) 
             : 'You';
 
         let after = who === 'You'
@@ -93,7 +87,9 @@ export default class XpRankCommand extends Command {
         let idx = res.indexOf(record);
         let position = idx + 1;
         let str = `${bold('Leaderboard Position')}` 
-                + `\n${who} ${after} ${bold(ordinalSuffix(position))} on the leaderboard.` 
+                + `\n${who} ${after} ${bold(ordinalSuffix(position))} on the leaderboard.`
+                + `\n\n${bold('Leveling')}`
+                + `\n${leveling}`
                 + `\n\n${bold('Ranking Insights')}` 
                 + `\n${position == 1 
                         ? `:first_place: ${who} ${after} at the top of the leaderboard.` 

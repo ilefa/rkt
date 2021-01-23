@@ -1,4 +1,5 @@
 import AlertsCommand from './types/alerts';
+import AvatarCommand from './types/fun/avatar';
 import BigJannieCommand from './types/fun/bigjannie';
 import BirthdayCommand from './types/fun/birthday';
 import ContractCommand from './types/stonks/contract';

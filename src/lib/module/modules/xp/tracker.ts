@@ -151,6 +151,30 @@ export const getRecordVariance = (initial: XpRecord, latest: XpRecord): XpMoverV
     }
 }
 
+export const nextLevelData = (record: XpBoardUser) => {
+    let now = record.xp;
+    let total = getTotalXp(record.level);
+    let prev = getTotalXp(record.level - 1);
+    let dt = total - prev;
+    let dp = now - prev;
+    let delta = dt - dp;
+
+    return {
+        now, total, prev,
+        delta, dt, dp,
+        percent: dp / dt,
+    }
+}
+
+export const getTotalXp = (level: number): number => {
+    let total = 0;
+    for (let i = 0; i <= level; i++) {
+        total += 5 * (Math.pow(i, 2)) + 50 * i + 100;
+    }
+
+    return total;
+}
+
 export const ascendingDateComparator = (a: XpRecord, b: XpRecord) => new Date(b.time).getTime() - new Date(a.time).getTime();
 export const descendingDateComparator = (a: XpRecord, b: XpRecord) => new Date(a.time).getTime() - new Date(b.time).getTime();
 
