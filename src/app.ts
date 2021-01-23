@@ -15,6 +15,7 @@ import * as Logger from './lib/logger';
 
 import {
     AlertsCommand,
+    AvatarCommand,
     BigJannieCommand,
     BirthdayCommand,
     ContractCommand,
@@ -54,7 +55,6 @@ import {
 } from './lib/module/modules/reactions';
 
 import { printStartup } from './lib/startup';
-import AvatarCommand from './lib/module/modules/commands/types/fun/avatar';
 
 const start = Date.now();
 const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });

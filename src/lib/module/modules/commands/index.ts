@@ -34,6 +34,7 @@ import XpTrackCommand from './types/xp/xptrack';
 
 export {
     AlertsCommand,
+    AvatarCommand,
     BigJannieCommand,
     BirthdayCommand,
     ContractCommand,
