@@ -26,6 +26,7 @@ import {
     HelpCommand,
     IsMarketOpenCommand,
     JackCommand,
+    KingCommand,
     MinorCommand,
     OptionsCommand,
     PassFailCommand,
@@ -77,6 +78,7 @@ commandCenter.registerCommand('futures', new FuturesCommand());
 commandCenter.registerCommand('help', new HelpCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
 commandCenter.registerCommand('jack', new JackCommand());
+commandCenter.registerCommand('king', new KingCommand());
 commandCenter.registerCommand('minor', new MinorCommand());
 commandCenter.registerCommand('options', new OptionsCommand());
 commandCenter.registerCommand('perms', new PermissionsCommand());

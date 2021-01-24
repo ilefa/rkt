@@ -34,6 +34,7 @@ export const JOIN_BUTTON = '<:join:798763992813928469>';
 
 export const SNOWFLAKE_REGEX = /^\d{18,}$/;
 export const USER_MENTION_REGEX = /^<@\!\d{18,}>$/;
+export const EMOTE_REGEX = /<(a|):\w+:\d{18,}>/;
 
 export enum EmbedIconType {
     BIRTHDAY = 'https://storage.googleapis.com/stonks-cdn/birthday.png',

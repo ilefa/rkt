@@ -10,6 +10,7 @@ import FuturesCommand from './types/stonks/futures';
 import HelpCommand from './types/help';
 import IsMarketOpenCommand from './types/stonks/isMarketOpen';
 import JackCommand from './types/fun/jack';
+import KingCommand from './types/fun/king';
 import MinorCommand from './types/uconn/minor';
 import OptionsCommand from './types/stonks/options';
 import PermissionsCommand from './types/perms';
@@ -45,6 +46,7 @@ export {
     HelpCommand,
     IsMarketOpenCommand,
     JackCommand,
+    KingCommand,
     MinorCommand,
     OptionsCommand,
     PermissionsCommand,
