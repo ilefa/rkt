@@ -44,7 +44,7 @@ export default class XpRankCommand extends Command {
 
         let target: User = await findUser(message, args[0], user);
         if (!target) {
-            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, `Invalid or unknown target: ${emboss(target)}`));
+            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, `Invalid or unknown target: ${emboss(args[0] || '[missing]')}`));
             return CommandReturn.EXIT;
         }
 
