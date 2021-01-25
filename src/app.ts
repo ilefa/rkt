@@ -21,6 +21,7 @@ import {
     ContractCommand,
     CountHerCommand,
     CourseCommand,
+    DisconnectCommand,
     EvalCommand,
     FuturesCommand,
     HelpCommand,
@@ -37,6 +38,7 @@ import {
     QuoteCommand,
     ReactCommand,
     SayCommand,
+    SoundCommand,
     StackCommand,
     StimmyCommand,
     StonksCommand,
@@ -73,6 +75,7 @@ commandCenter.registerCommand('birthday', new BirthdayCommand(birthdayManager));
 commandCenter.registerCommand('contract', new ContractCommand());
 commandCenter.registerCommand('counther', new CountHerCommand(countHerManager));
 commandCenter.registerCommand('course', new CourseCommand());
+commandCenter.registerCommand('dc', new DisconnectCommand());
 commandCenter.registerCommand('eval', new EvalCommand());
 commandCenter.registerCommand('futures', new FuturesCommand());
 commandCenter.registerCommand('help', new HelpCommand());
@@ -89,6 +92,7 @@ commandCenter.registerCommand('prefs', new PrefsCommand());
 commandCenter.registerCommand('purge', new PurgeCommand());
 commandCenter.registerCommand('react', new ReactCommand());
 commandCenter.registerCommand('say', new SayCommand());
+commandCenter.registerCommand('sound', new SoundCommand());
 commandCenter.registerCommand('stack', new StackCommand());
 commandCenter.registerCommand('stimmy', new StimmyCommand());
 commandCenter.registerCommand('stonks', new StonksCommand());

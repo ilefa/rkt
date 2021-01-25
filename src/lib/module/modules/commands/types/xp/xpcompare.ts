@@ -14,7 +14,7 @@ import {
     emboss,
     generateEmbed,
     generateSimpleEmbed,
-    generateSimpleEmbedWithThumbnail,
+    generateSimpleEmbedWithImage,
     SNOWFLAKE_REGEX,
     USER_MENTION_REGEX
 } from '../../../../../util';
@@ -46,6 +46,8 @@ export default class XpCompareCommand extends Command {
 
             return CommandReturn.EXIT;
         }
+
+        this.startLoader(message);
 
         let type = args[0] as TrackingType;
         let records = [] as XpComparePayload[];
@@ -97,7 +99,7 @@ export default class XpCompareCommand extends Command {
             .setBackgroundColor('rgba(0, 0, 0, 0)')
             .getShortUrl();
 
-        message.reply(generateSimpleEmbedWithThumbnail(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP,
+        message.reply(generateSimpleEmbedWithImage(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP,
             `Comparing ${bold(records.length + ' users')} ${getNameForType(type)} progression for the last ${bold('1d')}.\n\n`
             + `**Latest Data Marker**\n`
             + `${moment(records[0].data[records[0].data.length - 1].time).format('MMMM Do YYYY, h:mm:ss a')}\n\n`

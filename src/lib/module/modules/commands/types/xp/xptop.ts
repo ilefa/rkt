@@ -62,6 +62,8 @@ export default class XpTopCommand extends Command {
             }
         }
 
+        this.startLoader(message);
+
         let res = await getTopMovers(message.guild.id, limit, range);
         if (!res) {
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Top Movers`, EmbedIconType.XP, `Something went wrong while retrieving historical data.`));

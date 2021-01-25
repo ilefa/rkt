@@ -22,12 +22,12 @@ export default class JackCommand extends Command {
         }
 
         let numA = (args[0].match(/a/g) || []).length;
-        let imageList = ['src/lib/module/modules/commands/types/fun/assets/top.png'];
+        let imageList = ['assets/top.png'];
         for (; numA > 0; numA--) {
-            imageList.push('src/lib/module/modules/commands/types/fun/assets/mid.png')
+            imageList.push('assets/mid.png')
         }
 
-        imageList.push('src/lib/module/modules/commands/types/fun/assets/bottom.png')
+        imageList.push('assets/bottom.png')
         let mergedImg: Jimp = await mergeImage(imageList, { direction: true });
 
         mergedImg.getBuffer(MIME_PNG,(_, buffer)=>{

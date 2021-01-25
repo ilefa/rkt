@@ -77,6 +77,8 @@ export default class CommandManager extends Module {
                         message.delete();
                     }
                     
+                    cmd.command.endLoader();
+
                     if (result === CommandReturn.EXIT) {
                         break;
                     }
@@ -90,6 +92,8 @@ export default class CommandManager extends Module {
                     message.reply(helpEmbed);
                     break;
                 } catch (e) {
+                    cmd.command.endLoader();
+                    
                     if (env.reportErrors.includes(message.guild.id)) {
                         message.reply(generateEmbed('Huh? That wasn\'t supposed to happen..', EmbedIconType.ERROR, `Something went wrong while processing your command.`, [
                             {

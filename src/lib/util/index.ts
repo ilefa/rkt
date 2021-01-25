@@ -33,8 +33,8 @@ export const LOADER = '<a:loading:788890776444207194>';
 export const JOIN_BUTTON = '<:join:798763992813928469>';
 
 export const SNOWFLAKE_REGEX = /^\d{18,}$/;
-export const USER_MENTION_REGEX = /^<@\!\d{18,}>$/;
 export const EMOTE_REGEX = /<(a|):\w+:\d{18,}>/;
+export const USER_MENTION_REGEX = /^<@\!\d{18,}>$/;
 
 export enum EmbedIconType {
     BIRTHDAY = 'https://storage.googleapis.com/stonks-cdn/birthday.png',
@@ -130,6 +130,18 @@ export const isFC = (guild: Guild | string) => guild instanceof Guild
     ? guild.id === '749978305549041734' 
     : guild === '749978305549041734';
 
+/**
+ * Returns whether or not a given user has
+ * a certain bot permission in a given guild.
+ * 
+ * Note: This does not necessarily mean that
+ * the user has that permission in the guild
+ * (in the case of superperms users always being true).
+ * 
+ * @param user the user in question
+ * @param permission the permission in question
+ * @param guild the guild in which this takes place
+ */
 export const has = (user: User, permission: number, guild: Guild) => 
     guild
         .member(user)
@@ -138,6 +150,42 @@ export const has = (user: User, permission: number, guild: Guild) =>
                 .superPerms
                 .some(id => user.id === id)
 
+/**
+ * Attempts to find a user by a mention, or by
+ * their snowflake ID from a given message.
+ * 
+ * @param message the message related to this query
+ * @param input the user input to query for
+ * @param def the fallback user in case the input is invalid
+ */
+export const findUser = async (message: Message, input: string, def: User) => {
+    let target: User = def;
+    if (input) {
+        let client = input;
+        let temp = null;
+        if (SNOWFLAKE_REGEX.test(client)) {
+            temp = await message.client.users.fetch(client);
+        }
+
+        if (USER_MENTION_REGEX.test(client)) {
+            let id = client.slice(3, client.length - 1);
+            temp = await message.client.users.fetch(id);
+        }
+
+        target = temp;
+    }
+
+    return def;
+} 
+
+/**
+ * Replaces all occurances of a given
+ * search string within another string.
+ * 
+ * @param input the input string
+ * @param search the string to replace
+ * @param replace what to replace it with
+ */
 export const replaceAll = (input: string, search: string, replace: string) => {
     let copy = String(input);
     if (!copy.includes(search)) {
@@ -369,6 +417,24 @@ export const getEmoteForXpPlacement = (placement: number) => {
 }
 
 /**
+ * Returns an indicator string
+ * for a given campus input.
+ * 
+ * @param campus the campus input
+ */
+export const getCampusIndicator = (campus: string) => {
+    campus = campus.toLowerCase();
+    if (campus === 'storrs') return 'S';
+    if (campus === 'hartford') return 'H';
+    if (campus === 'stamford') return 'Z';
+    if (campus === 'waterbury') return 'W';
+    if (campus === 'avery point') return 'A';
+    if (campus === 'off-campus') return 'O';
+
+    return '?';
+}
+
+/**
  * Returns the upwards XP difference
  * for a given placement.
  * 
@@ -532,6 +598,7 @@ export const getMovingAverage = (range: RangeGranularity, prices: PriceList[]) =
  * Shorthand for generating a simple message embed.
  * 
  * @param title the title of the embed
+ * @param icon the embed icon
  * @param message the description for the embed
  */
 export const generateSimpleEmbed = (title: string, icon: EmbedIconType | string, message: string) => {
@@ -545,10 +612,14 @@ export const generateSimpleEmbed = (title: string, icon: EmbedIconType | string,
  * Shorthand for generating a simple message embed.
  * 
  * @param title the title of the embed
+ * @param icon the embed icon
  * @param message the description for the embed
  * @param image the thumbnail for the embed
  */
-export const generateSimpleEmbedWithThumbnail = (title: string, icon: EmbedIconType | string, message: string, image: string) => {
+export const generateSimpleEmbedWithThumbnail = (title: string,
+                                                 icon: EmbedIconType | string,
+                                                 message: string,
+                                                 image: string) => {
     return generateSimpleEmbed(title, icon, message)
         .setThumbnail(image);
 }
@@ -557,22 +628,49 @@ export const generateSimpleEmbedWithThumbnail = (title: string, icon: EmbedIconT
  * Shorthand for generating a simple message embed.
  * 
  * @param title the title of the embed
+ * @param icon the embed icon
  * @param message the description for the embed
  * @param image the thumbnail for the embed
  */
-export const generateSimpleEmbedWithImage = (title: string, icon: EmbedIconType | string, message: string, image: string) => {
+export const generateSimpleEmbedWithImage = (title: string,
+                                             icon: EmbedIconType | string,
+                                             message: string,
+                                             image: string) => {
     return generateSimpleEmbed(title, icon, message)
         .setImage(image);
+}
+
+/**
+ * Shorthand for generating a simple message embed.
+ * 
+ * @param title the title of the embed
+ * @param icon the embed icon
+ * @param message the description for the embed
+ * @param image the image for the embed
+ * @param thumbnail the thumbnail for the embed
+ */
+export const generateSimpleEmbedWithImageAndThumbnail = (title: string,
+                                                         icon: EmbedIconType | string,
+                                                         message: string,
+                                                         image: string,
+                                                         thumbnail: string) => {
+    return generateSimpleEmbed(title, icon, message)
+        .setImage(image)
+        .setThumbnail(thumbnail);
 }
 
 /**
  * Shorthand for generating a complex message embed.
  * 
  * @param title the title of the embed
+ * @param icon the embed icon
  * @param message the description for the embed
  * @param fields a list of EmbedFieldData for the embed
  */
-export const generateEmbed = (title: string, icon: EmbedIconType | string, message: string, fields: EmbedFieldData[]) => {
+export const generateEmbed = (title: string,
+                              icon: EmbedIconType | string,
+                              message: string,
+                              fields: EmbedFieldData[]) => {
     return generateSimpleEmbed(title, icon, message)
         .addFields(fields);
 }
@@ -581,23 +679,35 @@ export const generateEmbed = (title: string, icon: EmbedIconType | string, messa
  * Shorthand for generating a complex message embed.
  * 
  * @param title the title of the embed
+ * @param icon the embed icon
  * @param message the description for the embed
  * @param fields a list of EmbedFieldData for the embed
+ * @param thumbnail the thumbnail for the embed
  */
-export const generateEmbedWithFieldsAndThumbnail = (title: string, icon: EmbedIconType | string, message: string, fields: EmbedFieldData[], image: string) => {
+export const generateEmbedWithFieldsAndThumbnail = (title: string,
+                                                    icon: EmbedIconType | string,
+                                                    message: string,
+                                                    fields: EmbedFieldData[],
+                                                    thumbnail: string) => {
     return generateSimpleEmbed(title, icon, message)
         .addFields(fields)
-        .setThumbnail(image);
+        .setThumbnail(thumbnail);
 }
 
 /**
  * Shorthand for generating a complex message embed.
  * 
  * @param title the title of the embed
+ * @param icon the embed icon
  * @param message the description for the embed
  * @param fields a list of EmbedFieldData for the embed
+ * @param image the image for the embed
  */
-export const generateEmbedWithFieldsAndImage = (title: string, icon: EmbedIconType | string, message: string, fields: EmbedFieldData[], image: string) => {
+export const generateEmbedWithFieldsAndImage = (title: string,
+                                                icon: EmbedIconType | string,
+                                                message: string,
+                                                fields: EmbedFieldData[],
+                                                image: string) => {
     return generateSimpleEmbed(title, icon, message)
         .addFields(fields)
         .setImage(image);
@@ -635,6 +745,15 @@ export const getClosestDate = (input: Date, valid: Date[]) => {
     return valid.reduce((prev, cur) => (Math.abs(cur.getTime() - input.getTime()) < Math.abs(prev.getTime() - input.getTime())) ? cur : prev);
 }
 
+/**
+ * Returns the closest matches of the
+ * provided valid string array, to the
+ * given input string.
+ * 
+ * @param input the input string
+ * @param valid a list of valid strings
+ * @param limit the limit of results to return
+ */
 export const getClosestMatches = (input: string, valid: string[], limit?: number) => {
     let results = valid
         .map(record => {
@@ -653,6 +772,15 @@ export const getClosestMatches = (input: string, valid: string[], limit?: number
     return results;
 }
 
+/**
+ * Applies the Jaro-Winkler algorithm
+ * to determine the simularity of two
+ * strings.
+ * 
+ * @param input the input string
+ * @param valid the valid string
+ * @see https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance
+ */
 export const getJWDistance = (input: string, valid: string) => {
     let m = 0;
     let i, j;
@@ -717,6 +845,17 @@ export const getJWDistance = (input: string, valid: string) => {
     return weight;
 }
 
+/**
+ * Returns the highest clean divisor
+ * of a given number, up to max.
+ * 
+ * (Yes, I know this could probably
+ *  be implemented more efficiently
+ *  but it's alright)
+ * 
+ * @param number the number
+ * @param max the maximum number
+ */
 export const getHighestDivisor = (number: number, max: number = number) => {
     let highest = 0;
     for (let i = 0; i < max; i++) {
@@ -728,6 +867,13 @@ export const getHighestDivisor = (number: number, max: number = number) => {
     return highest;
 }
 
+/**
+ * Returns a list of clean divisors
+ * of a given number, up to max.
+ * 
+ * @param number the number
+ * @param max the maximum number
+ */
 export const getDivisors = (number: number, max: number = number) => {
     let arr = [];
     for (let i = 0; i < max; i++) {
@@ -737,16 +883,4 @@ export const getDivisors = (number: number, max: number = number) => {
     }
 
     return arr;
-}
-
-export const getCampusIndicator = (campus: string) => {
-    campus = campus.toLowerCase();
-    if (campus === 'storrs') return 'S';
-    if (campus === 'hartford') return 'H';
-    if (campus === 'stamford') return 'Z';
-    if (campus === 'waterbury') return 'W';
-    if (campus === 'avery point') return 'A';
-    if (campus === 'off-campus') return 'O';
-
-    return '?';
 }

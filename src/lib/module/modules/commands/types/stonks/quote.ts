@@ -57,12 +57,10 @@ export default class QuoteCommand extends Command {
         let range: RangeGranularity = args.length > 1 ? args[1] as any : '5d';
         let interval: DataGranularity = args.length > 2 ? args[2] as any : '5m';
 
-        let start = Date.now();
-        let loading = await message.reply('<a:loading:788890776444207194> Working on that..');
+        this.startLoader(message);
 
         let res = await quote(ticker, range, interval);
         if (!res) {
-            loading.delete();
             message.reply(generateSimpleEmbed('.quote | Error', EmbedIconType.STONKS, `Couldn't find any results for ticker ${emboss(ticker)}.`));
             return CommandReturn.EXIT;
         }
@@ -70,7 +68,6 @@ export default class QuoteCommand extends Command {
         let opt = await getOptions(ticker);
         let payload = res.indicators.quote[0].close;
         if (!payload) {
-            loading.delete();
             message.reply(generateSimpleEmbed('.quote | Error', EmbedIconType.STONKS, `An unknown error occurred while quoting ${emboss(ticker)}.`));
             return CommandReturn.EXIT;
         }
@@ -119,13 +116,12 @@ export default class QuoteCommand extends Command {
         
         // let ma = getMovingAverage(range, prices);
         // console.log(ma);
-
+        
         let state = opt.quote.marketState;
         state = state.substring(state.indexOf(state));
         
-        loading.delete();
         message.reply(generateEmbedWithFieldsAndImage(`${opt.quote.displayName ? opt.quote.displayName : ticker}`, EmbedIconType.STONKS,
-            `Retrieved quote data for ${bold(ticker)} for the last ${emboss(`${range} (${interval})`)}.\nThis operation took ${emboss(timeDiff(start) + 'ms')} to complete.`,
+            `Retrieved quote data for ${bold(ticker)} for the last ${emboss(`${range} (${interval})`)}.`,
             [
                 {
                     name: 'Price',

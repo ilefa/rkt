@@ -9,6 +9,7 @@
    "author": "mike m",
    "license": "GPL-3.0",
    "dependencies": {
+      "@discordjs/opus": "^0.3.3",
       "@types/jimp": "^0.2.28",
       "@types/merge-img": "^2.1.0",
       "axios": "^0.21.1",

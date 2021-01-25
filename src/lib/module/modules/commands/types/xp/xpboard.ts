@@ -11,6 +11,7 @@ import {
     EmbedIconType,
     emboss,
     generateSimpleEmbed,
+    generateSimpleEmbedWithImageAndThumbnail,
     generateSimpleEmbedWithThumbnail,
     getEmoteForXpPlacement
 } from '../../../../../util';
@@ -26,6 +27,8 @@ export default class XpBoardCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
+        this.startLoader(message);
+        
         let res: XpBoardUser[] = await getLeaderboard(message.guild.id);
         if (!res) {
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, 'Something went wrong while retrieving data from the web.'));
@@ -57,6 +60,11 @@ export default class XpBoardCommand extends Command {
         res.map((user, i) => {
             str += `${getEmoteForXpPlacement(i + 1)} ${asMention(user.id)} with ${bold(user.xp.toLocaleString() + ' XP')} (${user.message_count.toLocaleString()} :incoming_envelope:)\n`;
         });
+
+        if (chart) {
+            message.reply(generateSimpleEmbedWithImageAndThumbnail(`${message.guild.name} - Experience Board`, EmbedIconType.XP, str, chart, message.guild.iconURL()));
+            return CommandReturn.EXIT;
+        }
 
         message.reply(generateSimpleEmbedWithThumbnail(`${message.guild.name} - Experience Board`, EmbedIconType.XP, str, message.guild.iconURL()));
         return CommandReturn.EXIT;

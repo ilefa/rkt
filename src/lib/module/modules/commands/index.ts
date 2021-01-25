@@ -5,6 +5,7 @@ import BirthdayCommand from './types/fun/birthday';
 import ContractCommand from './types/stonks/contract';
 import CountHerCommand from './types/fun/counther';
 import CourseCommand from './types/uconn/course';
+import DisconnectCommand from './types/fun/disconnect';
 import EvalCommand from './types/eval';
 import FuturesCommand from './types/stonks/futures';
 import HelpCommand from './types/help';
@@ -21,6 +22,7 @@ import PrefsCommand from './types/prefs';
 import PurgeCommand from './types/purge';
 import ReactCommand from './types/react';
 import SayCommand from './types/fun/say';
+import SoundCommand from './types/fun/sound';
 import StackCommand from './types/fun/stack';
 import StimmyCommand from './types/fun/stimmy';
 import StonksCommand from './types/stonks/stonks';
@@ -41,6 +43,7 @@ export {
     ContractCommand,
     CountHerCommand,
     CourseCommand,
+    DisconnectCommand,
     EvalCommand,
     FuturesCommand,
     HelpCommand,
@@ -57,6 +60,7 @@ export {
     PurgeCommand,
     ReactCommand,
     SayCommand,
+    SoundCommand,
     StackCommand,
     StimmyCommand,
     StonksCommand,

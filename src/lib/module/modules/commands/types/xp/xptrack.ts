@@ -101,6 +101,8 @@ export default class XpTrackCommand extends Command {
             range = customRange;
         }
 
+        this.startLoader(message);
+
         let entries: XpRecord[] = collectEntries(target.id, range);
         if (!entries) {
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Failed to find historical data for ${asMention(target.id)}.`))

@@ -82,6 +82,8 @@ export default class CourseCommand extends Command {
 
             return CommandReturn.EXIT;
         }
+        
+        this.startLoader(message);
 
         let prefix = identifier.split(/[0-9]/)[0].toUpperCase();
         let number = identifier.split(/[a-zA-Z]{2,4}/)[1];
@@ -100,7 +102,6 @@ export default class CourseCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        let loading = await message.reply('<a:loading:788890776444207194> Working on that..');
         let $ = cheerio.load(res);
         tableparse($);
 
@@ -137,7 +138,6 @@ export default class CourseCommand extends Command {
 
         let data: string[][] = ($('.tablesorter') as any).parsetable();
         if (!data[0]) {
-            loading.delete();
             message.reply(generateSimpleEmbed(`Course Search » ${identifier}`, EmbedIconType.UCONN,
                 `${bold(name)}\n\n`
                 + `:arrow_right: ${link('Course Catalog', target)}\n`
@@ -358,7 +358,6 @@ export default class CourseCommand extends Command {
             user, `Course Search » ${identifier}`,
             EmbedIconType.UCONN, pages, 600000);
                 
-        loading.delete();
         return CommandReturn.EXIT;
     }
 
