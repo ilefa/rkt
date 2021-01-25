@@ -175,7 +175,11 @@ export const findUser = async (message: Message, input: string, def: User) => {
         target = temp;
     }
 
-    return def;
+    if (!target && def) {
+        return def;
+    }
+
+    return target;
 } 
 
 /**
