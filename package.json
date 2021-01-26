@@ -34,7 +34,6 @@
       "tinygradient": "^1.1.2",
       "trading-signals": "^1.2.0",
       "typeorm": "0.2.29",
-      "youtube-metadata-from-url": "^1.0.3",
       "ytdl-core-discord": "^1.2.5"
    },
    "devDependencies": {
