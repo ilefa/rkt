@@ -13,14 +13,10 @@ import {
     getEmoteForEPS,
     getEmoteForIndicator,
     getJoinedList,
-    getMovingAverage,
-    getPriceVariance,
     getTotalVolume,
-    timeDiff,
     validRanges,
     validIntervals,
     EmbedIconType,
-    generateEmbed,
     generateEmbedWithFieldsAndImage,
 } from '../../../../../util';
 
@@ -109,13 +105,9 @@ export default class QuoteCommand extends Command {
             .setBackgroundColor('rgba(0, 0, 0, 0)')
             .getShortUrl();
 
-        let variance = getPriceVariance(res);
         let volume = getTotalVolume(res);
         let macd = computeMACD(res);
         let rsi = computeRSI(res);
-        
-        // let ma = getMovingAverage(range, prices);
-        // console.log(ma);
         
         let state = opt.quote.marketState;
         state = state.substring(state.indexOf(state));

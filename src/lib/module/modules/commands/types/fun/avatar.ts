@@ -1,12 +1,17 @@
 import { Command, CommandReturn } from '../../command';
-import { Message, MessageAttachment, Permissions, User } from 'discord.js';
+
+import {
+    Message,
+    MessageAttachment,
+    Permissions,
+    User
+} from 'discord.js';
+
 import {
     EmbedIconType,
     emboss,
     findUser,
-    generateSimpleEmbed,
-    SNOWFLAKE_REGEX,
-    USER_MENTION_REGEX
+    generateSimpleEmbed
 } from '../../../../../util';
 
 export default class AvatarCommand extends Command {

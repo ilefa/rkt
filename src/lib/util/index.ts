@@ -36,7 +36,10 @@ export const SNOWFLAKE_REGEX = /^\d{18,}$/;
 export const EMOTE_REGEX = /<(a|):\w+:\d{18,}>/;
 export const USER_MENTION_REGEX = /^<@\!\d{18,}>$/;
 
+export const URL_REGEX = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
+
 export enum EmbedIconType {
+    AUDIO = 'https://storage.googleapis.com/stonks-cdn/audio.png',
     BIRTHDAY = 'https://storage.googleapis.com/stonks-cdn/birthday.png',
     COUNTHER = 'https://storage.googleapis.com/stonks-cdn/counther.png',
     ERROR = 'https://storage.googleapis.com/stonks-cdn/error.png',

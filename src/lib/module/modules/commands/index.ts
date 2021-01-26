@@ -34,6 +34,7 @@ import XpCompareCommand from './types/xp/xpcompare';
 import XpRankCommand from './types/xp/xprank';
 import XpTopCommand from './types/xp/xptop';
 import XpTrackCommand from './types/xp/xptrack';
+import YtPlayCommand from './types/fun/ytplay';
 
 export {
     AlertsCommand,
@@ -72,4 +73,5 @@ export {
     XpRankCommand,
     XpTopCommand,
     XpTrackCommand,
+    YtPlayCommand
 };

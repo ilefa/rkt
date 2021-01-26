@@ -49,7 +49,8 @@ import {
     XpCompareCommand,
     XpRankCommand,
     XpTopCommand,
-    XpTrackCommand
+    XpTrackCommand,
+    YtPlayCommand
 } from './lib/module/modules/commands'; 
 
 import {
@@ -104,6 +105,7 @@ commandCenter.registerCommand('xpcompare', new XpCompareCommand());
 commandCenter.registerCommand('xprank', new XpRankCommand());
 commandCenter.registerCommand('xptop', new XpTopCommand());
 commandCenter.registerCommand('xptrack', new XpTrackCommand());
+commandCenter.registerCommand('ytplay', new YtPlayCommand());
 
 reactionManager.registerHandler('delete', new DeleteMessageReactionHandler());
 reactionManager.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());

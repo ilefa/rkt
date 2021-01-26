@@ -33,7 +33,9 @@
       "sqlite3": "^4.0.3",
       "tinygradient": "^1.1.2",
       "trading-signals": "^1.2.0",
-      "typeorm": "0.2.29"
+      "typeorm": "0.2.29",
+      "youtube-metadata-from-url": "^1.0.3",
+      "ytdl-core-discord": "^1.2.5"
    },
    "devDependencies": {
       "@types/chart.js": "^2.9.28",
