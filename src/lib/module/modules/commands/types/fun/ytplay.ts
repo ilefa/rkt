@@ -1,5 +1,7 @@
 import ytdl from 'ytdl-core-discord';
 
+import * as Logger from '../../../../../logger';
+
 import { Message, User } from 'discord.js';
 import { metadata } from 'youtube-metadata-from-url';
 import { Command, CommandReturn } from '../../command';
@@ -11,25 +13,10 @@ import {
     generateEmbed,
     generateSimpleEmbed,
     generateSimpleEmbedWithImage,
+    getYtMeta,
     link,
     URL_REGEX
 } from '../../../../../util';
-
-type MetaResponse = {
-    provider_name?: string;
-    provider_url?: string;
-    thumbnail_url: string;
-    thumbnail_width?: number;
-    thumbnail_height?: number;
-    author_name: string;
-    author_url: string;
-    version?: string;
-    title: string;
-    type?: string;
-    html?: string;
-    width?: number;
-    height?: number;
-}
 
 export default class YtPlayCommand extends Command {
 
@@ -76,14 +63,33 @@ export default class YtPlayCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        let meta = await metadata(args[0]) as MetaResponse;
-        if (!meta) {
-            meta = {
-                title: 'Unavailable',
-                author_name: 'Unknown',
-                author_url: '#',
-                thumbnail_url: 'https://i.ytimg.com/vi/1Gj1NvMJBOM/maxresdefault.jpg'
-            }
+        let meta = await getYtMeta(args[0]);
+        let cause = '';
+        let data = await ytdl(args[0])
+            .catch(err => {
+                cause = err?.message;
+
+                if (err.message && err.message.startsWith('No video id found')) {
+                    cause = 'Audio source not found';
+                }
+
+                return null;
+            });
+
+        if (!data) {
+            message.reply(generateEmbed('Audio Player', EmbedIconType.AUDIO, `An error occurred while retrieving data from the web.`, [
+                {
+                    name: 'URL',
+                    value: args[0],
+                    inline: false
+                },
+                {
+                    name: 'Error',
+                    value: cause || 'Unknown Cause',
+                    inline: false
+                }
+            ]));
+            return CommandReturn.EXIT;
         }
 
         vc
@@ -92,7 +98,7 @@ export default class YtPlayCommand extends Command {
                 message.reply(generateSimpleEmbedWithImage('Audio Player', EmbedIconType.AUDIO,
                     `Now playing ${link(meta.title, args[0])} by ${link(meta.author_name, meta.author_url)}.`, meta.thumbnail_url));
 
-                let dispatcher = connection.play(await ytdl(args[0]), {
+                let dispatcher = connection.play(data, {
                     volume: vol,
                     type: 'opus'
                 });
@@ -107,6 +113,8 @@ export default class YtPlayCommand extends Command {
                     }
                 ]));
             });
+
+        return CommandReturn.EXIT;
     }
 
 }

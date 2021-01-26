@@ -26,6 +26,7 @@ import {
     User,
     Guild
 } from 'discord.js';
+import axios from 'axios';
 
 export { PaginatedEmbed, GameEmbedAwaiter };
 
@@ -52,6 +53,29 @@ export enum EmbedIconType {
     TEST = 'https://storage.googleapis.com/stonks-cdn/test.png',
     UCONN = 'https://storage.googleapis.com/stonks-cdn/univ.png',
     XP = 'https://storage.googleapis.com/stonks-cdn/xp.png'
+}
+
+export type YtMetaResponse = {
+    provider_name?: string;
+    provider_url?: string;
+    thumbnail_url: string;
+    thumbnail_width?: number;
+    thumbnail_height?: number;
+    author_name: string;
+    author_url: string;
+    version?: string;
+    title: string;
+    type?: string;
+    html?: string;
+    width?: number;
+    height?: number;
+}
+
+export const INVALID_YT_RESPONSE = {
+    title: 'Unavailable',
+    author_name: 'Unknown',
+    author_url: '#',
+    thumbnail_url: 'https://i.ytimg.com/vi/1Gj1NvMJBOM/maxresdefault.jpg'
 }
 
 export const DAY_MILLIS = 86400000;
@@ -183,7 +207,20 @@ export const findUser = async (message: Message, input: string, def: User) => {
     }
 
     return target;
-} 
+}
+
+/**
+ * Attempts to retrieve metadata about
+ * a particular youtube video, given
+ * it's url.
+ * 
+ * @param url the youtube url
+ */
+export const getYtMeta = async (url: string) => axios
+    .get(`https://www.youtube.com/oembed?url=${url}&format=json`)
+    .then(res => res.data)
+    .then(data => data as YtMetaResponse)
+    .catch(() => INVALID_YT_RESPONSE)
 
 /**
  * Replaces all occurances of a given

@@ -1,4 +1,5 @@
 import env from '../../../../env.json';
+import * as Logger from '../../logger';
 
 import Module from '../module';
 import PollManager from './poll';
@@ -20,6 +21,7 @@ export default class EventManager extends Module {
     countHerManager: CountHerManager;
     reactionManager: ReactionManager;
     pollManager: PollManager;
+    commandDeck: TextChannel;
 
     constructor(commandCenter: CommandManager,
                 countHerManager: CountHerManager,
@@ -35,8 +37,8 @@ export default class EventManager extends Module {
 
     async start() {
         const { client, commandCenter, countHerManager, reactionManager, pollManager } = this;
-        const commandDeck = await client.channels.fetch(env.commandDeck, false) as TextChannel;
-            
+        
+        client.on('ready', async () => this.commandDeck = await client.channels.fetch(env.commandDeck, false) as TextChannel);
         client.on('message', async message => {
             if (message.author.bot) {
                 return;
@@ -89,8 +91,8 @@ export default class EventManager extends Module {
         });
 
         process.on('uncaughtException', async (err: any) => {
-            if (err.fatal) commandDeck.send('@everyone');
-            commandDeck.send(generateEmbed('Severe', EmbedIconType.ERROR, `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception.${err.fatal ? `\nStonksBot cannot recover from this incident and will now shutdown.` : ''}`, [
+            if (err.fatal) this.commandDeck?.send('@everyone');
+            this.commandDeck?.send(generateEmbed('Severe', EmbedIconType.ERROR, `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception.${err.fatal ? `\nStonksBot cannot recover from this incident and will now shutdown.` : ''}`, [
                 {
                     name: 'Error',
                     value: err.message,
@@ -102,6 +104,9 @@ export default class EventManager extends Module {
                     inline: false
                 }
             ]));
+
+            Logger.except(err, 'Stonks', `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception`);
+            Logger.severe('Stonks', err.stack);
         });
     }
 
