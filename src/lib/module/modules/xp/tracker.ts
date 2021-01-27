@@ -38,7 +38,7 @@ export default class XpTracker extends Module {
             let guild = env.xpTrackServer;
             let res = await getLeaderboard(guild);
             if (!res) {
-                return Logger.severe(this.name, `Failed to record datapoints for ${guild}.`);
+                return Logger.severe(this.name, `Failed to retrieve datapoints for ${guild}.`);
             }
 
             this.recordPoints(res);

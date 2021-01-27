@@ -1,3 +1,4 @@
+import axios from 'axios';
 import moment from 'moment';
 import df from 'parse-duration';
 import MA from 'moving-average';
@@ -19,14 +20,13 @@ import {
     Client,
     EmbedFieldData,
     Emoji,
+    Guild,
     Message,
     MessageEmbed,
     Permissions,
     PermissionFlags,
-    User,
-    Guild
+    User
 } from 'discord.js';
-import axios from 'axios';
 
 export { PaginatedEmbed, GameEmbedAwaiter };
 

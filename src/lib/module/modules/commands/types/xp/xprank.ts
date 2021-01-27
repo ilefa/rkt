@@ -13,9 +13,7 @@ import {
     generateSimpleEmbed,
     getDownwardXpDifference,
     getUpwardXpDifference,
-    ordinalSuffix,
-    SNOWFLAKE_REGEX,
-    USER_MENTION_REGEX
+    ordinalSuffix
 } from '../../../../../util';
 
 export default class XpRankCommand extends Command {

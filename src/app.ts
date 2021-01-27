@@ -126,7 +126,7 @@ moduleManager.registerModule(new XpTracker());
 moduleManager.init();
 
 client.on('ready', () => {
-    Logger.info('Stonks', 'Successfully connected to Discord.');
+    Logger.info('rkt', 'Successfully connected to Discord.');
     client.user.setPresence({
         status: 'online',
         activity: {

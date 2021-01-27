@@ -55,7 +55,7 @@ export default class PrefsCommand extends Command {
             verbose += ` • ${emboss(server)}\n`;
         });
 
-        let embed = generateEmbed('Stonks Bot Preferences', EmbedIconType.PREFS, '', [
+        let embed = generateEmbed('rkt Preferences', EmbedIconType.PREFS, '', [
             {
                 name: 'Futures Tickers',
                 value: futures,

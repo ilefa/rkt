@@ -1,5 +1,5 @@
 {
-   "name": "stonksbot",
+   "name": "rkt",
    "version": "1.0.0",
    "description": "stonks only go up",
    "main": "src/app.ts",

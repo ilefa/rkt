@@ -23,7 +23,7 @@ export default class PollCommand extends Command {
             },
             {
                 name: 'Advanced Polls',
-                value: 'If you would like to fully utilize the power of StonksBot polling, supply a question prompt wrapped in brackets, followed by up to twenty custom response prompts.',
+                value: 'If you would like to fully utilize the power of rkt polling, supply a question prompt wrapped in brackets, followed by up to twenty custom response prompts.',
                 inline: false
             },
             {

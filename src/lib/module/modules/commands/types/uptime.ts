@@ -22,7 +22,7 @@ export default class UptimeCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        message.reply(generateSimpleEmbed('Stonks Uptime', EmbedIconType.PREFS, `StonksBot has been running for ${bold(getLatestTimeValue(Date.now() - this.uptime))}.`))
+        message.reply(generateSimpleEmbed('Uptime', EmbedIconType.PREFS, `${bold('rkt')} has been running for ${bold(getLatestTimeValue(Date.now() - this.uptime))}.`))
         return CommandReturn.EXIT;
     }
 

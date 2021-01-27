@@ -50,7 +50,7 @@ export default class YtPlayCommand extends Command {
 
         let cur = message.guild.voice;
         if (cur && cur.speaking) {
-            message.reply(generateSimpleEmbed('Audio Player', EmbedIconType.AUDIO, `StonksBot is already speaking in ${bold(message.guild.voice.channel.name)}!`));
+            message.reply(generateSimpleEmbed('Audio Player', EmbedIconType.AUDIO, `${bold('rkt')} is already speaking in ${bold(message.guild.voice.channel.name)}!`));
             return CommandReturn.EXIT;
         }
 

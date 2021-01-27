@@ -20,7 +20,7 @@ export default class DisconnectCommand extends Command {
 
         let vc = message.guild.voice;
         if (!vc) {
-            message.reply(generateSimpleEmbed('Status', EmbedIconType.TEST, `${bold('StonksBot')} isn\'t connected to a voice channel.`));
+            message.reply(generateSimpleEmbed('Audio', EmbedIconType.AUDIO, `${bold('rkt')} isn\'t connected to a voice channel.`));
             return CommandReturn.EXIT;
         }
 
