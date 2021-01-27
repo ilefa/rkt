@@ -22,7 +22,7 @@ import {
     replaceAll
 } from '../../../../../util';
 
-const identifierRegex = /^[a-zA-Z]{2,4}\d{4}(Q|E|W)*$/;
+const identifierRegex = /^[a-zA-Z]{2,4}\dpoll: a{4}(Q|E|W)*$/;
 
 export default class CourseCommand extends Command {
 

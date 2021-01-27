@@ -18,6 +18,7 @@ enum SoundType {
     FART = 'https://storage.googleapis.com/stonks-cdn/fart.mp3',
     FART2 = 'https://storage.googleapis.com/stonks-cdn/fart2.mp3',
     FNAF = 'https://storage.googleapis.com/stonks-cdn/fnaf.mp3',
+    FRENCH = 'https://storage.googleapis.com/stonks-cdn/french.mp3',
     GUAC = 'https://storage.googleapis.com/stonks-cdn/guac.mp3',
     NIBBA = 'https://storage.googleapis.com/stonks-cdn/nibba.mp3',
     NIBBA2 = 'https://storage.googleapis.com/stonks-cdn/nibba2.mp3',
@@ -39,6 +40,7 @@ enum SoundVolume {
     FART = 1.0,
     FART2 = 0.85,
     FNAF = 0.70,
+    FRENCH = 0.5,
     GUAC = 0.15,
     NIBBA = 0.75,
     NIBBA2 = 0.30,
@@ -60,6 +62,7 @@ const valid = [
     'fart',
     'fart2',
     'fnaf',
+    'french',
     'guac',
     'nibba',
     'nibba2',
@@ -73,7 +76,7 @@ const valid = [
 export default class SoundCommand extends Command {
 
     constructor() {
-        super('sound', `Invalid usage: ${emboss('.sound <type>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
+        super('sound', `Invalid usage: ${emboss('.sound <type>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -104,6 +107,8 @@ export default class SoundCommand extends Command {
             message.reply(generateSimpleEmbed('Sounds', EmbedIconType.AUDIO, `Insufficient privileges to join ${emboss(vc.name)}!`));
             return;
         }
+
+        message.react('✅');
 
         vc
             .join()

@@ -1,9 +1,6 @@
 import ytdl from 'ytdl-core-discord';
 
-import * as Logger from '../../../../../logger';
-
 import { Message, User } from 'discord.js';
-import { metadata } from 'youtube-metadata-from-url';
 import { Command, CommandReturn } from '../../command';
 import {
     bold,
@@ -63,8 +60,8 @@ export default class YtPlayCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        let meta = await getYtMeta(args[0]);
         let cause = '';
+        let meta = await getYtMeta(args[0]);
         let data = await ytdl(args[0])
             .catch(err => {
                 cause = err?.message;

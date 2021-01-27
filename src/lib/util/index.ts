@@ -220,7 +220,7 @@ export const getYtMeta = async (url: string) => axios
     .get(`https://www.youtube.com/oembed?url=${url}&format=json`)
     .then(res => res.data)
     .then(data => data as YtMetaResponse)
-    .catch(() => INVALID_YT_RESPONSE)
+    .catch(() => INVALID_YT_RESPONSE);
 
 /**
  * Replaces all occurances of a given
