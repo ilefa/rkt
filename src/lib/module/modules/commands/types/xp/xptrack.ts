@@ -39,7 +39,7 @@ export default class XpTrackCommand extends Command {
             },
             {
                 name: 'Valid Range Specification',
-                value: emboss('[#](s|m|d|h|mo|y)'),
+                value: emboss('[#](s|m|h|d|w|mo|y)'),
                 inline: false
             }
         ], Permissions.FLAGS.SEND_MESSAGES);
@@ -86,12 +86,12 @@ export default class XpTrackCommand extends Command {
 
         let range = DAY_MILLIS;
         if (args[2]) {
-            let customRange = getDurationWithUnit(args[1], 'millisecond');
+            let customRange = getDurationWithUnit(args[2], 'millisecond');
             if (!customRange) {
                 message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Invalid time specification: ${emboss(args[2])}.`, [
                     {
                         name: 'Valid Time Specification',
-                        value: emboss(`[#](s|m|d|h|mo|y)`),
+                        value: emboss(`[#](s|m|h|d|w|mo|y)`),
                         inline: true
                     }
                 ]))
