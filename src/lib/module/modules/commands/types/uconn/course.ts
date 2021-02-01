@@ -22,7 +22,7 @@ import {
     replaceAll
 } from '../../../../../util';
 
-const identifierRegex = /^[a-zA-Z]{2,4}\dpoll: a{4}(Q|E|W)*$/;
+const identifierRegex = /^[a-zA-Z]{2,4}\d{4}(Q|E|W)*$/;
 
 export default class CourseCommand extends Command {
 
@@ -54,7 +54,7 @@ export default class CourseCommand extends Command {
 
         let identifier = args[0].toUpperCase();
         if (!identifierRegex.test(identifier)) {
-            message.reply(generateEmbed('Course Search', `Invalid or malformed course name: ${emboss(identifier)}`, EmbedIconType.UCONN, [
+            message.reply(generateEmbed('Course Search', EmbedIconType.UCONN, `Invalid or malformed course name: ${emboss(identifier)}`, [
                 {
                     name: 'Valid Course Name',
                     value: emboss('<course prefix><course number>[Q,E,W]'),
@@ -72,7 +72,7 @@ export default class CourseCommand extends Command {
 
         let campus: CampusType = args[1] as CampusType || 'any';
         if (!campus) {
-            message.reply(generateEmbed('Course Search', `Invalid or malformed campus specification: ${emboss(args[1])}`, EmbedIconType.UCONN, [
+            message.reply(generateEmbed('Course Search', EmbedIconType.UCONN, `Invalid or malformed campus specification: ${emboss(args[1])}`, [
                 {
                     name: 'Valid Campuses',
                     value: emboss(['any', 'storrs', 'hartford', 'stamford', 'waterbury', 'avery_point'].join(', ')),
