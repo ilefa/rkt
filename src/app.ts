@@ -38,6 +38,7 @@ import {
     QuoteCommand,
     ReactCommand,
     SayCommand,
+    SectionCommand,
     SoundCommand,
     StackCommand,
     StimmyCommand,
@@ -45,6 +46,7 @@ import {
     StopCommand,
     TestGameEmbedCommand,
     UptimeCommand,
+    VersionCommand,
     XpBoardCommand,
     XpCompareCommand,
     XpRankCommand,
@@ -59,6 +61,7 @@ import {
 } from './lib/module/modules/reactions';
 
 import { printStartup } from './lib/startup';
+import { getCurrentVersion, getReleaseChannel } from './lib/util/vcs';
 
 const start = Date.now();
 const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
@@ -93,6 +96,7 @@ commandCenter.registerCommand('prefs', new PrefsCommand());
 commandCenter.registerCommand('purge', new PurgeCommand());
 commandCenter.registerCommand('react', new ReactCommand());
 commandCenter.registerCommand('say', new SayCommand());
+commandCenter.registerCommand('section', new SectionCommand());
 commandCenter.registerCommand('sound', new SoundCommand());
 commandCenter.registerCommand('stack', new StackCommand());
 commandCenter.registerCommand('stimmy', new StimmyCommand());
@@ -100,6 +104,7 @@ commandCenter.registerCommand('stonks', new StonksCommand());
 commandCenter.registerCommand('stop', new StopCommand());
 commandCenter.registerCommand('tge', new TestGameEmbedCommand());
 commandCenter.registerCommand('uptime', new UptimeCommand(start));
+commandCenter.registerCommand('version', new VersionCommand());
 commandCenter.registerCommand('xpboard', new XpBoardCommand());
 commandCenter.registerCommand('xpcompare', new XpCompareCommand());
 commandCenter.registerCommand('xprank', new XpRankCommand());
@@ -125,7 +130,8 @@ moduleManager.registerModule(new EventManager(commandCenter,
 moduleManager.registerModule(new XpTracker());
 moduleManager.init();
 
-client.on('ready', () => {
+client.on('ready', async () => {
+    Logger.info('rkt', `Release channel: ${await getReleaseChannel()}, version: ${await getCurrentVersion()}`);
     Logger.info('rkt', 'Successfully connected to Discord.');
     client.user.setPresence({
         status: 'online',

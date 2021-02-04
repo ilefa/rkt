@@ -3,7 +3,7 @@ import * as Logger from './logger';
 
 import { Colors } from './logger';
 
-export function printStartup() {
+export async function printStartup() {
 Logger.unlisted(Colors.GREEN + `
                    |
                   / \\

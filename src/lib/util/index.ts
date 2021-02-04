@@ -223,6 +223,18 @@ export const getYtMeta = async (url: string) => axios
     .catch(() => INVALID_YT_RESPONSE);
 
 /**
+ * Blocks all I/O for the
+ * specified millisecond duration.
+ * 
+ * @param ms millis to sleep
+ */
+export const sleep = async ms => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
+
+/**
  * Replaces all occurances of a given
  * search string within another string.
  * 

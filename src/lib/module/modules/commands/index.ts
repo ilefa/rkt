@@ -22,6 +22,7 @@ import PrefsCommand from './types/prefs';
 import PurgeCommand from './types/purge';
 import ReactCommand from './types/react';
 import SayCommand from './types/fun/say';
+import SectionCommand from './types/uconn/section';
 import SoundCommand from './types/fun/sound';
 import StackCommand from './types/fun/stack';
 import StimmyCommand from './types/fun/stimmy';
@@ -29,6 +30,7 @@ import StonksCommand from './types/stonks/stonks';
 import StopCommand from './types/stop';
 import TestGameEmbedCommand from './types/fun/testGame';
 import UptimeCommand from './types/uptime';
+import VersionCommand from './types/version';
 import XpBoardCommand from './types/xp/xpboard';
 import XpCompareCommand from './types/xp/xpcompare';
 import XpRankCommand from './types/xp/xprank';
@@ -61,6 +63,7 @@ export {
     PurgeCommand,
     ReactCommand,
     SayCommand,
+    SectionCommand,
     SoundCommand,
     StackCommand,
     StimmyCommand,
@@ -68,6 +71,7 @@ export {
     StopCommand,
     TestGameEmbedCommand,
     UptimeCommand,
+    VersionCommand,
     XpBoardCommand,
     XpCompareCommand,
     XpRankCommand,

@@ -22,7 +22,7 @@ export default class StopCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        message.reply(generateSimpleEmbed('Stonks', EmbedIconType.PREFS, `Please confirm shutdown by responding with ${bold('Y(ES)')}.`));
+        message.reply(generateSimpleEmbed('rkt', EmbedIconType.PREFS, `Please confirm shutdown by responding with ${bold('Y(ES)')}.`));
         message.channel.awaitMessages((message: Message) => message && message.author.id === user.id,
             {
                 max: 1,
@@ -34,7 +34,7 @@ export default class StopCommand extends Command {
                 if (!msg 
                         || msg.content.toLowerCase() !== 'y' 
                         && msg.content.toLowerCase() !== 'yes') {
-                    msg.reply(generateSimpleEmbed('Stonks', EmbedIconType.PREFS, 'Shutdown cancelled.'));
+                    msg.reply(generateSimpleEmbed('rkt', EmbedIconType.PREFS, 'Shutdown cancelled.'));
                     return;
                 }
 
@@ -43,12 +43,12 @@ export default class StopCommand extends Command {
                 msg.channel.send(attachment);
 
                 setTimeout(() => {
-                    Logger.info('Stonks', 'Shutting down.');
+                    Logger.info('rkt', 'Shutting down.');
                     message.client.destroy();
                     process.exit();
                 }, 5000);
             })
-            .catch(() => message.channel.send(generateSimpleEmbed('Stonks', EmbedIconType.PREFS, 'Shutdown confirmation timed out.')))
+            .catch(() => message.channel.send(generateSimpleEmbed('rkt', EmbedIconType.PREFS, 'Shutdown confirmation timed out.')))
         return CommandReturn.EXIT;
     }
 

@@ -69,7 +69,7 @@ export class PaginatedEmbed {
 
     private generatePage(pnum: number) {
         let pind = pnum - 1;
-        return generateEmbed(this.title, this.icon, this.pages[pind].description, this.pages[pind].fields)
+        return generateEmbed(this.title, this.icon, this.pages[pind]?.description || '', this.pages[pind]?.fields || [])
                 .setTimestamp()
                 .setThumbnail(this.thumbnail)
                 .setFooter(`Page ${pnum} of ${this.pages.length}`, this.channel.guild.iconURL())

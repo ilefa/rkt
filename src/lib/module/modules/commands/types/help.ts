@@ -2,6 +2,7 @@ import MultiCommand from '../components/multi';
 
 import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
+import { getCurrentVersion, getReleaseChannel } from '../../../../util/vcs';
 import {
     bold,
     CUSTOM_PERMS,
@@ -63,7 +64,7 @@ export default class HelpCommand extends Command {
 
         let legend = '';
         if (has(user, CUSTOM_PERMS.SUPERMAN, message.guild)) {
-            legend += `${getEmoteForCommandPermission(CUSTOM_PERMS.SUPERMAN)} Super User\n\trkt developers and other select cool people\n\n`;
+            legend += `${getEmoteForCommandPermission(CUSTOM_PERMS.SUPERMAN)} Super User\n\t${bold('rkt')} developers and other select people\n\n`;
         }
 
         if (has(user, Permissions.FLAGS.ADMINISTRATOR, message.guild)) {
@@ -72,7 +73,7 @@ export default class HelpCommand extends Command {
 
         legend += `${getEmoteForCommandPermission(Permissions.FLAGS.SEND_MESSAGES)} Member\n\t${bold(message.guild.name)} server members`;
 
-        message.reply(generateEmbed('rkt help', EmbedIconType.HELP, `${bold('rkt')} version 0.1 (master)\n` 
+        message.reply(generateEmbed('rkt help', EmbedIconType.HELP, `${bold('rkt')} version ${emboss(`${await getCurrentVersion()} (git:${await getReleaseChannel()})`)}\n` 
             + `Made with lots of :blue_heart: and :rocket: by <@177167251986841600> & <@268044207854190604>.\n\n`
             + `${bold(`Command List (${commands.length})`)}\n` 
             + helpList.trim(),

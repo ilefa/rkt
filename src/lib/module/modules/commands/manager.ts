@@ -72,6 +72,23 @@ export default class CommandManager extends Module {
                         break;
                     }
 
+                    let helpEmbed = generateEmbed(
+                        cmd.command.helpTitle 
+                            ? cmd.command.helpTitle 
+                            : `.${cmd.command.name} | Help Menu`, 
+                        EmbedIconType.HELP,
+                        cmd.command.help,
+                        cmd.command.helpFields);
+
+                    if ((args.length === 1) && args[0].toLowerCase() === '-h') {
+                        if (cmd.command.deleteMessage) {
+                            message.delete();
+                        }
+
+                        message.reply(helpEmbed);
+                        break;
+                    }
+
                     let result = await cmd.command.execute(user, message, args);
                     if (cmd.command.deleteMessage) {
                         message.delete();
@@ -82,12 +99,6 @@ export default class CommandManager extends Module {
                     if (result === CommandReturn.EXIT) {
                         break;
                     }
-
-                    let helpEmbed = new MessageEmbed()
-                        .setAuthor(cmd.command.helpTitle ? cmd.command.helpTitle : `.${cmd.command.name} | Help Menu`, EmbedIconType.HELP)    
-                        .setColor(0x27AE60)
-                        .setDescription(cmd.command.help)
-                        .addFields(cmd.command.helpFields);
 
                     message.reply(helpEmbed);
                     break;
