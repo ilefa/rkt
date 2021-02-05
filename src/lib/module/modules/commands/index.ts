@@ -29,6 +29,7 @@ import StimmyCommand from './types/fun/stimmy';
 import StonksCommand from './types/stonks/stonks';
 import StopCommand from './types/stop';
 import TestGameEmbedCommand from './types/fun/testGame';
+import UpdateCommand from './types/update';
 import UptimeCommand from './types/uptime';
 import VersionCommand from './types/version';
 import WhoHasCommand from './types/whohas';
@@ -71,6 +72,7 @@ export {
     StonksCommand,
     StopCommand,
     TestGameEmbedCommand,
+    UpdateCommand,
     UptimeCommand,
     VersionCommand,
     WhoHasCommand,

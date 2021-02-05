@@ -6,7 +6,9 @@ import {
     EmbedIconType,
     emboss,
     join,
-    generateSimpleEmbed
+    generateSimpleEmbed,
+    italic,
+    numberEnding
 } from '../../../../util';
 
 export default class WhoHasCommand extends Command {
@@ -37,13 +39,21 @@ export default class WhoHasCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        let { name, color, members } = role;
+        let { name, color, members: m } = role;
+        let members = m.array();
+        let sliced = 0;
+        if (members.length > 80) {
+            sliced = Math.min(members.length - 80);
+            members = members.slice(0, 80);
+        }
+
         let str = join(members
-            .array()
             .sort((a, b) => a.displayName.localeCompare(b.displayName)), ', ', member => asMention(member.id));
 
+        let total = members.length + sliced;
         message.reply(generateSimpleEmbed('Role Information', EmbedIconType.PREFS,
-            `${bold(`Members with ${name} Role (${members.size})`)}\n\n${str}`)
+            `${bold(`${total} member${numberEnding(total)} with ${name}`)}\n\n` 
+                + `${str}${sliced !== 0 ? `, ${italic(`+ ${sliced} more`)}` : ''}`)
             .setColor(color));
         return CommandReturn.EXIT;
     }

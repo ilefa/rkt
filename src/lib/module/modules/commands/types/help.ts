@@ -132,7 +132,7 @@ export default class HelpCommand extends Command {
         }
 
         message.reply(generateEmbed(`rkt help » ${args[0].toLowerCase()}`, EmbedIconType.HELP, `${bold('rkt')} version ${emboss(`${await getCurrentVersion()} (git:${await getReleaseChannel()})`)}\n\n` 
-            + `${bold(`${capitalizeFirst(args[0])} Command List (${commands.length})`)}\n` 
+            + `${all ? '' : bold(`${capitalizeFirst(args[0]) + ' '}Command List (${commands.length})`)}\n` 
             + helpList.trim(),
             [
                 {

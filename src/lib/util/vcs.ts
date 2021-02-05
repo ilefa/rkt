@@ -28,6 +28,15 @@ export const getCurrentVersion = async () => {
     return res.substring(0, 7);
 };
 
+export const getUpstreamVersion = async () => {
+    let res = await exec(`ls-remote git@github.com:ilefa/stonksbot.git | grep refs/heads/${await getReleaseChannel()} | cut -f 1`);
+    if (!res) {
+        return 'unknown';   
+    }
+
+    return res.substr(0, 7);
+}
+
 export const getReleaseChannel = async () => {
     let res = await exec('rev-parse --abbrev-ref HEAD');
     if (res.startsWith('fatal')) {
@@ -36,3 +45,18 @@ export const getReleaseChannel = async () => {
 
     return res;
 };
+
+export const update = async (then?: (version: String) => void) => {
+    let local = await getCurrentVersion();
+    let remote = await getUpstreamVersion();
+    if (local.toLowerCase() === remote.toLowerCase()) {
+        return then(local);
+    }
+
+    let res = await exec('git pull');
+    if (!res) {
+        return then('Failure');
+    }
+
+    return then(await getCurrentVersion());
+}

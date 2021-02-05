@@ -45,6 +45,7 @@ import {
     StonksCommand,
     StopCommand,
     TestGameEmbedCommand,
+    UpdateCommand,
     UptimeCommand,
     VersionCommand,
     WhoHasCommand,
@@ -108,6 +109,7 @@ commandCenter.registerCommand('stimmy', new StimmyCommand());
 commandCenter.registerCommand('stonks', new StonksCommand());
 commandCenter.registerCommand('stop', new StopCommand());
 commandCenter.registerCommand('tge', new TestGameEmbedCommand());
+commandCenter.registerCommand('update', new UpdateCommand());
 commandCenter.registerCommand('uptime', new UptimeCommand(start));
 commandCenter.registerCommand('version', new VersionCommand());
 commandCenter.registerCommand('whohas', new WhoHasCommand());
