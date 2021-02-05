@@ -1,10 +1,10 @@
 import moment from 'moment';
 
 import { genXpChart } from '../../../../../chart';
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
 import { TrackingType, XpRecord } from '../../../xp/struct';
 import { collectEntries, getNameForType } from '../../../xp/tracker';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import {
     asMention,
     bold,
@@ -24,7 +24,7 @@ import {
 export default class XpTrackCommand extends Command {
 
     constructor() {
-        super('xptrack', `Invalid usage: ${emboss('.xptrack <target> <type> [range]')}`, null, [
+        super('xptrack', CommandCategory.XP, `Invalid usage: ${emboss('.xptrack <target> <type> [range]')}`, null, [
             {
                 name: 'Args',
                 value: `${bold('__target__')}: a mentioned member or a member's snowflake id\n` 

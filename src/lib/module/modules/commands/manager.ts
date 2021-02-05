@@ -3,7 +3,7 @@ import Module from '../../module';
 
 import * as Logger from '../../../logger';
 
-import { User, Message, MessageEmbed, Client } from 'discord.js';
+import { User, Message, Client } from 'discord.js';
 import { Command, CommandEntry, CommandReturn } from './command';
 import {
     codeBlock,
@@ -21,7 +21,6 @@ export default class CommandManager extends Module {
     
     constructor(client: Client) {
         super('Commands');
-
         this.client = client;
         this.commands = [];
     }
@@ -38,6 +37,7 @@ export default class CommandManager extends Module {
     }
 
     start() {
+        this.commands = this.commands.sort((a, b) => a.name.localeCompare(b.name));
         Logger.info(this.name, `Registered ${this.commands.length} command${numberEnding(this.commands.length)}.`)
     }
 

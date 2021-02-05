@@ -1,5 +1,5 @@
 import { Message, Permissions, User } from 'discord.js';
-import { Command, CommandReturn } from '../../command';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 
 import {
     COURSE_IDENTIFIER,
@@ -24,7 +24,7 @@ import {
 export default class SectionCommand extends Command {
 
     constructor() {
-        super('section', `Invalid usage: ${emboss('.section <course> <name>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
+        super('section', CommandCategory.UCONN, `Invalid usage: ${emboss('.section <course> <name>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

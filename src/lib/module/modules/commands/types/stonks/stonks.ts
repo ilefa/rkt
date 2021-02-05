@@ -1,11 +1,11 @@
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import { EmbedIconType, emboss, generateSimpleEmbed } from '../../../../../util';
 
 export default class HelpCommand extends Command {
 
     constructor() {
-        super('stonks', `Invalid usage: ${emboss('.stonks')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('stonks', CommandCategory.STONKS, `Invalid usage: ${emboss('.stonks')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

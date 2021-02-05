@@ -1,5 +1,5 @@
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import {
     bold,
     EmbedIconType,
@@ -10,7 +10,7 @@ import {
 export default class DisconnectCommand extends Command {
 
     constructor() {
-        super('dc', `Invalid usage: ${emboss('.dc')}`, null, [], Permissions.FLAGS.ADMINISTRATOR, false);
+        super('dc', CommandCategory.AUDIO, `Invalid usage: ${emboss('.dc')}`, null, [], Permissions.FLAGS.ADMINISTRATOR, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

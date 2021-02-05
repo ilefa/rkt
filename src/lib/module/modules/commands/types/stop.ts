@@ -1,7 +1,7 @@
 import * as Logger from '../../../../logger';
 
-import { Command, CommandReturn } from "../command";
 import { Message, MessageAttachment, User } from "discord.js";
+import { Command, CommandCategory, CommandReturn } from "../command";
 
 import {
     bold,
@@ -14,7 +14,7 @@ import {
 export default class StopCommand extends Command {
 
     constructor() {
-        super('stop', `Invalid usage: ${emboss('.stop')}`, 'change da world, my final message... goodbye', [], CUSTOM_PERMS.SUPERMAN);
+        super('stop', CommandCategory.MISC, `Invalid usage: ${emboss('.stop')}`, 'change da world, my final message... goodbye', [], CUSTOM_PERMS.SUPERMAN);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

@@ -1,5 +1,5 @@
 import { Message, User } from 'discord.js';
-import { Command, CommandReturn } from '../command';
+import { Command, CommandCategory, CommandReturn } from '../command';
 import {
     bold,
     codeBlock,
@@ -14,7 +14,7 @@ const HEADER = /^`{3}(?:ts|js)\n/;
 export default class EvalCommand extends Command {
 
     constructor() {
-        super('eval', `Invalid usage: ${emboss('.eval <executable..>')}`, null, [
+        super('eval', CommandCategory.MISC, `Invalid usage: ${emboss('.eval <executable..>')}`, null, [
             {
                 name: 'Args',
                 value: `${bold('__executable__')}: executable js/ts instructions`,

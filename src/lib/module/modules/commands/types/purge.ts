@@ -1,5 +1,5 @@
-import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../command';
 import {
     EmbedIconType,
     emboss,
@@ -11,7 +11,7 @@ import {
 export default class PurgeCommand extends Command {
 
     constructor() {
-        super('purge', `Invalid usage: ${emboss('.purge <amount>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
+        super('purge', CommandCategory.GENERAL, `Invalid usage: ${emboss('.purge <amount>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

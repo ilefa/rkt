@@ -1,9 +1,9 @@
 import { getLeaderboard } from '../../../xp/api';
 import { collectEntries } from '../../../xp/tracker';
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
 import { genXpCompareChart } from '../../../../../chart';
 import { XpBoardUser, XpComparePayload } from '../../../xp/struct';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import {
     asMention,
     bold,
@@ -19,7 +19,7 @@ import {
 export default class XpBoardCommand extends Command {
 
     constructor() {
-        super('xpboard', `Invalid usage: ${emboss('.xpboard [-g]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('xpboard', CommandCategory.XP, `Invalid usage: ${emboss('.xpboard [-g]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

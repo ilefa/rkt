@@ -31,6 +31,7 @@ import StopCommand from './types/stop';
 import TestGameEmbedCommand from './types/fun/testGame';
 import UptimeCommand from './types/uptime';
 import VersionCommand from './types/version';
+import WhoHasCommand from './types/whohas';
 import XpBoardCommand from './types/xp/xpboard';
 import XpCompareCommand from './types/xp/xpcompare';
 import XpRankCommand from './types/xp/xprank';
@@ -72,6 +73,7 @@ export {
     TestGameEmbedCommand,
     UptimeCommand,
     VersionCommand,
+    WhoHasCommand,
     XpBoardCommand,
     XpCompareCommand,
     XpRankCommand,

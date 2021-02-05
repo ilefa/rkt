@@ -1,8 +1,8 @@
 import moment from 'moment';
 
-import { Command, CommandReturn } from '../../command';
 import { PageContent } from '../../../../../util/paginator';
 import { Message, Permissions, TextChannel, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import { CampusType, ProfessorData, searchCourse } from '../../../../../util/uconn';
 
 import {
@@ -23,7 +23,7 @@ const identifierRegex = /^[a-zA-Z]{2,4}\d{4}(Q|E|W)*$/;
 export default class CourseCommand extends Command {
 
     constructor() {
-        super('course', `Invalid usage: ${emboss('.course <course> [campus]')}`, null, [
+        super('course', CommandCategory.UCONN, `Invalid usage: ${emboss('.course <course> [campus]')}`, null, [
             {
                 name: 'Args',
                 value: `${bold('__course__')}: the course to retrieve data for\n` 

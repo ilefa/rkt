@@ -1,10 +1,10 @@
 import moment from 'moment';
 
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
 import { genXpCompareChart } from '../../../../../chart';
 import { collectEntries, getNameForType } from '../../../xp/tracker';
 import { TrackingType, XpComparePayload } from '../../../xp/struct';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import {
     asMention,
     bold,
@@ -22,7 +22,7 @@ import {
 export default class XpCompareCommand extends Command {
 
     constructor() {
-        super('xpboard', `Invalid usage: ${emboss('.xpcompare <type> <...members>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('xpboard', CommandCategory.XP, `Invalid usage: ${emboss('.xpcompare <type> <...members>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

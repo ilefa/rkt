@@ -2,19 +2,25 @@ import Module from '../../../module';
 import CommandComponent from './component';
 import env from '../../../../../../env.json';
 
-import { Command, CommandReturn } from '../command';
 import { EmbedFieldData, Message, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../command';
 import { bold, EmbedIconType, generateSimpleEmbed } from '../../../../util';
 
 export default abstract class MultiCommand<M extends Module> extends Command {
     
     base: string;
+    baseHelp: string;
     baseManager: M;
     basePermission: number;
+    baseCategory: CommandCategory;
     components: Map<string, CommandComponent<M>>;
 
-    constructor(base: string, basePermission: number, baseManager: M) {
-        super(base, 'Invalid usage, please reference the command list below.', null, [], basePermission);
+    constructor(base: string,
+                basePermission: number,
+                baseCategory: CommandCategory,
+                baseManager: M,
+                baseHelp: string = 'Invalid usage, please reference the command list below.') {
+        super(base, baseCategory, baseHelp, null, [], basePermission);
 
         this.base = base;
         this.baseManager = baseManager;

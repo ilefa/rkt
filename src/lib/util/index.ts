@@ -31,6 +31,7 @@ import {
 export { PaginatedEmbed, GameEmbedAwaiter };
 
 export const LOADER = '<a:loading:788890776444207194>';
+export const LOOKING = '<a:looking:807057053713039420>';
 export const JOIN_BUTTON = '<:join:798763992813928469>';
 
 export const SNOWFLAKE_REGEX = /^\d{18,}$/;

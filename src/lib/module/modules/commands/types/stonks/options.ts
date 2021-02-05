@@ -1,8 +1,8 @@
 import moment from 'moment';
 
 import { OptionsContract } from '../../../../../stonk';
-import { Command, CommandReturn } from '../../command';
 import { getExpirationDates, getOptions } from '../../../../../repo';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import { EmbedFieldData, Message, Permissions, User } from 'discord.js';
 
 import {
@@ -19,7 +19,7 @@ import {
 export default class OptionsCommand extends Command {
 
     constructor() {
-        super('options', `Invalid usage: ${emboss('.options <ticker> <c|p> [expDate]')}`, null, [
+        super('options', CommandCategory.STONKS, `Invalid usage: ${emboss('.options <ticker> <c|p> [expDate]')}`, null, [
             {
                 name: 'Args',
                 value: `${bold('__ticker__')}: the ticker to retrieve options for\n` 

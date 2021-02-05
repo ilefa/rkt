@@ -1,8 +1,8 @@
 import { XpBoardUser } from '../../../xp/struct';
 import { getLeaderboard } from '../../../xp/api';
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
 import { getTopMovers, nextLevelData } from '../../../xp/tracker';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import {
     asMention,
     bold,
@@ -19,7 +19,7 @@ import {
 export default class XpRankCommand extends Command {
 
     constructor() {
-        super('xprank', `Invalid usage: ${emboss('.xprank [target]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
+        super('xprank', CommandCategory.XP, `Invalid usage: ${emboss('.xprank [target]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

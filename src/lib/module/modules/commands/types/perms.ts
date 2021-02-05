@@ -1,13 +1,13 @@
 import env from '../../../../../../env.json';
 
-import { Command, CommandReturn } from '../command';
+import { Command, CommandCategory, CommandReturn } from '../command';
 import { Message, MessageEmbed, Permissions, User } from 'discord.js';
 import { bold, EmbedIconType, emboss, getEmoteForPermissions } from '../../../../util';
 
 export default class PermissionsCommand extends Command {
 
     constructor() {
-        super('perms', `Invalid usage: ${emboss('.perms')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('perms', CommandCategory.MISC, `Invalid usage: ${emboss('.perms')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

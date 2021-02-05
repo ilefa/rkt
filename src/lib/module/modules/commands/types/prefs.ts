@@ -1,7 +1,7 @@
 import env from '../../../../../../env.json';
 
 import { Message, User } from 'discord.js';
-import { Command, CommandReturn } from '../command';
+import { Command, CommandCategory, CommandReturn } from '../command';
 
 import {
     asEmote,
@@ -19,7 +19,7 @@ import {
 export default class PrefsCommand extends Command {
 
     constructor() {
-        super('prefs', `Invalid usage: ${emboss('.prefs')}`, null, [], CUSTOM_PERMS.SUPERMAN);
+        super('prefs', CommandCategory.MISC, `Invalid usage: ${emboss('.prefs')}`, null, [], CUSTOM_PERMS.SUPERMAN);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

@@ -3,13 +3,13 @@ import mergeImage from 'merge-img';
 
 import { MIME_PNG } from 'jimp';
 import { emboss } from '../../../../../util';
-import { Command, CommandReturn } from '../../command';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import { Message, MessageAttachment, Permissions, User } from 'discord.js';
 
 export default class JackCommand extends Command {
 
     constructor() {
-        super('jack', `Invalid usage: ${emboss('.jack st<a..>ck')}`, 'jack do be stackin tho :flushed: :flushed: :flushed:', [], Permissions.FLAGS.SEND_MESSAGES);
+        super('jack', CommandCategory.FUN, `Invalid usage: ${emboss('.jack st<a..>ck')}`, 'jack do be stackin tho :flushed: :flushed: :flushed:', [], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

@@ -9,6 +9,7 @@ export abstract class Command {
     help: string;
     helpTitle: string;
     helpFields: EmbedFieldData[];
+    category: CommandCategory;
     permission: number;
     deleteMessage: boolean;
     hideFromHelp: boolean;
@@ -28,6 +29,7 @@ export abstract class Command {
      * @param hideFromHelp whether or not to hide this command from the help menu
      */
     constructor(name: string,
+                category: CommandCategory,
                 help: string,
                 helpTitle: string,
                 helpFields: EmbedFieldData[],
@@ -35,6 +37,7 @@ export abstract class Command {
                 deleteMessage = true,
                 hideFromHelp = false) {
         this.name = name;
+        this.category = category;
         this.help = help;
         this.helpTitle = helpTitle;
         this.helpFields = helpFields;
@@ -90,4 +93,14 @@ export class CommandEntry {
 
 export enum CommandReturn {
     EXIT, HELP_MENU
+}
+
+export enum CommandCategory {
+    AUDIO,
+    FUN,
+    GENERAL,
+    MISC,
+    STONKS,
+    UCONN,
+    XP
 }

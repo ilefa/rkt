@@ -1,11 +1,11 @@
-import { Command, CommandReturn } from "../../command";
 import { Message, TextChannel, User } from "discord.js";
+import { Command, CommandCategory, CommandReturn } from "../../command";
 import { codeBlock, CUSTOM_PERMS, GameEmbedAwaiter } from "../../../../../util";
 
 export default class TestGameEmbedCommand extends Command {
 
     constructor() {
-        super('tge', '[min] [max]', null, [], CUSTOM_PERMS.SUPERMAN, true, true);
+        super('tge', CommandCategory.MISC, '[min] [max]', null, [], CUSTOM_PERMS.SUPERMAN, true, true);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

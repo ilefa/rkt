@@ -3,7 +3,7 @@ import env from '../../../../../../../env.json';
 
 import { getFutures } from '../../../../../repo';
 import { FuturesQuote } from '../../../../../stonk';
-import { Command, CommandReturn } from '../../command';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import { EmbedFieldData, Message, Permissions, User } from 'discord.js';
 
 import {
@@ -18,7 +18,7 @@ import {
 export default class FuturesCommand extends Command {
 
     constructor() {
-        super('futures', `Invalid usage: ${emboss('.futures')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('futures', CommandCategory.STONKS, `Invalid usage: ${emboss('.futures')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

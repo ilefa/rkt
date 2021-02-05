@@ -47,6 +47,7 @@ import {
     TestGameEmbedCommand,
     UptimeCommand,
     VersionCommand,
+    WhoHasCommand,
     XpBoardCommand,
     XpCompareCommand,
     XpRankCommand,
@@ -64,7 +65,11 @@ import { printStartup } from './lib/startup';
 import { getCurrentVersion, getReleaseChannel } from './lib/util/vcs';
 
 const start = Date.now();
-const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+const client = new discord.Client({
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+    fetchAllMembers: true
+});
+
 const moduleManager = new ModuleManager(client);
 const commandCenter = new CommandManager(client);
 const countHerManager = new CountHerManager(client);
@@ -105,6 +110,7 @@ commandCenter.registerCommand('stop', new StopCommand());
 commandCenter.registerCommand('tge', new TestGameEmbedCommand());
 commandCenter.registerCommand('uptime', new UptimeCommand(start));
 commandCenter.registerCommand('version', new VersionCommand());
+commandCenter.registerCommand('whohas', new WhoHasCommand());
 commandCenter.registerCommand('xpboard', new XpBoardCommand());
 commandCenter.registerCommand('xpcompare', new XpCompareCommand());
 commandCenter.registerCommand('xprank', new XpRankCommand());
@@ -133,11 +139,13 @@ moduleManager.init();
 client.on('ready', async () => {
     Logger.info('rkt', `Release channel: ${await getReleaseChannel()}, version: ${await getCurrentVersion()}`);
     Logger.info('rkt', 'Successfully connected to Discord.');
+
     client.user.setPresence({
         status: 'online',
         activity: {
-            type: 'COMPETING',
-            name: 'buying high, selling low',
+            type: 'STREAMING',
+            name: 'rocket thrusters',
+            url: 'https://twitch.tv/rossmanngroup',
         }
     });
 });

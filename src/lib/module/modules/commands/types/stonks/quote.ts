@@ -1,7 +1,7 @@
 import { genPriceChart } from '../../../../../chart';
-import { Command, CommandReturn } from '../../command';
 import { getOptions, quote } from '../../../../../repo';
 import { User, Message, Permissions } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import { DataGranularity, PriceList, RangeGranularity } from '../../../../../stonk';
 
 import {
@@ -23,7 +23,7 @@ import {
 export default class QuoteCommand extends Command {
     
     constructor() {
-        super('quote', `Invalid usage: ${emboss('.quote <ticker> <[range] [interval]>')}`, null, [
+        super('quote', CommandCategory.STONKS, `Invalid usage: ${emboss('.quote <ticker> <[range] [interval]>')}`, null, [
             {
                 name: 'Args',
                 value: `${bold('__ticker__')}: the ticker to retrieve data for\n` 

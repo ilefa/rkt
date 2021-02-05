@@ -1,5 +1,5 @@
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import {
     EmbedIconType,
     emboss,
@@ -76,7 +76,7 @@ const valid = [
 export default class SoundCommand extends Command {
 
     constructor() {
-        super('sound', `Invalid usage: ${emboss('.sound <type>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR, false);
+        super('sound', CommandCategory.AUDIO, `Invalid usage: ${emboss('.sound <type>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

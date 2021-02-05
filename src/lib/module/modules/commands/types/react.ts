@@ -1,5 +1,5 @@
-import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../command';
 import {
     bold,
     EmbedIconType,
@@ -11,7 +11,7 @@ import {
 export default class ReactCommand extends Command {
 
     constructor() {
-        super('react', `Invalid usage: ${emboss('.react')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
+        super('react', CommandCategory.MISC, `Invalid usage: ${emboss('.react')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

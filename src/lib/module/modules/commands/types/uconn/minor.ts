@@ -4,8 +4,8 @@ import minors from '../../../../../uconn/minors';
 
 import * as Logger from '../../../../../logger';
 
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, TextChannel, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import { PageContent, PaginatedEmbed } from '../../../../../util/paginator';
 import {
     bold,
@@ -23,7 +23,7 @@ export type MinorData = {
 export default class MinorCommand extends Command {
 
     constructor() {
-        super('minor', `Invalid usage: ${emboss('.minor <list | name..>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('minor', CommandCategory.UCONN, `Invalid usage: ${emboss('.minor <list | name..>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

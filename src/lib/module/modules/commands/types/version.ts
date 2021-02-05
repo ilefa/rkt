@@ -1,5 +1,5 @@
 import { Message, User } from 'discord.js';
-import { Command, CommandReturn } from '../command';
+import { Command, CommandCategory, CommandReturn } from '../command';
 import { getCurrentVersion, getReleaseChannel } from '../../../../util/vcs';
 import {
     bold,
@@ -12,7 +12,7 @@ import {
 export default class VersionCommand extends Command {
 
     constructor() {
-        super('version', `Invalid usage: ${emboss('.version')}`, null, [], CUSTOM_PERMS.SUPERMAN);
+        super('version', CommandCategory.MISC, `Invalid usage: ${emboss('.version')}`, null, [], CUSTOM_PERMS.SUPERMAN);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
