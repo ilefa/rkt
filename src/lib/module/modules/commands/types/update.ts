@@ -30,6 +30,11 @@ export default class UpdateCommand extends Command {
                 return CommandReturn.EXIT;
             }
 
+            if (ver.toLowerCase() === 'Failure') {
+                message.reply(generateSimpleEmbed('Updater', EmbedIconType.TEST, `:x: Something went wrong while performing updates.`));
+                return CommandReturn.EXIT;
+            }
+
             message.reply(generateSimpleEmbed('Updater', EmbedIconType.TEST, `${bold('rkt')} updated to ${emboss(version)} via release channel ${emboss(channel)}.\n\n`));
             setTimeout(() => {
                 process.on('exit', () => {
