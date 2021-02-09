@@ -86,7 +86,7 @@ export default class EventManager extends Module {
                 await reaction.fetch();
             }
         
-            if (reaction.message.embeds.length && reaction.message.embeds[0].author.name === "Polls") {
+            if (reaction.message.embeds.length && reaction.message?.embeds[0]?.author?.name === "Polls") {
                 await this.pollManager.handle(reaction);
             }
         });
