@@ -12,6 +12,7 @@ import HelpCommand from './types/help';
 import IsMarketOpenCommand from './types/stonks/isMarketOpen';
 import JackCommand from './types/fun/jack';
 import KingCommand from './types/fun/king';
+import MembersCommand from './types/members';
 import MinorCommand from './types/uconn/minor';
 import OptionsCommand from './types/stonks/options';
 import PermissionsCommand from './types/perms';
@@ -55,6 +56,7 @@ export {
     IsMarketOpenCommand,
     JackCommand,
     KingCommand,
+    MembersCommand,
     MinorCommand,
     OptionsCommand,
     PermissionsCommand,

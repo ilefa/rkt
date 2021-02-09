@@ -33,6 +33,10 @@ export { PaginatedEmbed, GameEmbedAwaiter };
 export const LOADER = '<a:loading:788890776444207194>';
 export const LOOKING = '<a:looking:807057053713039420>';
 export const JOIN_BUTTON = '<:join:798763992813928469>';
+export const RED_CIRCLE = '<:dnd:808585033991585802>';
+export const YELLOW_CIRCLE = '<:idle:808585033908224010>';
+export const GREEN_CIRCLE = '<:online:808585033899966464>';
+export const GRAY_CIRCLE = '<:offline:808585033890791424>';
 
 export const SNOWFLAKE_REGEX = /^\d{18,}$/;
 export const EMOTE_REGEX = /<(a|):\w+:\d{18,}>/;
@@ -628,6 +632,19 @@ export const join = <U, T>(list: U[], delimiter: string, apply: (val: U) => T) =
         });
     
     return str;
+}
+
+/**
+ * Returns the amount of elements matching a given
+ * predicate in a provided list of elements of type U.
+ * 
+ * @param list the list of elements of type U
+ * @param predicate the predicate to sum types of U
+ */
+export const sum = <U, T>(list: U[], predicate: (val: U) => boolean) => {
+    return list
+        .filter(predicate)
+        .length;
 }
 
 /**

@@ -28,6 +28,7 @@ import {
     IsMarketOpenCommand,
     JackCommand,
     KingCommand,
+    MembersCommand,
     MinorCommand,
     OptionsCommand,
     PassFailCommand,
@@ -68,7 +69,7 @@ import { getCurrentVersion, getReleaseChannel } from './lib/util/vcs';
 const start = Date.now();
 const client = new discord.Client({
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-    fetchAllMembers: true
+    fetchAllMembers: true,
 });
 
 const moduleManager = new ModuleManager(client);
@@ -92,6 +93,7 @@ commandCenter.registerCommand('help', new HelpCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
 commandCenter.registerCommand('jack', new JackCommand());
 commandCenter.registerCommand('king', new KingCommand());
+commandCenter.registerCommand('members', new MembersCommand());
 commandCenter.registerCommand('minor', new MinorCommand());
 commandCenter.registerCommand('options', new OptionsCommand());
 commandCenter.registerCommand('perms', new PermissionsCommand());
