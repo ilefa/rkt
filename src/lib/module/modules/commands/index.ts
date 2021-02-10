@@ -9,6 +9,7 @@ import DisconnectCommand from './types/fun/disconnect';
 import EvalCommand from './types/eval';
 import FuturesCommand from './types/stonks/futures';
 import HelpCommand from './types/help';
+import InvitesCommand from './types/invites';
 import IsMarketOpenCommand from './types/stonks/isMarketOpen';
 import JackCommand from './types/fun/jack';
 import KingCommand from './types/fun/king';
@@ -53,6 +54,7 @@ export {
     EvalCommand,
     FuturesCommand,
     HelpCommand,
+    InvitesCommand,
     IsMarketOpenCommand,
     JackCommand,
     KingCommand,

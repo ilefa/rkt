@@ -25,6 +25,7 @@ import {
     EvalCommand,
     FuturesCommand,
     HelpCommand,
+    InvitesCommand,
     IsMarketOpenCommand,
     JackCommand,
     KingCommand,
@@ -90,6 +91,7 @@ commandCenter.registerCommand('dc', new DisconnectCommand());
 commandCenter.registerCommand('eval', new EvalCommand());
 commandCenter.registerCommand('futures', new FuturesCommand());
 commandCenter.registerCommand('help', new HelpCommand());
+commandCenter.registerCommand('invites', new InvitesCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
 commandCenter.registerCommand('jack', new JackCommand());
 commandCenter.registerCommand('king', new KingCommand());
