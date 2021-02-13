@@ -474,7 +474,7 @@ export const getEmoteForXpPlacement = (placement: number) => {
     if (placement == 10) return ':keycap_ten:';
     if (placement > 10) return '';
 
-    return `${toWords(placement)}`;
+    return `:${toWords(placement)}:`;
 }
 
 /**

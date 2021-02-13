@@ -19,7 +19,7 @@ import {
 export default class XpBoardCommand extends Command {
 
     constructor() {
-        super('xpboard', CommandCategory.XP, `Invalid usage: ${emboss('.xpboard [-g]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('xpboard', CommandCategory.XP, `Invalid usage: ${emboss('.xpboard [-g]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

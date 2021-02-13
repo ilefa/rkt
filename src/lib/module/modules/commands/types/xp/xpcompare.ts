@@ -22,7 +22,7 @@ import {
 export default class XpCompareCommand extends Command {
 
     constructor() {
-        super('xpboard', CommandCategory.XP, `Invalid usage: ${emboss('.xpcompare <type> <...members>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('xpboard', CommandCategory.XP, `Invalid usage: ${emboss('.xpcompare <type> <...members>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

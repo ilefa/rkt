@@ -1,7 +1,7 @@
 import { XpBoardUser } from '../../../xp/struct';
 import { getLeaderboard } from '../../../xp/api';
 import { Message, Permissions, User } from 'discord.js';
-import { getTopMovers, nextLevelData } from '../../../xp/tracker';
+import { getTopMovers, getTotalXp, nextLevelData } from '../../../xp/tracker';
 import { Command, CommandCategory, CommandReturn } from '../../command';
 import {
     asMention,
@@ -28,7 +28,7 @@ export default class XpRankCommand extends Command {
         }
 
         if (message.mentions.members.size > 1) {
-            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, `Excess targets: ${args.join(' ')}`));
+            message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, `Excess targets: ${emboss(args.join(' '))}`));
             return CommandReturn.EXIT;
         }
 
@@ -60,7 +60,9 @@ export default class XpRankCommand extends Command {
 
         let data = nextLevelData(record);
         let amount = Math.floor((data.percent * 10));
-        let leveling = `:left_right_arrow: ${data.now.toLocaleString()}/${data.total.toLocaleString()} XP [${'▰'.repeat(amount)}${'▱'.repeat((10 - amount))}] (${(data.percent * 100).toFixed(2)}%)`;
+        let o1 = record.detailed_xp[0];
+        let o2 = record.detailed_xp[1];
+        let leveling = `:left_right_arrow: ${o1.toLocaleString()}/${o2.toLocaleString()} XP [${'▰'.repeat(amount)}${'▱'.repeat((10 - amount))}] (${(data.percent * 100).toFixed(2)}%)`;
 
         let who = id !== user.id
             ? asMention(target) 
@@ -72,8 +74,9 @@ export default class XpRankCommand extends Command {
 
         let idx = res.indexOf(record);
         let position = idx + 1;
-        let str = `${bold('Leaderboard Position')}` 
+        let str = `${bold('Leaderboard Overview')}` 
                 + `\n${who} ${after} ${bold(ordinalSuffix(position))} on the leaderboard.`
+                + `\n${who} ${after} ${bold(`Level ${record.level.toLocaleString()}`)} with ${bold(record.xp.toLocaleString() + ' XP')}.`
                 + `\n\n${bold('Leveling')}`
                 + `\n${leveling}`
                 + `\n\n${bold('Ranking Insights')}` 

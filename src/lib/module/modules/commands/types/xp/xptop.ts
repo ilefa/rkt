@@ -21,7 +21,7 @@ import {
 export default class XpTopCommand extends Command {
 
     constructor() {
-        super('xpboard', CommandCategory.XP, `Invalid usage: ${emboss('.xptop [<range> <limit>]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('xpboard', CommandCategory.XP, `Invalid usage: ${emboss('.xptop [<range> <limit>]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

@@ -1,5 +1,5 @@
-import env from '../../../../../env.json';
 import Module from '../../module';
+import env from '../../../../../env.json';
 
 import * as Logger from '../../../logger';
 

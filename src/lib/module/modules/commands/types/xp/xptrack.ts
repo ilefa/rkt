@@ -39,10 +39,10 @@ export default class XpTrackCommand extends Command {
             },
             {
                 name: 'Valid Range Specification',
-                value: emboss('[#](s|m|h|d|w|mo|y)'),
+                value: emboss('[#](s|m|h|d|w|b|y)'),
                 inline: false
             }
-        ], Permissions.FLAGS.SEND_MESSAGES);
+        ], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -91,7 +91,7 @@ export default class XpTrackCommand extends Command {
                 message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Invalid time specification: ${emboss(args[2])}.`, [
                     {
                         name: 'Valid Time Specification',
-                        value: emboss(`[#](s|m|h|d|w|mo|y)`),
+                        value: emboss(`[#](s|m|h|d|w|b|y)`),
                         inline: true
                     }
                 ]))
