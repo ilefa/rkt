@@ -29,6 +29,7 @@ import {
     IsMarketOpenCommand,
     JackCommand,
     KingCommand,
+    MaldCommand,
     MembersCommand,
     MinorCommand,
     OptionsCommand,
@@ -95,6 +96,7 @@ commandCenter.registerCommand('invites', new InvitesCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
 commandCenter.registerCommand('jack', new JackCommand());
 commandCenter.registerCommand('king', new KingCommand());
+commandCenter.registerCommand('mald', new MaldCommand());
 commandCenter.registerCommand('members', new MembersCommand());
 commandCenter.registerCommand('minor', new MinorCommand());
 commandCenter.registerCommand('options', new OptionsCommand());

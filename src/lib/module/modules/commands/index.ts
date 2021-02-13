@@ -13,6 +13,7 @@ import InvitesCommand from './types/invites';
 import IsMarketOpenCommand from './types/stonks/isMarketOpen';
 import JackCommand from './types/fun/jack';
 import KingCommand from './types/fun/king';
+import MaldCommand from './types/fun/mald';
 import MembersCommand from './types/members';
 import MinorCommand from './types/uconn/minor';
 import OptionsCommand from './types/stonks/options';
@@ -58,6 +59,7 @@ export {
     IsMarketOpenCommand,
     JackCommand,
     KingCommand,
+    MaldCommand,
     MembersCommand,
     MinorCommand,
     OptionsCommand,
