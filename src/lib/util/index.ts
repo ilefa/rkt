@@ -2,6 +2,7 @@ import axios from 'axios';
 import moment from 'moment';
 import df from 'parse-duration';
 import MA from 'moving-average';
+import JSONdb from 'simple-json-db';
 import env from '../../../env.json';
 
 import { Units } from 'parse-duration';
@@ -161,6 +162,8 @@ export const capitalizeFirst = (input: string) => input.split(' ').map(str => st
 export const isFC = (guild: Guild | string) => guild instanceof Guild 
     ? guild.id === '749978305549041734' 
     : guild === '749978305549041734';
+
+export const initFlatFileStore = (path: string) => new JSONdb(path);
 
 /**
  * Returns whether or not a given user has

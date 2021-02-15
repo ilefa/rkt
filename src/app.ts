@@ -10,6 +10,7 @@ import BirthdayManager from './lib/module/modules/birthday';
 import CommandManager from './lib/module/modules/commands/manager';
 import CountHerManager from './lib/module/modules/counther/manager';
 import ReactionManager from './lib/module/modules/reactions/manager';
+import VoiceBoardManager from './lib/module/modules/vcboard/manager';
 
 import * as Logger from './lib/logger';
 
@@ -51,6 +52,8 @@ import {
     UpdateCommand,
     UptimeCommand,
     VersionCommand,
+    VoiceBoardCommand,
+    VoiceRankCommand,
     WhoHasCommand,
     XpBoardCommand,
     XpCompareCommand,
@@ -78,6 +81,7 @@ const moduleManager = new ModuleManager(client);
 const commandCenter = new CommandManager(client);
 const countHerManager = new CountHerManager(client);
 const birthdayManager = new BirthdayManager(client);
+const voiceBoardManager = new VoiceBoardManager(client);
 const reactionManager = new ReactionManager();
 const pollManager = new PollManager();
 
@@ -113,10 +117,12 @@ commandCenter.registerCommand('sound', new SoundCommand());
 commandCenter.registerCommand('stack', new StackCommand());
 commandCenter.registerCommand('stimmy', new StimmyCommand());
 commandCenter.registerCommand('stonks', new StonksCommand());
-commandCenter.registerCommand('stop', new StopCommand());
+commandCenter.registerCommand('stop', new StopCommand(moduleManager));
 commandCenter.registerCommand('tge', new TestGameEmbedCommand());
 commandCenter.registerCommand('update', new UpdateCommand());
 commandCenter.registerCommand('uptime', new UptimeCommand(start));
+commandCenter.registerCommand('vcboard', new VoiceBoardCommand(voiceBoardManager));
+commandCenter.registerCommand('vcrank', new VoiceRankCommand(voiceBoardManager));
 commandCenter.registerCommand('version', new VersionCommand());
 commandCenter.registerCommand('whohas', new WhoHasCommand());
 commandCenter.registerCommand('xpboard', new XpBoardCommand());
@@ -135,6 +141,7 @@ moduleManager.registerModule(commandCenter);
 moduleManager.registerModule(countHerManager);
 moduleManager.registerModule(birthdayManager);
 moduleManager.registerModule(reactionManager);
+moduleManager.registerModule(voiceBoardManager);
 moduleManager.registerModule(new Announcer(client));
 moduleManager.registerModule(new EventManager(commandCenter,
                                               countHerManager,
@@ -151,9 +158,9 @@ client.on('ready', async () => {
     client.user.setPresence({
         status: 'online',
         activity: {
-            type: 'STREAMING',
+            type: 'LISTENING',
             name: 'rocket thrusters',
-            url: 'https://twitch.tv/rossmanngroup',
+            url: 'https://open.spotify.com/track/7GhIk7Il098yCjg4BQjzvb?si=FOvlyk-xQ_q50JIUVi_vNg',
         }
     });
 });

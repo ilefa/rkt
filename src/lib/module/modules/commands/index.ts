@@ -34,6 +34,8 @@ import StopCommand from './types/stop';
 import TestGameEmbedCommand from './types/fun/testGame';
 import UpdateCommand from './types/update';
 import UptimeCommand from './types/uptime';
+import VoiceBoardCommand from './types/xp/vcboard';
+import VoiceRankCommand from './types/xp/vcrank';
 import VersionCommand from './types/version';
 import WhoHasCommand from './types/whohas';
 import XpBoardCommand from './types/xp/xpboard';
@@ -80,6 +82,8 @@ export {
     TestGameEmbedCommand,
     UpdateCommand,
     UptimeCommand,
+    VoiceBoardCommand,
+    VoiceRankCommand,
     VersionCommand,
     WhoHasCommand,
     XpBoardCommand,

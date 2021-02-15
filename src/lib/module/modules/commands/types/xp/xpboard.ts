@@ -13,7 +13,8 @@ import {
     generateSimpleEmbed,
     generateSimpleEmbedWithImageAndThumbnail,
     generateSimpleEmbedWithThumbnail,
-    getEmoteForXpPlacement
+    getEmoteForXpPlacement,
+    numberEnding
 } from '../../../../../util';
 
 export default class XpBoardCommand extends Command {
@@ -34,8 +35,9 @@ export default class XpBoardCommand extends Command {
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, 'Something went wrong while retrieving data from the web.'));
             return CommandReturn.EXIT;
         }
-
         
+        let amt = res.length;
+        let total = res.map(record => record.xp).reduce((prev, cur) => cur + prev, 0);
         let str = '';
         
         // get top 10, or list length - 1, whichever comes first
@@ -66,7 +68,8 @@ export default class XpBoardCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        message.reply(generateSimpleEmbedWithThumbnail(`${message.guild.name} - Experience Board`, EmbedIconType.XP, str, message.guild.iconURL()));
+        message.reply(generateSimpleEmbedWithThumbnail(`${message.guild.name} - Experience Board`, EmbedIconType.XP,
+            `Tracking ${bold(total.toLocaleString() + ' XP')} between ${bold(`${amt.toLocaleString()} member${numberEnding(amt)}`)}.\n\n` + str, message.guild.iconURL()));
         return CommandReturn.EXIT;
     }
 

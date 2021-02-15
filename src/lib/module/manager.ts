@@ -18,10 +18,10 @@ export default class ModuleManager {
      * Registers a module into the manager.
      * @param module the module
      */
-    registerModule(module: Module) {
+    async registerModule(module: Module) {
         module.client = this.client;
         module.manager = this;
-        module.start();
+        await module.start();
 
         this.modules.push(module);
     }

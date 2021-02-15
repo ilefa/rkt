@@ -1,3 +1,4 @@
+import ModuleManager from '../../../manager';
 import * as Logger from '../../../../logger';
 
 import { Message, MessageAttachment, User } from "discord.js";
@@ -13,8 +14,11 @@ import {
 
 export default class StopCommand extends Command {
 
-    constructor() {
+    moduleManager: ModuleManager;
+
+    constructor(moduleManager: ModuleManager) {
         super('stop', CommandCategory.MISC, `Invalid usage: ${emboss('.stop')}`, 'change da world, my final message... goodbye', [], CUSTOM_PERMS.SUPERMAN);
+        this.moduleManager = moduleManager;
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -44,6 +48,7 @@ export default class StopCommand extends Command {
 
                 setTimeout(() => {
                     Logger.info('rkt', 'Shutting down.');
+                    this.moduleManager.disable();
                     message.client.destroy();
                     process.exit();
                 }, 5000);

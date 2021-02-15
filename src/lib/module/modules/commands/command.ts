@@ -61,11 +61,7 @@ export abstract class Command {
     }
 
     async endLoader(): Promise<number> {
-        if (!this.loader) {
-            return;
-        }
-
-        this.loader.delete();
+        this.loader?.delete();
         this.loader = null;
 
         return Number((Date.now() - this.loadStart).toFixed(2));
