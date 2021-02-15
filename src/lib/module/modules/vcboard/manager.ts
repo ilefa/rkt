@@ -32,6 +32,9 @@ export default class VoiceBoardManager extends Module {
 
         await sleep(1000);
         this.client.guilds.cache.forEach(guild => {
+            this.jobs.push(scheduler.scheduleJob('* * * * *',
+                () => ctx.runUpdate(ctx, guild)));
+
             if (!ctx.store.has(guild.id)) {
                 ctx.store.set(guild.id, {});
             }
@@ -60,9 +63,6 @@ export default class VoiceBoardManager extends Module {
                         ctx.voiceMap.set(resolvable, Date.now());
                     });
                 });
-
-            this.jobs.push(scheduler.scheduleJob('* * * * *',
-                () => ctx.runUpdate(ctx, guild)));
         });
 
         Logger.info('Voice Board', `${this.voiceMap.size} passive records added.`);
