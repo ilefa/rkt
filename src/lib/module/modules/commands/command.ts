@@ -1,6 +1,5 @@
 import CommandManager from './manager';
 
-import { LOADER } from '../../../util';
 import { User, Message, EmbedFieldData } from 'discord.js';
 
 export abstract class Command {
@@ -54,18 +53,6 @@ export abstract class Command {
      * @param args the arguments provided for the command
      */
     abstract execute(user: User, message: Message, args: string[]): Promise<CommandReturn>;
-    
-    async startLoader(message: Message, emote?: string, prompt?: string) {
-        this.loadStart = Date.now();
-        this.loader = await message.reply(`${emote || LOADER} ${prompt || 'Working on that..'}`);
-    }
-
-    async endLoader(): Promise<number> {
-        this.loader?.delete();
-        this.loader = null;
-
-        return Number((Date.now() - this.loadStart).toFixed(2));
-    }
 
 }
 

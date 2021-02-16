@@ -9,13 +9,16 @@ import {
     bold,
     EmbedIconType,
     emboss,
+    endLoader,
     generateEmbed,
     generateSimpleEmbed,
     getCampusIndicator,
     getHighestDivisor,
     italic,
     link,
-    PaginatedEmbed
+    MessageLoader,
+    PaginatedEmbed,
+    startLoader
 } from '../../../../../util';
 
 const identifierRegex = /^[a-zA-Z]{2,4}\d{4}(Q|E|W)*$/;
@@ -79,13 +82,13 @@ export default class CourseCommand extends Command {
             return CommandReturn.EXIT;
         }
         
-        this.startLoader(message);
-
         let prefix = identifier.split(/[0-9]/)[0].toUpperCase();
         let number = identifier.split(/[a-zA-Z]{2,4}/)[1];
+        let loader: MessageLoader = await startLoader(message);
         let res = await searchCourse(identifier, campus);
         if (!res) {
             message.reply(generateSimpleEmbed('Course Search', EmbedIconType.UCONN, `Error locating course ${emboss(args[0])} on campus ${emboss(args[1])}.`));
+            endLoader(loader);
             return CommandReturn.EXIT;
         }
 
@@ -103,6 +106,7 @@ export default class CourseCommand extends Command {
         let target = `https://catalog.uconn.edu/directory-of-courses/course/${prefix}/${number}/`;
 
         if (!sections.length || !professors.length) {
+            endLoader(loader);
             message.reply(generateEmbed('', EmbedIconType.UCONN, `${bold(name)}\n\n`
                 + `:arrow_right: ${link('Course Catalog', target)}\n`
                 + `:hash: Credits: ${bold(credits)}\n` 
@@ -206,6 +210,8 @@ export default class CourseCommand extends Command {
 
                 profList += toAppend;
             });
+
+        endLoader(loader);
 
         if (pages.length === 0) {
             message.reply(generateSimpleEmbed(`Course Search » ${identifier}`, EmbedIconType.UCONN, 'An error occurred while retrieving data from the web.'));

@@ -1,17 +1,20 @@
 import { User, Message, Permissions } from 'discord.js';
-import { VoiceBoardRecord, VoiceBoardManager } from '../../../vcboard';
-import { Command, CommandCategory, CommandReturn } from '../../command';
+import { VoiceBoardRecord, VoiceBoardManager } from '../../../../vcboard';
+import { Command, CommandCategory, CommandReturn } from '../../../command';
 import {
     asMention,
     bold,
     EmbedIconType,
     emboss,
+    endLoader,
     findUser,
     generateSimpleEmbed,
     generateSimpleEmbedWithThumbnail,
     getLatestTimeValue,
-    ordinalSuffix
-} from '../../../../../util';
+    MessageLoader,
+    ordinalSuffix,
+    startLoader
+} from '../../../../../../util';
 
 export default class VoiceBoardRankCommand extends Command {
 
@@ -32,16 +35,17 @@ export default class VoiceBoardRankCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        this.startLoader(message);
-
+        let loader: MessageLoader = await startLoader(message);
         let res: VoiceBoardRecord[] = await this.boardManager.getTop(message.guild.id);
         if (!res) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Voice Board`, EmbedIconType.XP, 'Something went wrong while retrieving data from the web.'));
             return CommandReturn.EXIT;
         }
 
         let target: User = await findUser(message, args[0], user);
         if (!target) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Voice Board`, EmbedIconType.XP, `Invalid or unknown target: ${emboss(args[0] || '[missing]')}`));
             return CommandReturn.EXIT;
         }
@@ -49,11 +53,13 @@ export default class VoiceBoardRankCommand extends Command {
         let id = target.id;
         let record = res.find(r => r.user === id);
         if (!record && (id === user.id)) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Voice Board`, EmbedIconType.XP, 'You are not on the voice leaderboard.'));
             return CommandReturn.EXIT;
         }
 
         if (!record) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Voice Board`, EmbedIconType.XP, `${asMention(target)} is not on the voice board.`));
             return CommandReturn.EXIT;
         }
@@ -74,6 +80,8 @@ export default class VoiceBoardRankCommand extends Command {
         let downward = position === res.length
             ? null 
             : getLatestTimeValue(record.time - res[position].time);
+
+        endLoader(loader);
 
         let str = `${bold('Leaderboard Overview')}\n` 
             + `${who} ${after} ${bold(ordinalSuffix(record.position))} on the leaderboard.\n` 

@@ -61,6 +61,11 @@ export enum EmbedIconType {
     XP = 'https://storage.googleapis.com/stonks-cdn/xp.png'
 }
 
+export type MessageLoader = {
+    message: Message;
+    start: number;
+}
+
 export type YtMetaResponse = {
     provider_name?: string;
     provider_url?: string;
@@ -159,11 +164,11 @@ export const mentionChannel = (id: string) => `<#${id}>`;
 export const getDuration = (input: string) => df(input, 's');
 export const getDurationWithUnit = (input: string, unit: Units) => df(input, unit);
 export const capitalizeFirst = (input: string) => input.split(' ').map(str => str.charAt(0).toUpperCase() + str.slice(1)).join('');
+export const initFlatFileStore = (path: string) => new JSONdb(path);
 export const isFC = (guild: Guild | string) => guild instanceof Guild 
     ? guild.id === '749978305549041734' 
     : guild === '749978305549041734';
 
-export const initFlatFileStore = (path: string) => new JSONdb(path);
 
 /**
  * Returns whether or not a given user has
@@ -240,6 +245,32 @@ export const sleep = async ms => {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
+}
+
+/**
+ * Creates a message loader and returns it.
+ * 
+ * @param message the command message
+ * @param emote an optional loader emote
+ * @param prompt an optional loader prompt
+ */
+export const startLoader = async (message: Message, emote?: string, prompt?: string): Promise<MessageLoader> => {
+    let loader = await message.reply(`${emote || LOADER} ${prompt || 'Working on that..'}`);
+    return {
+        message: loader,
+        start: Date.now()
+    };
+}
+
+/**
+ * Destroys a message loader and returns
+ * the time it took to load.
+ * 
+ * @param loader the message loader
+ */
+export const endLoader = async (loader: MessageLoader) => {
+    await loader.message.delete();
+    return { timeDiff: parseInt((Date.now() - loader.start).toFixed(2)) };
 }
 
 /**
@@ -644,10 +675,23 @@ export const join = <U, T>(list: U[], delimiter: string, apply: (val: U) => T) =
  * @param list the list of elements of type U
  * @param predicate the predicate to sum types of U
  */
-export const sum = <U, T>(list: U[], predicate: (val: U) => boolean) => {
+export const count = <U, T>(list: U[], predicate: (val: U) => boolean) => {
     return list
         .filter(predicate)
         .length;
+}
+
+/**
+ * Returns a sum of elements converted to numbers
+ * from a provided list of elements of type U.
+ * 
+ * @param list the list of elements of type U
+ * @param apply how to convert the list of U to numbers
+ */
+export const sum = <U>(list: U[], apply: (val: U) => number) => {
+    return list
+        .map(apply)
+        .reduce((prev, cur) => cur + prev, 0);
 }
 
 /**

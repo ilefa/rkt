@@ -9,11 +9,14 @@ import {
     DAY_MILLIS,
     EmbedIconType,
     emboss,
+    endLoader,
     findUser,
     generateSimpleEmbed,
     getDownwardXpDifference,
     getUpwardXpDifference,
-    ordinalSuffix
+    MessageLoader,
+    ordinalSuffix,
+    startLoader
 } from '../../../../../util';
 
 export default class XpRankCommand extends Command {
@@ -32,16 +35,17 @@ export default class XpRankCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        this.startLoader(message);
-
+        let loader: MessageLoader = await startLoader(message);
         let res: XpBoardUser[] = await getLeaderboard(message.guild.id);
         if (!res) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, 'Something went wrong while retrieving data from the web.'));
             return CommandReturn.EXIT;
         }
 
         let target: User = await findUser(message, args[0], user);
         if (!target) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, `Invalid or unknown target: ${emboss(args[0] || '[missing]')}`));
             return CommandReturn.EXIT;
         }
@@ -49,11 +53,13 @@ export default class XpRankCommand extends Command {
         let id = target.id;
         let record = res.find(r => r.id === id);
         if (!record && (id === user.id)) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, 'You are not on the experience leaderboard.'));
             return CommandReturn.EXIT;
         }
 
         if (!record) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, `${asMention(target)} is not on the experience board.`));
             return CommandReturn.EXIT;
         }
@@ -100,6 +106,8 @@ export default class XpRankCommand extends Command {
 
             str += mover; 
         }
+
+        endLoader(loader);
 
         await message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, str)
             .setThumbnail(id === user.id ? user.avatarURL() : target.avatarURL()));

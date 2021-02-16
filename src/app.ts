@@ -52,6 +52,7 @@ import {
     UpdateCommand,
     UptimeCommand,
     VersionCommand,
+    VoiceAdminCommand,
     VoiceBoardCommand,
     VoiceRankCommand,
     WhoHasCommand,
@@ -121,6 +122,7 @@ commandCenter.registerCommand('stop', new StopCommand(moduleManager));
 commandCenter.registerCommand('tge', new TestGameEmbedCommand());
 commandCenter.registerCommand('update', new UpdateCommand());
 commandCenter.registerCommand('uptime', new UptimeCommand(start));
+commandCenter.registerCommand('vcadmin', new VoiceAdminCommand(voiceBoardManager));
 commandCenter.registerCommand('vcboard', new VoiceBoardCommand(voiceBoardManager));
 commandCenter.registerCommand('vcrank', new VoiceRankCommand(voiceBoardManager));
 commandCenter.registerCommand('version', new VersionCommand());

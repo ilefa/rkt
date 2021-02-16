@@ -1,12 +1,20 @@
 import path from 'path';
 import Module from '../../module';
 import scheduler from 'node-schedule';
+import env from '../../../../../env.json';
 
 import * as Logger from '../../../logger';
 
 import { Job } from 'node-schedule';
 import { Client, Guild, VoiceChannel, VoiceState } from 'discord.js';
-import { initFlatFileStore, numberEnding, sleep, timeDiff } from '../../../util';
+import {
+    CUSTOM_PERMS,
+    has, 
+    initFlatFileStore, 
+    numberEnding, 
+    sleep, 
+    timeDiff
+} from '../../../util';
 
 const DB_PATH = path.join(__dirname, '../../../../../', 'vcboard.json');
 
@@ -15,7 +23,7 @@ export default class VoiceBoardManager extends Module {
     store: any;
     jobs: Job[];
     client: Client;
-    voiceMap: Map<VoiceMapResolvable, number>;
+    voiceMap: VoiceMapResolvable[];
 
     constructor(client: Client) {
         super('Voice Board');
@@ -24,8 +32,8 @@ export default class VoiceBoardManager extends Module {
 
     async start() {
         this.jobs = [];
+        this.voiceMap = [];
         this.store = initFlatFileStore(DB_PATH);
-        this.voiceMap = new Map<VoiceMapResolvable, number>();
 
         let start = Date.now();
         let ctx = this;
@@ -52,23 +60,24 @@ export default class VoiceBoardManager extends Module {
 
             channels
                 .map(channel => channel.members.array())
-                .filter(members => members.length)
+                .filter(members => members.length > 0)
                 .forEach(memberList => {
                     memberList.forEach(member => {
                         let resolvable = {
                             guild: guild.id,
-                            user: member.id
+                            user: member.id,
+                            time: Date.now()
                         };
 
-                        ctx.voiceMap.set(resolvable, Date.now());
+                        ctx.voiceMap.push(resolvable);
                     });
                 });
         });
 
-        Logger.info('Voice Board', `${this.voiceMap.size} passive records added.`);
+        Logger.info('Voice Board', `${this.voiceMap.length} passive records added.`);
         
         this.store.sync();
-        this.client.on('voiceStateUpdate', (old, current) => {
+        this.client.on('voiceStateUpdate', async (old, current) => {
             let change = this.determineChange(old, current);
             if (!change || change === VoiceStateChange.UNKNOWN) {
                 return;
@@ -84,7 +93,8 @@ export default class VoiceBoardManager extends Module {
 
             let resolvable = {
                 guild: current.guild.id,
-                user: current.member.user.id
+                user: current.member.user.id,
+                time: Date.now(),
             };
 
             switch (change.toLowerCase()) {
@@ -92,22 +102,42 @@ export default class VoiceBoardManager extends Module {
                 case 'undeaf':
                 case 'unmute':
                     if (this.existsLocal(resolvable.user)) {
-                        ctx.update(resolvable.guild, resolvable.user, Date.now() - this.getLocal(resolvable.user));
-                        ctx.voiceMap.delete(resolvable);
+                        let local = this.getLocal(resolvable.user);
+                        ctx.update(resolvable.guild, resolvable.user, Date.now() - local.time);
+                        this.removeLocal(resolvable.user);
                     }
 
-                    ctx.voiceMap.set(resolvable, Date.now());
+                    if (this.isAlone(current)) {
+                        break;
+                    }
+
+                    ctx.voiceMap.push(resolvable);
                     break;
                 case 'disconnect':
                 case 'deaf':
                 case 'mute':
+                    if (this.isAlone(current)) {
+                        let alone = await this.whoIsAlone(current);
+                        if (alone) {
+                            if (!this.existsLocal(alone)) {
+                                break;
+                            }
+        
+                            let local = this.getLocal(alone);
+                            this.removeLocal(alone);
+        
+                            ctx.update(resolvable.guild, alone, Date.now() - local.time);
+                        }
+                    }
+
                     if (!this.existsLocal(resolvable.user)) {
                         break;
                     }
-
+                    
                     let local = this.getLocal(resolvable.user);
-                    ctx.voiceMap.delete(resolvable);
-                    ctx.update(resolvable.guild, resolvable.user, Date.now() - local);
+                    this.removeLocal(resolvable.user);
+
+                    ctx.update(resolvable.guild, resolvable.user, Date.now() - local.time);
                     break;
                 default:
                     break;
@@ -119,15 +149,17 @@ export default class VoiceBoardManager extends Module {
 
     end() {
         let ctx = this;
-        let size = this.voiceMap.size;
+        let size = this.voiceMap.length;
 
         this.jobs.forEach(job => job.cancel());
-        this.voiceMap.forEach((timeDiff, resolvable) => {
-            ctx.update(resolvable.guild, resolvable.user, Date.now() - timeDiff);
-            ctx.voiceMap.delete(resolvable);
+        this.voiceMap.forEach(resolvable => {
+            ctx.update(resolvable.guild, resolvable.user, Date.now() - resolvable.time);
+            ctx.voiceMap = ctx
+                .voiceMap
+                .filter(ent => ent.user !== resolvable.user);       
         });
 
-        ctx.voiceMap.clear();
+        ctx.voiceMap = [];
         Logger.info('Voice Board', `Saved ${size} record${numberEnding(size)} to the datastore.`);
     }
 
@@ -140,19 +172,67 @@ export default class VoiceBoardManager extends Module {
             .keys(data)
             .forEach(user => unsorted.push({
                 user,
-                time: data[`${user}`]
+                time: data[user]
             }));
 
         unsorted
             .sort((a, b) => b.time - a.time)
-            .slice(0, Math.min(unsorted.length, limit))
             .forEach((record, i) => records.push({
                 user: record.user,
                 time: record.time,
                 position: i + 1
             }));
 
+        if (limit !== -1) {
+            records = records.slice(0, Math.min(unsorted.length, limit));
+        }
+
         return records;
+    }
+
+    async reset(guild: string, user: string): Promise<boolean> {
+        let data = this.store.get(guild);
+        let record = this.getStats(guild, user, null);
+        if (!record) {
+            return false;
+        }
+
+        data[user] = 0;
+
+        this.store.set(guild, data);
+        this.store.sync();
+        return true;
+    }
+
+    async resetAll(guild: string): Promise<boolean> {
+        let data = this.store.get(guild);
+        if (!data) {
+            return false;
+        }
+
+        data = {};
+
+        this.store.set(guild, data);
+        this.store.sync();
+        return true;
+    }
+
+    private async isAlone(state: VoiceState) {
+        let channel = state.channel;
+        if (!channel || channel.members.size !== 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private async whoIsAlone(state: VoiceState) {
+        let channel = state.channel;
+        if (!this.isAlone(state) || channel.members.size === 0) {
+            return null;
+        }
+
+        return channel.members.first().id;
     }
 
     private async update(guild: string, user: string, timeDiff: number) {
@@ -180,31 +260,40 @@ export default class VoiceBoardManager extends Module {
 
         channels
             .map(channel => channel.members.array())
-            .filter(members => members.length)
+            .filter(members => members.length > 0)
             .forEach(memberList => {
                 memberList.forEach(member => {
                     let resolvable = {
                         guild: guild.id,
-                        user: member.id
+                        user: member.id,
+                        time: Date.now()
                     };
 
                     let local = this.getLocal(resolvable.user);
-                    ctx.voiceMap.delete(resolvable);
-                    ctx.update(resolvable.guild, resolvable.user, Date.now() - local);
+                    if (!local) {
+                        return;
+                    }
+
+                    ctx.update(resolvable.guild, resolvable.user, Date.now() - local.time);
+                    this.removeLocal(resolvable.user);
+
+                    ctx.voiceMap.push(resolvable);
                 });
             });
     }
 
-    private existsLocal(user: string) {
-        return Array
-            .from(this.voiceMap)
-            .some(([k]) => k.user === user);
+    private existsLocal(user: string): boolean {
+        return this.voiceMap.some(resolvable => resolvable.user === user);
     }
 
-    private getLocal(user: string) {
-        return Array
-            .from(this.voiceMap)
-            .find(([k]) => k.user === user)[1];
+    private getLocal(user: string): VoiceMapResolvable {
+        return this.voiceMap.find(resolvable => resolvable.user === user);
+    }
+
+    private removeLocal(user: string) {
+        this.voiceMap = this
+            .voiceMap
+            .filter(resolvable => resolvable.user !== user);
     }
 
     private getStats(guild: string, user: string, or?: number) {
@@ -237,6 +326,7 @@ export enum VoiceStateChange {
 type VoiceMapResolvable = {
     user: string;
     guild: string;
+    time: number;
 }
 
 export type PartialVoiceBoardRecord = {

@@ -2,6 +2,7 @@ import { Message, Permissions, User } from 'discord.js';
 import { Command, CommandCategory, CommandReturn } from '../command';
 import {
     bold,
+    count,
     EmbedIconType,
     emboss,
     generateSimpleEmbedWithThumbnail,
@@ -9,7 +10,6 @@ import {
     GREEN_CIRCLE,
     numberEnding,
     RED_CIRCLE,
-    sum,
     YELLOW_CIRCLE
 } from '../../../../util';
 
@@ -31,11 +31,11 @@ export default class MembersCommand extends Command {
             .array()
             .map(member => member.user);
 
-        let bots = sum(members, member => member.bot);
-        let online = sum(members, member => member.presence.status === 'online');
-        let idle = sum(members, member => member.presence.status ===  'idle');
-        let dnd = sum(members, member => member.presence.status ===  'dnd');
-        let offline = sum(members, member => member.presence.status ===  'offline');
+        let bots = count(members, member => member.bot);
+        let online = count(members, member => member.presence.status === 'online');
+        let idle = count(members, member => member.presence.status ===  'idle');
+        let dnd = count(members, member => member.presence.status ===  'dnd');
+        let offline = count(members, member => member.presence.status ===  'offline');
 
         message.reply(generateSimpleEmbedWithThumbnail('Member Insights', EmbedIconType.JACK, `${bold('Overview')}\n` 
             + `There ${members.length === 1 ? 'is' : 'are'} ${emboss(members.length)} member${numberEnding(members.length)} in ${bold(message.guild.name)}.\n` 

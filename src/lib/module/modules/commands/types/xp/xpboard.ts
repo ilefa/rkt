@@ -10,11 +10,15 @@ import {
     DAY_MILLIS,
     EmbedIconType,
     emboss,
+    endLoader,
     generateSimpleEmbed,
     generateSimpleEmbedWithImageAndThumbnail,
     generateSimpleEmbedWithThumbnail,
     getEmoteForXpPlacement,
-    numberEnding
+    MessageLoader,
+    numberEnding,
+    startLoader,
+    sum
 } from '../../../../../util';
 
 export default class XpBoardCommand extends Command {
@@ -28,17 +32,17 @@ export default class XpBoardCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        this.startLoader(message);
-        
+        let loader: MessageLoader = await startLoader(message);
         let res: XpBoardUser[] = await getLeaderboard(message.guild.id);
         if (!res) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Board`, EmbedIconType.XP, 'Something went wrong while retrieving data from the web.'));
             return CommandReturn.EXIT;
         }
         
-        let amt = res.length;
-        let total = res.map(record => record.xp).reduce((prev, cur) => cur + prev, 0);
         let str = '';
+        let amt = res.length;
+        let total = sum(res, record => record.xp);
         
         // get top 10, or list length - 1, whichever comes first
         res = res.slice(0, Math.min(10, res.length));
@@ -62,6 +66,8 @@ export default class XpBoardCommand extends Command {
         res.map((user, i) => {
             str += `${getEmoteForXpPlacement(i + 1)} ${asMention(user.id)} with ${bold(user.xp.toLocaleString() + ' XP')} (${user.message_count.toLocaleString()} :incoming_envelope:)\n`;
         });
+
+        endLoader(loader);
 
         if (chart) {
             message.reply(generateSimpleEmbedWithImageAndThumbnail(`${message.guild.name} - Experience Board`, EmbedIconType.XP, str, chart, message.guild.iconURL()));

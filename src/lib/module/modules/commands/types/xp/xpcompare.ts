@@ -12,10 +12,13 @@ import {
     DAY_MILLIS,
     EmbedIconType,
     emboss,
+    endLoader,
     generateEmbed,
     generateSimpleEmbed,
     generateSimpleEmbedWithImage,
+    MessageLoader,
     SNOWFLAKE_REGEX,
+    startLoader,
     USER_MENTION_REGEX
 } from '../../../../../util';
 
@@ -47,10 +50,9 @@ export default class XpCompareCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        this.startLoader(message);
-
         let type = args[0] as TrackingType;
         let records = [] as XpComparePayload[];
+        let loader: MessageLoader = await startLoader(message);
         for (let client of args.slice(1)) {
             let target: User = null;
             if (SNOWFLAKE_REGEX.test(client)) {
@@ -63,22 +65,26 @@ export default class XpCompareCommand extends Command {
             }
 
             if (!target) {
+                endLoader(loader);
                 message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Analysis`, EmbedIconType.XP, `Invalid or unknown target: ${emboss(client)}`));
                 return CommandReturn.EXIT;
             }
 
             if (records.some(payload => payload.target === target.id)) {
+                endLoader(loader);
                 message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Analysis`, EmbedIconType.XP, `Duplicate target: ${emboss(client)}`));
                 return CommandReturn.EXIT;
             }
 
             if (target.bot) {
+                endLoader(loader);
                 message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Analysis`, EmbedIconType.XP, `Cannot use bot as a target: ${emboss(client)}`));
                 return CommandReturn.EXIT;
             }
 
             let data = collectEntries(target.id, DAY_MILLIS);
             if (!data || Object.keys(data[0]).length === 0) {
+                endLoader(loader);
                 message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Analysis`, EmbedIconType.XP, `${asMention(target.id)} has no available data.`));
                 return CommandReturn.EXIT;
             }
@@ -98,6 +104,8 @@ export default class XpCompareCommand extends Command {
             .setHeight(800)
             .setBackgroundColor('rgba(0, 0, 0, 0)')
             .getShortUrl();
+
+        endLoader(loader);
 
         message.reply(generateSimpleEmbedWithImage(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP,
             `Comparing ${bold(records.length + ' users')} ${getNameForType(type)} progression for the last ${bold('1d')}.\n\n`

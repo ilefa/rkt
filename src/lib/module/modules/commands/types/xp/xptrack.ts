@@ -11,6 +11,7 @@ import {
     DAY_MILLIS,
     EmbedIconType,
     emboss,
+    endLoader,
     generateEmbed,
     generateSimpleEmbed,
     generateSimpleEmbedWithImage,
@@ -18,7 +19,9 @@ import {
     getDurationWithUnit,
     getEmoteForIndicator,
     getLatestTimeValue,
+    MessageLoader,
     SNOWFLAKE_REGEX,
+    startLoader,
 } from '../../../../../util';
 
 export default class XpTrackCommand extends Command {
@@ -101,10 +104,10 @@ export default class XpTrackCommand extends Command {
             range = customRange;
         }
 
-        this.startLoader(message);
-
+        let loader: MessageLoader = await startLoader(message);
         let entries: XpRecord[] = collectEntries(target.id, range);
         if (!entries) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Failed to find historical data for ${asMention(target.id)}.`))
             return CommandReturn.EXIT;
         }
@@ -130,6 +133,8 @@ export default class XpTrackCommand extends Command {
         let xpVariance = latest.experience - initial.experience;
         let msgVariance = latest.messages - initial.messages;
         let posVariance = latest.position - initial.position;
+
+        endLoader(loader);
 
         message.reply(generateSimpleEmbedWithImage(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP,
             `Tracking ${asMention(target.id)}'s ${getNameForType(type)} progression for the last ${bold(getLatestTimeValue(range))}.\n\n`

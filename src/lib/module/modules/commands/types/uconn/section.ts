@@ -14,11 +14,14 @@ import {
     bold,
     EmbedIconType,
     emboss,
+    endLoader,
     generateEmbed,
     generateSimpleEmbed,
     italic,
     link,
-    numberEnding
+    MessageLoader,
+    numberEnding,
+    startLoader
 } from '../../../../../util';
 
 export default class SectionCommand extends Command {
@@ -66,10 +69,10 @@ export default class SectionCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        this.startLoader(message);
-
+        let loader: MessageLoader = await startLoader(message);
         let data = await searchBySection(course, section);
         if (!data) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed('Course Search', EmbedIconType.UCONN,
                 `Error locating section ${emboss(section)} for course ${emboss(course)}.`));
             return CommandReturn.EXIT;
@@ -127,6 +130,8 @@ export default class SectionCommand extends Command {
         } else {
             location = 'does not meet'
         }
+
+        endLoader(loader);
 
         message.reply(generateEmbed('Course Search', EmbedIconType.UCONN, `${bold(`${name} - Section ${res.section}`)}\n\n`
             + `:arrow_right: ${link('Course Catalog', target)}\n`
