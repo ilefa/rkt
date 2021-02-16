@@ -1,20 +1,12 @@
 import path from 'path';
 import Module from '../../module';
 import scheduler from 'node-schedule';
-import env from '../../../../../env.json';
 
 import * as Logger from '../../../logger';
 
 import { Job } from 'node-schedule';
 import { Client, Guild, VoiceChannel, VoiceState } from 'discord.js';
-import {
-    CUSTOM_PERMS,
-    has, 
-    initFlatFileStore, 
-    numberEnding, 
-    sleep, 
-    timeDiff
-} from '../../../util';
+import { initFlatFileStore, numberEnding, sleep, timeDiff } from '../../../util';
 
 const DB_PATH = path.join(__dirname, '../../../../../', 'vcboard.json');
 
@@ -228,8 +220,10 @@ export default class VoiceBoardManager extends Module {
 
     private async whoIsAlone(state: VoiceState) {
         let channel = state.channel;
-        if (!this.isAlone(state) || channel.members.size === 0) {
-            return null;
+        if (!this.isAlone(state)
+            || !channel
+            || channel.members.size === 0) {
+                return null;
         }
 
         return channel.members.first().id;
