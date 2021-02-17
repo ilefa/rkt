@@ -33,7 +33,7 @@ export default class ResetClientCommand extends CommandComponent<VoiceBoardManag
             return CommandReturn.EXIT;
         }
 
-        let result = await this.manager.reset(message.guild.id, user.id);
+        let result = await this.manager.reset(message.guild.id, target.id);
         if (!result) {
             message.reply(generateSimpleEmbed(`${message.guild.name} - Voice Board`, EmbedIconType.XP, `Failed to reset record for ${asMention(target)}.`));
             return CommandReturn.EXIT;

@@ -10,7 +10,7 @@ import BirthdayManager from './lib/module/modules/birthday';
 import CommandManager from './lib/module/modules/commands/manager';
 import CountHerManager from './lib/module/modules/counther/manager';
 import ReactionManager from './lib/module/modules/reactions/manager';
-import VoiceBoardManager from './lib/module/modules/vcboard/manager';
+// import VoiceBoardManager from './lib/module/modules/vcboard/manager';
 
 import * as Logger from './lib/logger';
 
@@ -52,9 +52,9 @@ import {
     UpdateCommand,
     UptimeCommand,
     VersionCommand,
-    VoiceAdminCommand,
-    VoiceBoardCommand,
-    VoiceRankCommand,
+    // VoiceAdminCommand,
+    // VoiceBoardCommand,
+    // VoiceRankCommand,
     WhoHasCommand,
     XpBoardCommand,
     XpCompareCommand,
@@ -82,7 +82,7 @@ const moduleManager = new ModuleManager(client);
 const commandCenter = new CommandManager(client);
 const countHerManager = new CountHerManager(client);
 const birthdayManager = new BirthdayManager(client);
-const voiceBoardManager = new VoiceBoardManager(client);
+// const voiceBoardManager = new VoiceBoardManager(client);
 const reactionManager = new ReactionManager();
 const pollManager = new PollManager();
 
@@ -122,9 +122,9 @@ commandCenter.registerCommand('stop', new StopCommand(moduleManager));
 commandCenter.registerCommand('tge', new TestGameEmbedCommand());
 commandCenter.registerCommand('update', new UpdateCommand());
 commandCenter.registerCommand('uptime', new UptimeCommand(start));
-commandCenter.registerCommand('vcadmin', new VoiceAdminCommand(voiceBoardManager));
-commandCenter.registerCommand('vcboard', new VoiceBoardCommand(voiceBoardManager));
-commandCenter.registerCommand('vcrank', new VoiceRankCommand(voiceBoardManager));
+// commandCenter.registerCommand('vcadmin', new VoiceAdminCommand(voiceBoardManager));
+// commandCenter.registerCommand('vcboard', new VoiceBoardCommand(voiceBoardManager));
+// commandCenter.registerCommand('vcrank', new VoiceRankCommand(voiceBoardManager));
 commandCenter.registerCommand('version', new VersionCommand());
 commandCenter.registerCommand('whohas', new WhoHasCommand());
 commandCenter.registerCommand('xpboard', new XpBoardCommand());
@@ -143,7 +143,7 @@ moduleManager.registerModule(commandCenter);
 moduleManager.registerModule(countHerManager);
 moduleManager.registerModule(birthdayManager);
 moduleManager.registerModule(reactionManager);
-moduleManager.registerModule(voiceBoardManager);
+// moduleManager.registerModule(voiceBoardManager);
 moduleManager.registerModule(new Announcer(client));
 moduleManager.registerModule(new EventManager(commandCenter,
                                               countHerManager,
