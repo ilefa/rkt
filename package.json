@@ -33,9 +33,11 @@
       "reflect-metadata": "^0.1.10",
       "simple-json-db": "^1.2.2",
       "sqlite3": "^4.0.3",
+      "text-to-speech-js": "^1.1.10",
       "tinygradient": "^1.1.2",
       "trading-signals": "^1.2.0",
       "typeorm": "0.2.29",
+      "ytdl-core": "^4.5.0",
       "ytdl-core-discord": "^1.2.5"
    },
    "devDependencies": {
