@@ -1,7 +1,8 @@
+import ModuleManager from '../../../manager';
 import * as Logger from '../../../../logger';
 
-import { Command, CommandReturn } from "../command";
 import { Message, MessageAttachment, User } from "discord.js";
+import { Command, CommandCategory, CommandReturn } from "../command";
 
 import {
     bold,
@@ -13,8 +14,11 @@ import {
 
 export default class StopCommand extends Command {
 
-    constructor() {
-        super('stop', `Invalid usage: ${emboss('.stop')}`, 'change da world, my final message... goodbye', [], CUSTOM_PERMS.SUPERMAN);
+    moduleManager: ModuleManager;
+
+    constructor(moduleManager: ModuleManager) {
+        super('stop', CommandCategory.MISC, `Invalid usage: ${emboss('.stop')}`, 'change da world, my final message... goodbye', [], CUSTOM_PERMS.SUPERMAN);
+        this.moduleManager = moduleManager;
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -22,7 +26,7 @@ export default class StopCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        message.reply(generateSimpleEmbed('Stonks', EmbedIconType.PREFS, `Please confirm shutdown by responding with ${bold('Y(ES)')}.`));
+        message.reply(generateSimpleEmbed('rkt', EmbedIconType.PREFS, `Please confirm shutdown by responding with ${bold('Y(ES)')}.`));
         message.channel.awaitMessages((message: Message) => message && message.author.id === user.id,
             {
                 max: 1,
@@ -34,7 +38,7 @@ export default class StopCommand extends Command {
                 if (!msg 
                         || msg.content.toLowerCase() !== 'y' 
                         && msg.content.toLowerCase() !== 'yes') {
-                    msg.reply(generateSimpleEmbed('Stonks', EmbedIconType.PREFS, 'Shutdown cancelled.'));
+                    msg.reply(generateSimpleEmbed('rkt', EmbedIconType.PREFS, 'Shutdown cancelled.'));
                     return;
                 }
 
@@ -43,12 +47,13 @@ export default class StopCommand extends Command {
                 msg.channel.send(attachment);
 
                 setTimeout(() => {
-                    Logger.info('Stonks', 'Shutting down.');
+                    Logger.info('rkt', 'Shutting down.');
+                    this.moduleManager.disable();
                     message.client.destroy();
                     process.exit();
                 }, 5000);
             })
-            .catch(() => message.channel.send(generateSimpleEmbed('Stonks', EmbedIconType.PREFS, 'Shutdown confirmation timed out.')))
+            .catch(() => message.channel.send(generateSimpleEmbed('rkt', EmbedIconType.PREFS, 'Shutdown confirmation timed out.')))
         return CommandReturn.EXIT;
     }
 

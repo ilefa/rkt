@@ -1,7 +1,7 @@
 import { genPriceChart } from '../../../../../chart';
-import { Command, CommandReturn } from '../../command';
 import { getOptions, quote } from '../../../../../repo';
 import { User, Message, Permissions } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import { DataGranularity, PriceList, RangeGranularity } from '../../../../../stonk';
 
 import {
@@ -18,12 +18,15 @@ import {
     validIntervals,
     EmbedIconType,
     generateEmbedWithFieldsAndImage,
+    startLoader,
+    MessageLoader,
+    endLoader,
 } from '../../../../../util';
 
 export default class QuoteCommand extends Command {
     
     constructor() {
-        super('quote', `Invalid usage: ${emboss('.quote <ticker> <[range] [interval]>')}`, null, [
+        super('quote', CommandCategory.STONKS, `Invalid usage: ${emboss('.quote <ticker> <[range] [interval]>')}`, null, [
             {
                 name: 'Args',
                 value: `${bold('__ticker__')}: the ticker to retrieve data for\n` 
@@ -52,12 +55,12 @@ export default class QuoteCommand extends Command {
         let ticker = args[0].toUpperCase();
         let range: RangeGranularity = args.length > 1 ? args[1] as any : '5d';
         let interval: DataGranularity = args.length > 2 ? args[2] as any : '5m';
-
-        this.startLoader(message);
+        let loader: MessageLoader = await startLoader(message);
 
         let res = await quote(ticker, range, interval);
         if (!res) {
             message.reply(generateSimpleEmbed('.quote | Error', EmbedIconType.STONKS, `Couldn't find any results for ticker ${emboss(ticker)}.`));
+            endLoader(loader);
             return CommandReturn.EXIT;
         }
 
@@ -65,6 +68,7 @@ export default class QuoteCommand extends Command {
         let payload = res.indicators.quote[0].close;
         if (!payload) {
             message.reply(generateSimpleEmbed('.quote | Error', EmbedIconType.STONKS, `An unknown error occurred while quoting ${emboss(ticker)}.`));
+            endLoader(loader);
             return CommandReturn.EXIT;
         }
 
@@ -112,6 +116,8 @@ export default class QuoteCommand extends Command {
         let state = opt.quote.marketState;
         state = state.substring(state.indexOf(state));
         
+        endLoader(loader);
+
         message.reply(generateEmbedWithFieldsAndImage(`${opt.quote.displayName ? opt.quote.displayName : ticker}`, EmbedIconType.STONKS,
             `Retrieved quote data for ${bold(ticker)} for the last ${emboss(`${range} (${interval})`)}.`,
             [
@@ -161,6 +167,7 @@ export default class QuoteCommand extends Command {
                     inline: true
                 }
             ], chart));
+            
         return CommandReturn.EXIT;
     }
 

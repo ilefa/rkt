@@ -9,6 +9,7 @@ import ReactionManager from './reactions/manager';
 
 import { MessageReaction, TextChannel, User } from 'discord.js';
 import {
+    bold,
     codeBlock,
     EmbedIconType,
     generateEmbed,
@@ -85,14 +86,16 @@ export default class EventManager extends Module {
                 await reaction.fetch();
             }
         
-            if (reaction.message.embeds.length && reaction.message.embeds[0].author.name === "Polls") {
+            if (reaction.message.embeds.length && reaction.message?.embeds[0]?.author?.name === "Polls") {
                 await this.pollManager.handle(reaction);
             }
         });
 
-        process.on('uncaughtException', async (err: any) => {
+        process.on('unhandledRejection', (err: any) => {
+            if (err.message.includes('Unknown Message')) return;
             if (err.fatal) this.commandDeck?.send('@everyone');
-            this.commandDeck?.send(generateEmbed('Severe', EmbedIconType.ERROR, `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception.${err.fatal ? `\nStonksBot cannot recover from this incident and will now shutdown.` : ''}`, [
+
+            this.commandDeck?.send(generateEmbed('Severe', EmbedIconType.ERROR, `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception.${err.fatal ? `\n${bold('rkt')} cannot recover from this incident and will now shutdown.` : ''}`, [
                 {
                     name: 'Error',
                     value: err.message,
@@ -105,8 +108,27 @@ export default class EventManager extends Module {
                 }
             ]));
 
-            Logger.except(err, 'Stonks', `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception`);
-            Logger.severe('Stonks', err.stack);
+            Logger.except(err, 'rkt', `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception`);
+            Logger.severe('rkt', err.stack);
+        });
+
+        process.on('uncaughtException', async (err: any) => {
+            if (err.fatal) this.commandDeck?.send('@everyone');
+            this.commandDeck?.send(generateEmbed('Severe', EmbedIconType.ERROR, `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception.${err.fatal ? `\n${bold('rkt')} cannot recover from this incident and will now shutdown.` : ''}`, [
+                {
+                    name: 'Error',
+                    value: err.message,
+                    inline: false
+                },
+                {
+                    name: 'Stack',
+                    value: codeBlock('', err.stack),
+                    inline: false
+                }
+            ]));
+
+            Logger.except(err, 'rkt', `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception`);
+            Logger.severe('rkt', err.stack);
         });
     }
 

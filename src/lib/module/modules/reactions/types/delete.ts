@@ -5,11 +5,11 @@ export default class DelteMessageReactionHandler extends ReactionHandler {
 
     constructor() {
         // :x:
-        super('❌', Permissions.FLAGS.ADMINISTRATOR, true);
+        super('❌', Permissions.FLAGS.ADMINISTRATOR, false);
     }
 
     async execute(user: User, message: Message, isBot: boolean, reactionClass: MessageReaction) {
-        if (isBot) message.delete();
+        message.delete();
     }
 
 }

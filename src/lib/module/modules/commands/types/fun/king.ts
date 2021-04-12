@@ -1,11 +1,11 @@
 import { emboss } from '../../../../../util';
-import { Command, CommandReturn } from '../../command';
 import { User, Message, Permissions } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 
 export default class KingCommand extends Command {
     
     constructor() {
-        super('king', `Invalid usage: ${emboss('.king <emote>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('king', CommandCategory.FUN, `Invalid usage: ${emboss('.king <emote>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
     }
     
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

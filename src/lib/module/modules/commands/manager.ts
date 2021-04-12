@@ -1,9 +1,9 @@
-import env from '../../../../../env.json';
 import Module from '../../module';
+import env from '../../../../../env.json';
 
 import * as Logger from '../../../logger';
 
-import { User, Message, MessageEmbed, Client } from 'discord.js';
+import { User, Message, Client } from 'discord.js';
 import { Command, CommandEntry, CommandReturn } from './command';
 import {
     codeBlock,
@@ -21,7 +21,6 @@ export default class CommandManager extends Module {
     
     constructor(client: Client) {
         super('Commands');
-
         this.client = client;
         this.commands = [];
     }
@@ -38,6 +37,7 @@ export default class CommandManager extends Module {
     }
 
     start() {
+        this.commands = this.commands.sort((a, b) => a.name.localeCompare(b.name));
         Logger.info(this.name, `Registered ${this.commands.length} command${numberEnding(this.commands.length)}.`)
     }
 
@@ -72,28 +72,35 @@ export default class CommandManager extends Module {
                         break;
                     }
 
+                    let helpEmbed = generateEmbed(
+                        cmd.command.helpTitle 
+                            ? cmd.command.helpTitle 
+                            : `.${cmd.command.name} | Help Menu`, 
+                        EmbedIconType.HELP,
+                        cmd.command.help,
+                        cmd.command.helpFields);
+
+                    if ((args.length === 1) && args[0].toLowerCase() === '-h') {
+                        if (cmd.command.deleteMessage) {
+                            message.delete();
+                        }
+
+                        message.reply(helpEmbed);
+                        break;
+                    }
+
                     let result = await cmd.command.execute(user, message, args);
                     if (cmd.command.deleteMessage) {
                         message.delete();
                     }
                     
-                    cmd.command.endLoader();
-
                     if (result === CommandReturn.EXIT) {
                         break;
                     }
 
-                    let helpEmbed = new MessageEmbed()
-                        .setAuthor(cmd.command.helpTitle ? cmd.command.helpTitle : `.${cmd.command.name} | Help Menu`, EmbedIconType.HELP)    
-                        .setColor(0x27AE60)
-                        .setDescription(cmd.command.help)
-                        .addFields(cmd.command.helpFields);
-
                     message.reply(helpEmbed);
                     break;
-                } catch (e) {
-                    cmd.command.endLoader();
-                    
+                } catch (e) {                    
                     if (env.reportErrors.includes(message.guild.id)) {
                         message.reply(generateEmbed('Huh? That wasn\'t supposed to happen..', EmbedIconType.ERROR, `Something went wrong while processing your command.`, [
                             {

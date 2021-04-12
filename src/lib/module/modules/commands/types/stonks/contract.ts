@@ -1,9 +1,9 @@
 import moment from 'moment';
 
 import { OptionsContract } from '../../../../../stonk';
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
 import { getExpirationDates, getOptions } from '../../../../../repo';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 
 import {
     bold,
@@ -19,7 +19,7 @@ import {
 export default class ContractCommand extends Command {
 
     constructor() {
-        super('contract', `Invalid usage: ${emboss('.contract <ticker> <strike> <expDate>')}`, null, [
+        super('contract', CommandCategory.STONKS, `Invalid usage: ${emboss('.contract <ticker> <strike> <expDate>')}`, null, [
             {
                 name: 'Args',
                 value: `${bold('__ticker__')}: the ticker to retrieve information for\n` 

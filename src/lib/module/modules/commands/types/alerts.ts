@@ -1,5 +1,5 @@
-import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../command';
 import {
     bold,
     EmbedIconType,
@@ -11,7 +11,7 @@ import {
 export default class AlertsCommand extends Command {
 
     constructor() {
-        super('alerts', `Invalid usage: ${emboss('.alerts')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
+        super('alerts', CommandCategory.MISC, `Invalid usage: ${emboss('.alerts')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

@@ -1,6 +1,12 @@
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
-import { bold, EmbedIconType, generateSimpleEmbed, isFC, italic } from '../../../../../util';
+import { Command, CommandCategory, CommandReturn } from '../../command';
+import {
+    bold,
+    EmbedIconType,
+    generateSimpleEmbed,
+    isFC,
+    italic
+} from '../../../../../util';
 
 const SOE_ROLES = [
     "770717116633448449",
@@ -19,7 +25,7 @@ const SOE_ROLES = [
 export default class PassFailCommand extends Command {
 
     constructor() {
-        super('pf', 'what', null, [], Permissions.FLAGS.SEND_MESSAGES, false, true);
+        super('pf', CommandCategory.FUN, 'what', null, [], Permissions.FLAGS.SEND_MESSAGES, false, true);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

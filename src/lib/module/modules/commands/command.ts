@@ -1,6 +1,5 @@
 import CommandManager from './manager';
 
-import { LOADER } from '../../../util';
 import { User, Message, EmbedFieldData } from 'discord.js';
 
 export abstract class Command {
@@ -9,6 +8,7 @@ export abstract class Command {
     help: string;
     helpTitle: string;
     helpFields: EmbedFieldData[];
+    category: CommandCategory;
     permission: number;
     deleteMessage: boolean;
     hideFromHelp: boolean;
@@ -28,6 +28,7 @@ export abstract class Command {
      * @param hideFromHelp whether or not to hide this command from the help menu
      */
     constructor(name: string,
+                category: CommandCategory,
                 help: string,
                 helpTitle: string,
                 helpFields: EmbedFieldData[],
@@ -35,6 +36,7 @@ export abstract class Command {
                 deleteMessage = true,
                 hideFromHelp = false) {
         this.name = name;
+        this.category = category;
         this.help = help;
         this.helpTitle = helpTitle;
         this.helpFields = helpFields;
@@ -51,22 +53,6 @@ export abstract class Command {
      * @param args the arguments provided for the command
      */
     abstract execute(user: User, message: Message, args: string[]): Promise<CommandReturn>;
-
-    async startLoader(message: Message, emote?: string, prompt?: string) {
-        this.loadStart = Date.now();
-        this.loader = await message.reply(`${emote || LOADER} ${prompt || 'Working on that..'}`);
-    }
-
-    async endLoader(): Promise<number> {
-        if (!this.loader) {
-            return;
-        }
-
-        this.loader.delete();
-        this.loader = null;
-
-        return Number((Date.now() - this.loadStart).toFixed(2));
-    }
 
 }
 
@@ -90,4 +76,14 @@ export class CommandEntry {
 
 export enum CommandReturn {
     EXIT, HELP_MENU
+}
+
+export enum CommandCategory {
+    AUDIO,
+    FUN,
+    GENERAL,
+    MISC,
+    STONKS,
+    UCONN,
+    XP
 }

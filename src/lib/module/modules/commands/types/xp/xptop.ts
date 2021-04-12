@@ -1,26 +1,30 @@
 import moment from 'moment';
 
 import { getTopMovers } from '../../../xp/tracker';
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../../command';
+
 import {
     asMention,
     bold,
     DAY_MILLIS,
     EmbedIconType,
     emboss,
+    endLoader,
     generateEmbed,
     generateSimpleEmbed,
     generateSimpleEmbedWithThumbnail,
     getDurationWithUnit,
     getEmoteForXpPlacement,
-    getLatestTimeValue
+    getLatestTimeValue,
+    MessageLoader,
+    startLoader
 } from '../../../../../util';
 
 export default class XpTopCommand extends Command {
 
     constructor() {
-        super('xpboard', `Invalid usage: ${emboss('.xptop [<range> <limit>]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('xpboard', CommandCategory.XP, `Invalid usage: ${emboss('.xptop [<range> <limit>]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -62,10 +66,10 @@ export default class XpTopCommand extends Command {
             }
         }
 
-        this.startLoader(message);
-
+        let loader: MessageLoader = await startLoader(message);
         let res = await getTopMovers(message.guild.id, limit, range);
         if (!res) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Top Movers`, EmbedIconType.XP, `Something went wrong while retrieving historical data.`));
             return CommandReturn.EXIT;
         }
@@ -77,8 +81,10 @@ export default class XpTopCommand extends Command {
                 
         res.map((user, i) => {
             str += `${getEmoteForXpPlacement(i + 1)} ${asMention(user.client)} with ${bold('+' + user.exp + ' XP')} and ${bold('+' + user.messages.toLocaleString())} :incoming_envelope:\n`;
-        })
+        });
 
+        endLoader(loader);
+        
         message.reply(generateSimpleEmbedWithThumbnail(`${message.guild.name} - Experience Top Movers`, EmbedIconType.XP, str, message.guild.iconURL()));
         return CommandReturn.EXIT;
     }

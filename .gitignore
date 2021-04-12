@@ -7,6 +7,7 @@ temp/
 
 env.json
 xprepo.json
+vcboard.json
 birthdays.json
 stonkboard.json
 database.sqlite

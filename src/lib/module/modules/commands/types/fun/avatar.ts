@@ -1,4 +1,4 @@
-import { Command, CommandReturn } from '../../command';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 
 import {
     Message,
@@ -17,7 +17,7 @@ import {
 export default class AvatarCommand extends Command {
 
     constructor() {
-        super('avatar', `Invalid usage: ${emboss('.avatar [@mention | id]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
+        super('avatar', CommandCategory.GENERAL, `Invalid usage: ${emboss('.avatar [@mention | id]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

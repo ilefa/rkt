@@ -1,7 +1,7 @@
 import CountHerManager from '../../../counther/manager';
 
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import { 
     EmbedIconType,
     emboss,
@@ -15,7 +15,7 @@ export default class CountHerCommand extends Command {
     countHerManager: CountHerManager;
 
     constructor(countHerManager: CountHerManager) {
-        super('counther', `Invalid usage: ${emboss('.counther <target>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
+        super('counther', CommandCategory.FUN, `Invalid usage: ${emboss('.counther <target>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
         this.countHerManager = countHerManager;
     }
 

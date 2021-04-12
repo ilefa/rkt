@@ -1,5 +1,5 @@
-import { Command, CommandReturn } from '../command';
 import { Message, Permissions, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../command';
 import {
     bold,
     EmbedIconType,
@@ -13,7 +13,7 @@ export default class UptimeCommand extends Command {
     uptime: number;
 
     constructor(uptime: number) {
-        super('uptime', `Invalid usage: ${emboss('.uptime')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
+        super('uptime', CommandCategory.MISC, `Invalid usage: ${emboss('.uptime')}`, null, [], Permissions.FLAGS.ADMINISTRATOR);
         this.uptime = uptime;
     }
 
@@ -22,7 +22,7 @@ export default class UptimeCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        message.reply(generateSimpleEmbed('Stonks Uptime', EmbedIconType.PREFS, `StonksBot has been running for ${bold(getLatestTimeValue(Date.now() - this.uptime))}.`))
+        message.reply(generateSimpleEmbed('Uptime', EmbedIconType.PREFS, `${bold('rkt')} has been running for ${bold(getLatestTimeValue(Date.now() - this.uptime))}.`))
         return CommandReturn.EXIT;
     }
 

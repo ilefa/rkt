@@ -1,4 +1,4 @@
-import { Command, CommandReturn } from '../../command';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
 import {
     asMention,
@@ -15,7 +15,7 @@ import {
 export default class PollCommand extends Command {
 
     constructor() {
-        super('poll', `Invalid usage: ${emboss('.poll <[question]> [responses..]')}`, null, [
+        super('poll', CommandCategory.GENERAL, `Invalid usage: ${emboss('.poll <[question]> [responses..]')}`, null, [
             {
                 name: 'Simple Polls',
                 value: 'If you just want a poll with standard 👍, 👎, 🤷 responses, you may just supply a question prompt wrapped in brackets.',
@@ -23,7 +23,7 @@ export default class PollCommand extends Command {
             },
             {
                 name: 'Advanced Polls',
-                value: 'If you would like to fully utilize the power of StonksBot polling, supply a question prompt wrapped in brackets, followed by up to twenty custom response prompts.',
+                value: 'If you would like to fully utilize the power of rkt polling, supply a question prompt wrapped in brackets, followed by up to twenty custom response prompts.',
                 inline: false
             },
             {

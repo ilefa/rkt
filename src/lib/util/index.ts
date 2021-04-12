@@ -1,6 +1,8 @@
+import axios from 'axios';
 import moment from 'moment';
 import df from 'parse-duration';
 import MA from 'moving-average';
+import JSONdb from 'simple-json-db';
 import env from '../../../env.json';
 
 import { Units } from 'parse-duration';
@@ -19,19 +21,23 @@ import {
     Client,
     EmbedFieldData,
     Emoji,
+    Guild,
     Message,
     MessageEmbed,
     Permissions,
     PermissionFlags,
-    User,
-    Guild
+    User
 } from 'discord.js';
-import axios from 'axios';
 
 export { PaginatedEmbed, GameEmbedAwaiter };
 
 export const LOADER = '<a:loading:788890776444207194>';
+export const LOOKING = '<a:looking:807057053713039420>';
 export const JOIN_BUTTON = '<:join:798763992813928469>';
+export const RED_CIRCLE = '<:dnd:808585033991585802>';
+export const YELLOW_CIRCLE = '<:idle:808585033908224010>';
+export const GREEN_CIRCLE = '<:online:808585033899966464>';
+export const GRAY_CIRCLE = '<:offline:808585033890791424>';
 
 export const SNOWFLAKE_REGEX = /^\d{18,}$/;
 export const EMOTE_REGEX = /<(a|):\w+:\d{18,}>/;
@@ -53,6 +59,11 @@ export enum EmbedIconType {
     TEST = 'https://storage.googleapis.com/stonks-cdn/test.png',
     UCONN = 'https://storage.googleapis.com/stonks-cdn/univ.png',
     XP = 'https://storage.googleapis.com/stonks-cdn/xp.png'
+}
+
+export type MessageLoader = {
+    message: Message;
+    start: number;
 }
 
 export type YtMetaResponse = {
@@ -153,9 +164,11 @@ export const mentionChannel = (id: string) => `<#${id}>`;
 export const getDuration = (input: string) => df(input, 's');
 export const getDurationWithUnit = (input: string, unit: Units) => df(input, unit);
 export const capitalizeFirst = (input: string) => input.split(' ').map(str => str.charAt(0).toUpperCase() + str.slice(1)).join('');
+export const initFlatFileStore = (path: string) => new JSONdb(path);
 export const isFC = (guild: Guild | string) => guild instanceof Guild 
     ? guild.id === '749978305549041734' 
     : guild === '749978305549041734';
+
 
 /**
  * Returns whether or not a given user has
@@ -221,6 +234,44 @@ export const getYtMeta = async (url: string) => axios
     .then(res => res.data)
     .then(data => data as YtMetaResponse)
     .catch(() => INVALID_YT_RESPONSE);
+
+/**
+ * Blocks all I/O for the
+ * specified millisecond duration.
+ * 
+ * @param ms millis to sleep
+ */
+export const sleep = async ms => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
+
+/**
+ * Creates a message loader and returns it.
+ * 
+ * @param message the command message
+ * @param emote an optional loader emote
+ * @param prompt an optional loader prompt
+ */
+export const startLoader = async (message: Message, emote?: string, prompt?: string): Promise<MessageLoader> => {
+    let loader = await message.reply(`${emote || LOADER} ${prompt || 'Working on that..'}`);
+    return {
+        message: loader,
+        start: Date.now()
+    };
+}
+
+/**
+ * Destroys a message loader and returns
+ * the time it took to load.
+ * 
+ * @param loader the message loader
+ */
+export const endLoader = async (loader: MessageLoader) => {
+    await loader.message.delete();
+    return { timeDiff: parseInt((Date.now() - loader.start).toFixed(2)) };
+}
 
 /**
  * Replaces all occurances of a given
@@ -615,6 +666,32 @@ export const join = <U, T>(list: U[], delimiter: string, apply: (val: U) => T) =
         });
     
     return str;
+}
+
+/**
+ * Returns the amount of elements matching a given
+ * predicate in a provided list of elements of type U.
+ * 
+ * @param list the list of elements of type U
+ * @param predicate the predicate to sum types of U
+ */
+export const count = <U, T>(list: U[], predicate: (val: U) => boolean) => {
+    return list
+        .filter(predicate)
+        .length;
+}
+
+/**
+ * Returns a sum of elements converted to numbers
+ * from a provided list of elements of type U.
+ * 
+ * @param list the list of elements of type U
+ * @param apply how to convert the list of U to numbers
+ */
+export const sum = <U>(list: U[], apply: (val: U) => number) => {
+    return list
+        .map(apply)
+        .reduce((prev, cur) => cur + prev, 0);
 }
 
 /**

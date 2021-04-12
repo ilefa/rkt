@@ -1,11 +1,11 @@
 import { emboss } from '../../../../../util';
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 
 export default class IsMarketOpenCommand extends Command {
 
     constructor() {
-        super('ismarketopen', `Invalid usage: ${emboss('.ismarketopen')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
+        super('ismarketopen', CommandCategory.STONKS, `Invalid usage: ${emboss('.ismarketopen')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

@@ -10,6 +10,7 @@ import BirthdayManager from './lib/module/modules/birthday';
 import CommandManager from './lib/module/modules/commands/manager';
 import CountHerManager from './lib/module/modules/counther/manager';
 import ReactionManager from './lib/module/modules/reactions/manager';
+// import VoiceBoardManager from './lib/module/modules/vcboard/manager';
 
 import * as Logger from './lib/logger';
 
@@ -25,9 +26,12 @@ import {
     EvalCommand,
     FuturesCommand,
     HelpCommand,
+    InvitesCommand,
     IsMarketOpenCommand,
     JackCommand,
     KingCommand,
+    MaldCommand,
+    MembersCommand,
     MinorCommand,
     OptionsCommand,
     PassFailCommand,
@@ -38,13 +42,20 @@ import {
     QuoteCommand,
     ReactCommand,
     SayCommand,
+    SectionCommand,
     SoundCommand,
     StackCommand,
     StimmyCommand,
     StonksCommand,
     StopCommand,
     TestGameEmbedCommand,
+    UpdateCommand,
     UptimeCommand,
+    VersionCommand,
+    // VoiceAdminCommand,
+    // VoiceBoardCommand,
+    // VoiceRankCommand,
+    WhoHasCommand,
     XpBoardCommand,
     XpCompareCommand,
     XpRankCommand,
@@ -59,13 +70,19 @@ import {
 } from './lib/module/modules/reactions';
 
 import { printStartup } from './lib/startup';
+import { getCurrentVersion, getReleaseChannel } from './lib/util/vcs';
 
 const start = Date.now();
-const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+const client = new discord.Client({
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+    fetchAllMembers: true,
+});
+
 const moduleManager = new ModuleManager(client);
 const commandCenter = new CommandManager(client);
 const countHerManager = new CountHerManager(client);
 const birthdayManager = new BirthdayManager(client);
+// const voiceBoardManager = new VoiceBoardManager(client);
 const reactionManager = new ReactionManager();
 const pollManager = new PollManager();
 
@@ -80,9 +97,12 @@ commandCenter.registerCommand('dc', new DisconnectCommand());
 commandCenter.registerCommand('eval', new EvalCommand());
 commandCenter.registerCommand('futures', new FuturesCommand());
 commandCenter.registerCommand('help', new HelpCommand());
+commandCenter.registerCommand('invites', new InvitesCommand());
 commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
 commandCenter.registerCommand('jack', new JackCommand());
 commandCenter.registerCommand('king', new KingCommand());
+commandCenter.registerCommand('mald', new MaldCommand());
+commandCenter.registerCommand('members', new MembersCommand());
 commandCenter.registerCommand('minor', new MinorCommand());
 commandCenter.registerCommand('options', new OptionsCommand());
 commandCenter.registerCommand('perms', new PermissionsCommand());
@@ -93,13 +113,20 @@ commandCenter.registerCommand('prefs', new PrefsCommand());
 commandCenter.registerCommand('purge', new PurgeCommand());
 commandCenter.registerCommand('react', new ReactCommand());
 commandCenter.registerCommand('say', new SayCommand());
+commandCenter.registerCommand('section', new SectionCommand());
 commandCenter.registerCommand('sound', new SoundCommand());
 commandCenter.registerCommand('stack', new StackCommand());
 commandCenter.registerCommand('stimmy', new StimmyCommand());
 commandCenter.registerCommand('stonks', new StonksCommand());
-commandCenter.registerCommand('stop', new StopCommand());
+commandCenter.registerCommand('stop', new StopCommand(moduleManager));
 commandCenter.registerCommand('tge', new TestGameEmbedCommand());
+commandCenter.registerCommand('update', new UpdateCommand());
 commandCenter.registerCommand('uptime', new UptimeCommand(start));
+// commandCenter.registerCommand('vcadmin', new VoiceAdminCommand(voiceBoardManager));
+// commandCenter.registerCommand('vcboard', new VoiceBoardCommand(voiceBoardManager));
+// commandCenter.registerCommand('vcrank', new VoiceRankCommand(voiceBoardManager));
+commandCenter.registerCommand('version', new VersionCommand());
+commandCenter.registerCommand('whohas', new WhoHasCommand());
 commandCenter.registerCommand('xpboard', new XpBoardCommand());
 commandCenter.registerCommand('xpcompare', new XpCompareCommand());
 commandCenter.registerCommand('xprank', new XpRankCommand());
@@ -116,6 +143,7 @@ moduleManager.registerModule(commandCenter);
 moduleManager.registerModule(countHerManager);
 moduleManager.registerModule(birthdayManager);
 moduleManager.registerModule(reactionManager);
+// moduleManager.registerModule(voiceBoardManager);
 moduleManager.registerModule(new Announcer(client));
 moduleManager.registerModule(new EventManager(commandCenter,
                                               countHerManager,
@@ -125,13 +153,16 @@ moduleManager.registerModule(new EventManager(commandCenter,
 moduleManager.registerModule(new XpTracker());
 moduleManager.init();
 
-client.on('ready', () => {
-    Logger.info('Stonks', 'Successfully connected to Discord.');
+client.on('ready', async () => {
+    Logger.info('rkt', `Release channel: ${await getReleaseChannel()}, version: ${await getCurrentVersion()}`);
+    Logger.info('rkt', 'Successfully connected to Discord.');
+
     client.user.setPresence({
         status: 'online',
         activity: {
-            type: 'COMPETING',
-            name: 'buying high, selling low',
+            type: 'LISTENING',
+            name: 'rocket thrusters',
+            url: 'https://open.spotify.com/track/7GhIk7Il098yCjg4BQjzvb?si=FOvlyk-xQ_q50JIUVi_vNg',
         }
     });
 });

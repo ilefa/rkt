@@ -1,16 +1,17 @@
 import moment from 'moment';
 
 import { genXpChart } from '../../../../../chart';
-import { Command, CommandReturn } from '../../command';
 import { Message, Permissions, User } from 'discord.js';
 import { TrackingType, XpRecord } from '../../../xp/struct';
 import { collectEntries, getNameForType } from '../../../xp/tracker';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 import {
     asMention,
     bold,
     DAY_MILLIS,
     EmbedIconType,
     emboss,
+    endLoader,
     generateEmbed,
     generateSimpleEmbed,
     generateSimpleEmbedWithImage,
@@ -18,13 +19,15 @@ import {
     getDurationWithUnit,
     getEmoteForIndicator,
     getLatestTimeValue,
+    MessageLoader,
     SNOWFLAKE_REGEX,
+    startLoader,
 } from '../../../../../util';
 
 export default class XpTrackCommand extends Command {
 
     constructor() {
-        super('xptrack', `Invalid usage: ${emboss('.xptrack <target> <type> [range]')}`, null, [
+        super('xptrack', CommandCategory.XP, `Invalid usage: ${emboss('.xptrack <target> <type> [range]')}`, null, [
             {
                 name: 'Args',
                 value: `${bold('__target__')}: a mentioned member or a member's snowflake id\n` 
@@ -39,10 +42,10 @@ export default class XpTrackCommand extends Command {
             },
             {
                 name: 'Valid Range Specification',
-                value: emboss('[#](s|m|d|h|mo|y)'),
+                value: emboss('[#](s|m|h|d|w|b|y)'),
                 inline: false
             }
-        ], Permissions.FLAGS.SEND_MESSAGES);
+        ], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -86,12 +89,12 @@ export default class XpTrackCommand extends Command {
 
         let range = DAY_MILLIS;
         if (args[2]) {
-            let customRange = getDurationWithUnit(args[1], 'millisecond');
+            let customRange = getDurationWithUnit(args[2], 'millisecond');
             if (!customRange) {
                 message.reply(generateEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Invalid time specification: ${emboss(args[2])}.`, [
                     {
                         name: 'Valid Time Specification',
-                        value: emboss(`[#](s|m|d|h|mo|y)`),
+                        value: emboss(`[#](s|m|h|d|w|b|y)`),
                         inline: true
                     }
                 ]))
@@ -101,10 +104,10 @@ export default class XpTrackCommand extends Command {
             range = customRange;
         }
 
-        this.startLoader(message);
-
+        let loader: MessageLoader = await startLoader(message);
         let entries: XpRecord[] = collectEntries(target.id, range);
         if (!entries) {
+            endLoader(loader);
             message.reply(generateSimpleEmbed(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP, `Failed to find historical data for ${asMention(target.id)}.`))
             return CommandReturn.EXIT;
         }
@@ -130,6 +133,8 @@ export default class XpTrackCommand extends Command {
         let xpVariance = latest.experience - initial.experience;
         let msgVariance = latest.messages - initial.messages;
         let posVariance = latest.position - initial.position;
+
+        endLoader(loader);
 
         message.reply(generateSimpleEmbedWithImage(`${message.guild.name} - Experience Tracking`, EmbedIconType.XP,
             `Tracking ${asMention(target.id)}'s ${getNameForType(type)} progression for the last ${bold(getLatestTimeValue(range))}.\n\n`

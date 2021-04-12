@@ -1,11 +1,11 @@
 import { Message, User } from 'discord.js';
-import { Command, CommandReturn } from '../../command';
 import { CUSTOM_PERMS, emboss } from '../../../../../util';
+import { Command, CommandCategory, CommandReturn } from '../../command';
 
 export default class SayCommand extends Command {
 
     constructor() {
-        super('say', `Invalid usage: ${emboss('.say <message..>')}`, null, [], CUSTOM_PERMS.SUPERMAN);
+        super('say', CommandCategory.GENERAL, `Invalid usage: ${emboss('.say <message..>')}`, null, [], CUSTOM_PERMS.SUPERMAN);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
