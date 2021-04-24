@@ -83,7 +83,7 @@ export class CourseCommand extends Command {
         let loader: MessageLoader = await startLoader(message);
         let res = await searchCourse(identifier, campus);
         if (!res) {
-            message.reply(this.embeds.build('Course Search', EmbedIconType.UCONN, `Error locating course ${emboss(args[0])} on campus ${emboss(args[1])}.`, null, message));
+            message.reply(this.embeds.build('Course Search', EmbedIconType.UCONN, `Course ${emboss(args[0])} is either not offered, or doesn't exist.`, null, message));
             endLoader(loader);
             return CommandReturn.EXIT;
         }
@@ -103,29 +103,7 @@ export class CourseCommand extends Command {
 
         if (!sections.length || !professors.length) {
             endLoader(loader);
-            message.reply(this.embeds.build('', EmbedIconType.UCONN, `${bold(name)}\n\n`
-                + `:arrow_right: ${link('Course Catalog', target)}\n`
-                + `:hash: Credits: ${bold(credits)}\n` 
-                + `:asterisk: Grading Type: ${bold(grading)}\n\n`
-                + `${bold('Description')}\n` 
-                + `${italic(description)}\n\n`, [
-                    {
-                        name: 'Last Data Marker',
-                        value: moment(lastDataMarker).format('MMMM Do YYYY, h:mm:ss a'),
-                        inline: false
-                    },
-                    {
-                        name: 'Prerequisites',
-                        value: prereqs,
-                        inline: false
-                    },
-                    {
-                        name: 'Sections',
-                        value: ':warning: No sections are being taught this semester.',
-                        inline: false
-                    }
-                ], message));
-
+            message.reply(this.embeds.build('Course Search', EmbedIconType.UCONN, `Course ${emboss(args[0])} is either not offered, or doesn't exist.`, null, message));
             return CommandReturn.EXIT;
         }
 
@@ -193,7 +171,7 @@ export class CourseCommand extends Command {
             message.channel as TextChannel,
             user, `Course Search » ${identifier}`,
             EmbedIconType.UCONN, professorData,
-            6, transform, 600000);
+            8, transform, 600000);
                 
         return CommandReturn.EXIT;
     }

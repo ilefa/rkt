@@ -73,7 +73,7 @@ export class SectionCommand extends Command {
         if (!data) {
             endLoader(loader);
             message.reply(this.manager.engine.embeds.build('Course Search', EmbedIconType.UCONN,
-                `Error locating section ${emboss(section)} for course ${emboss(course)}.`, null, message));
+                `Course ${emboss(course)} is either not offered, or does not have a section classified by ${emboss(section)}.`, null, message));
             return CommandReturn.EXIT;
         }
 

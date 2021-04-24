@@ -71,6 +71,10 @@ export default class CustomEventManager extends EventManager {
     }
     
     private _exceptionHandler = async (err: any) => {
+        if (err.message.includes('Unknown Message')) {
+            return;
+        }
+
         if (err.fatal) this.commandDeck?.send('@everyone');
         this.commandDeck?.send(this.engine.embeds.build('Severe', EmbedIconType.ERROR, `Encountered a ${err.fatal ? 'fatal' : 'uncaught'} exception.${err.fatal ? `\n${bold('rkt')} cannot recover from this incident and will now shutdown.` : ''}`, [
             {
