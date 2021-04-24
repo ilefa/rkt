@@ -1,4 +1,4 @@
-import { searchRMP } from "../src/lib/util/uconn";
+import { searchRMP } from "../src/lib/util";
 
 const TEST_CASES = [
     'Gregory Johnson',

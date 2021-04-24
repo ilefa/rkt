@@ -3,7 +3,6 @@ import Watermark from './lib/startup';
 import DataProvider from './lib/data';
 import PollManager from './lib/modules/poll';
 import CustomEventManager from './lib/modules/events';
-import ReactionManager from './lib/modules/reactions/manager';
 
 import { Client } from 'discord.js';
 
@@ -16,6 +15,7 @@ import {
 } from '@ilefa/ivy';
 
 import {
+    ReactionManager,
     DeleteMessageReactionHandler,
     OnlyGoesUpReactionHandler
 } from './lib/modules/reactions';
@@ -158,8 +158,8 @@ export default class RktBot extends IvyEngine {
         this.reactionHandler = new ReactionManager();
         this.reactionHandler.registerHandler('delete', new DeleteMessageReactionHandler());
         this.reactionHandler.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());
+        
         this.registerModule(this.reactionHandler);
-
         this.registerModule(this.pollHandler = new PollManager());
     }
 

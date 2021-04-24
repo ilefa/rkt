@@ -1,4 +1,4 @@
-import { getRawEnrollment } from "../src/lib/util/uconn";
+import { getRawEnrollment } from "../src/lib/util";
 
 const TEST_CASES = [
     {

@@ -2,7 +2,7 @@ import { User, MessageReaction } from 'discord.js';
 import { asMention, Module, numberEnding } from '@ilefa/ivy';
 import { ReactionHandler, ReactionHandlerEntry } from './handler';
 
-export default class ReactionManager extends Module {
+export class ReactionManager extends Module {
     
     handlers: ReactionHandlerEntry[];
     

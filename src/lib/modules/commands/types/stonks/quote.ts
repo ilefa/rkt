@@ -2,18 +2,28 @@ import { genPriceChart } from '../../../../chart';
 import { getOptions, quote } from '../../../../repo';
 import { User, Message, Permissions } from 'discord.js';
 import { DataGranularity, PriceList, RangeGranularity } from '../../../../stonk';
+
+import {
+    bold,
+    Command,
+    CommandReturn,
+    emboss,
+    endLoader,
+    getArrowEmoteForData,
+    join,
+    startLoader
+} from '@ilefa/ivy';
+
 import {
     computeMACD,
     computeRSI,
     getEmoteForEPS,
-    getEmoteForIndicator,
     getTotalVolume,
     validRanges,
     validIntervals,
     EmbedIconType,
     MessageLoader,
 } from '../../../../util';
-import { bold, Command, CommandReturn, emboss, endLoader, join, startLoader } from '@ilefa/ivy';
 
 export class QuoteCommand extends Command {
     
@@ -150,12 +160,12 @@ export class QuoteCommand extends Command {
                 },
                 {
                     name: 'MACD',
-                    value: `${getEmoteForIndicator(macd, 0, 0, 0) + ' ' + macd}`,
+                    value: `${getArrowEmoteForData(macd, 0, 0, 0) + ' ' + macd}`,
                     inline: true,
                 },
                 {
                     name: 'RSI',
-                    value: `${getEmoteForIndicator(rsi, 40, 40, 40) + ' ' + rsi}`,
+                    value: `${getArrowEmoteForData(rsi, 40, 40, 40) + ' ' + rsi}`,
                     inline: true
                 }
             ], message, chart));

@@ -1,6 +1,14 @@
 import { EmbedIconType } from '../../../util';
 import { Message, MessageAttachment, User } from 'discord.js';
-import { bold, Command, CommandReturn, CUSTOM_PERMS, emboss, ModuleManager } from '@ilefa/ivy';
+
+import {
+    bold,
+    Command,
+    CommandReturn,
+    CUSTOM_PERMS,
+    emboss,
+    ModuleManager
+} from '@ilefa/ivy';
 
 export class StopCommand extends Command {
 

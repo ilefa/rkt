@@ -1,7 +1,4 @@
-import DeleteMessageReactionHandler from './types/delete';
-import OnlyGoesUpReactionHandler from './types/onlygoesup';
-
-export {
-    DeleteMessageReactionHandler,
-    OnlyGoesUpReactionHandler
-}
+export * from './handler';
+export * from './manager';
+export * from './types/delete';
+export * from './types/onlygoesup';

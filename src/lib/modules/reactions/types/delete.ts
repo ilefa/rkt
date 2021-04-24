@@ -1,7 +1,7 @@
 import { ReactionHandler } from '../handler';
 import { Message, MessageReaction, Permissions, User } from 'discord.js';
 
-export default class DelteMessageReactionHandler extends ReactionHandler {
+export class DeleteMessageReactionHandler extends ReactionHandler {
 
     constructor() {
         // :x:

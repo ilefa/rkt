@@ -1,10 +1,6 @@
 import { Message, MessageReaction, User } from 'discord.js';
 
 export abstract class ReactionHandler {
-    
-    emote: string;
-    permission: number;
-    onBot: boolean;
 
     /**
      * Default constructor for a reaction handler
@@ -13,11 +9,7 @@ export abstract class ReactionHandler {
      * @param permission the required permission
      * @param onBot boolean if the reaction needs to be on the bot
      */
-    constructor(emote, permission, onBot) {
-        this.emote = emote;
-        this.permission = permission;
-        this.onBot = onBot;
-    }
+    constructor(public emote: string, public permission: number, public onBot: boolean) {}
 
     /**
      * Reacion Handler Execution Method
@@ -27,14 +19,11 @@ export abstract class ReactionHandler {
      * @param isBot whether the message reacted to is sent by the bot
      * @param reactionObject the reaction object recieved from the API
      */
-    abstract execute(user: User, message: Message, isBot: boolean, reactionObject: MessageReaction);
+    abstract execute(user: User, message: Message, isBot: boolean, reactionObject: MessageReaction): void;
 
 }
 
 export class ReactionHandlerEntry {
-    
-    name: string;
-    reactionHandler: ReactionHandler;
 
     /**
      * A wrapped reaction handler instance.
@@ -42,9 +31,6 @@ export class ReactionHandlerEntry {
      * @param name the name of the reaction handler
      * @param reactionHandler the reaction handler object
      */
-    constructor(name: string, reactionHandler: ReactionHandler) {
-        this.name = name;
-        this.reactionHandler = reactionHandler;
-    }
+    constructor(public name: string, public reactionHandler: ReactionHandler) {}
 
 }

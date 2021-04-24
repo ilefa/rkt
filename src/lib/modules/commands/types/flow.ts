@@ -1,5 +1,5 @@
 import { User, Message } from 'discord.js';
-import { EmbedIconType } from '../../../../lib/util';
+import { EmbedIconType } from '../../../util';
 import { Command, CommandReturn, CUSTOM_PERMS, emboss } from '@ilefa/ivy';
 
 export class FlowCommand extends Command {

@@ -4,7 +4,7 @@ import MA from 'moving-average';
 import { MACD, RSI } from 'trading-signals';
 import { Guild, Message, Permissions } from 'discord.js';
 import { PriceList, RangeGranularity, StonkQuote } from '../stonk';
-import { CUSTOM_PERMS, getDurationWithUnit, toWords } from '@ilefa/ivy';
+import { CUSTOM_PERMS, getArrowEmoteForData, getDurationWithUnit, toWords } from '@ilefa/ivy';
 
 export const SNOWFLAKE_REGEX = /^\d{18,}$/;
 export const EMOTE_REGEX = /<(a|):\w+:\d{18,}>/;
@@ -225,26 +225,10 @@ export const getChangeString = (input: string | number, seperator: string, digit
 }
 
 /**
- * Returns the indicator emote for a given value.
- * 
- * @param indicator the indicator value
- * @param upThreshold the threshold for an upwards arrow to appear
- * @param downThreshold the threshold for a downwards arrow to appear
- * @param stagnent the threshold for a stagnant arrow to appear
- */
-export const getEmoteForIndicator = (indicator: number | string, upThreshold: number, downThreshold: number, stagnent: number) => {
-    if (indicator === stagnent) return ':arrow_right:';
-    if (indicator > upThreshold) return ':arrow_upper_right:';
-    if (indicator < downThreshold) return ':arrow_lower_left:';
-
-    return ':twisted_rightwards_arrows:';
-}
-
-/**
  * Returns the arrow emote for a given EPS value.
  * @param eps the eps value for a stock
  */
-export const getEmoteForEPS = (eps: number | string) => getEmoteForIndicator(eps, 0, 0, 0);
+export const getEmoteForEPS = (eps: number | string) => getArrowEmoteForData(eps, 0, 0, 0);
 
 /**
  * Returns an emote for a user's permission level.
@@ -262,20 +246,6 @@ export const getEmoteForCommandPermission = (permission: number) => {
     if (permission === CUSTOM_PERMS.SUPER_PERMS) return ':eight_spoked_asterisk:';
     if (permission === Permissions.FLAGS.ADMINISTRATOR) return ':a:';
     return ':regional_indicator_m:';
-}
-
-/**
- * Returns an emote for the XP placement leaderboard.
- * @param placement the xp placement
- */
-export const getEmoteForXpPlacement = (placement: number) => {
-    if (placement == 1) return ':first_place:';
-    if (placement == 2) return ':second_place:';
-    if (placement == 3) return ':third_place:';
-    if (placement == 10) return ':keycap_ten:';
-    if (placement > 10) return '';
-
-    return `:${toWords(placement)}:`;
 }
 
 /**

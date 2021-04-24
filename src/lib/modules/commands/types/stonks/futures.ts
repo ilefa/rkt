@@ -3,9 +3,9 @@ import env from '../../../../../../env.json';
 
 import { getFutures } from '../../../../repo';
 import { FuturesQuote } from '../../../../stonk';
+import { EmbedIconType, getChangeString } from '../../../../util';
 import { EmbedFieldData, Message, Permissions, User } from 'discord.js';
-import { bold, Command, CommandReturn, emboss } from '@ilefa/ivy';
-import { EmbedIconType, getChangeString, getEmoteForIndicator } from '../../../../util';
+import { bold, Command, CommandReturn, emboss, getArrowEmoteForData } from '@ilefa/ivy';
 
 export class FuturesCommand extends Command {
 
@@ -22,7 +22,7 @@ export class FuturesCommand extends Command {
         let fields: EmbedFieldData[] = res.map(future => {
             return {
                 name: `${future.name}`,
-                value: `${getEmoteForIndicator(future.change, 0, 0, 0)} ${bold(getChangeString(future.change, '$', 2, true))} (${getChangeString(future.change_pct, '', 2, false)}%)\n` 
+                value: `${getArrowEmoteForData(future.change, 0, 0, 0)} ${bold(getChangeString(future.change, '$', 2, true))} (${getChangeString(future.change_pct, '', 2, false)}%)\n` 
                         + `:dollar: ${bold('$' + parseFloat(future.last).toLocaleString())} as of ${moment(future.last_time).format('MMM Do [at] h:mm:ss a')}.\n\n`
                         + `**Historical**\n`
                         + `Prev Close: **$${Number(future.previous_day_closing).toFixed(2)}**\n`

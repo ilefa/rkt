@@ -2,7 +2,15 @@ import env from '../../../../../env.json';
 
 import { Message, User } from 'discord.js';
 import { EmbedIconType } from '../../../util';
-import { asMention, Command, CommandReturn, CUSTOM_PERMS, emboss, mentionChannel } from '@ilefa/ivy';
+
+import {
+    asMention,
+    Command,
+    CommandReturn,
+    CUSTOM_PERMS,
+    emboss,
+    mentionChannel
+} from '@ilefa/ivy';
 
 export class PrefsCommand extends Command {
 

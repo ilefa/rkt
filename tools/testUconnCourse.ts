@@ -1,4 +1,4 @@
-import { searchCourse } from "../src/lib/util/uconn";
+import { searchCourse } from "../src/lib/util";
 
 const TEST_CASES = [
     'CSE1729',

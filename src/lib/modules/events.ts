@@ -1,9 +1,9 @@
 import env from '../../../env.json';
 
 import PollManager from './poll';
-import ReactionManager from './reactions/manager';
 
 import { EmbedIconType } from '../util';
+import { ReactionManager } from './reactions';
 import { Message, MessageReaction, TextChannel, User } from 'discord.js';
 import { bold, codeBlock, CommandManager, EventManager, IvyEngine } from '@ilefa/ivy';
 
