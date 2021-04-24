@@ -10,7 +10,6 @@ import {
     CommandReturn,
     emboss,
     endLoader,
-    getHighestDivisor,
     italic,
     link,
     PageContent,
@@ -50,7 +49,7 @@ export class CourseCommand extends Command {
 
         let identifier = args[0].toUpperCase();
         if (!identifierRegex.test(identifier)) {
-            message.reply(this.manager.engine.embeds.build('Course Search', EmbedIconType.UCONN, `Invalid or malformed course name: ${emboss(identifier)}`, [
+            message.reply(this.embeds.build('Course Search', EmbedIconType.UCONN, `Invalid or malformed course name: ${emboss(identifier)}`, [
                 {
                     name: 'Valid Course Name',
                     value: emboss('<course prefix><course number>[Q,E,W]'),
@@ -68,7 +67,7 @@ export class CourseCommand extends Command {
 
         let campus: CampusType = args[1] as CampusType || 'any';
         if (!campus) {
-            message.reply(this.manager.engine.embeds.build('Course Search', EmbedIconType.UCONN, `Invalid or malformed campus specification: ${emboss(args[1])}`, [
+            message.reply(this.embeds.build('Course Search', EmbedIconType.UCONN, `Invalid or malformed campus specification: ${emboss(args[1])}`, [
                 {
                     name: 'Valid Campuses',
                     value: emboss(['any', 'storrs', 'hartford', 'stamford', 'waterbury', 'avery_point'].join(', ')),
@@ -84,7 +83,7 @@ export class CourseCommand extends Command {
         let loader: MessageLoader = await startLoader(message);
         let res = await searchCourse(identifier, campus);
         if (!res) {
-            message.reply(this.manager.engine.embeds.build('Course Search', EmbedIconType.UCONN, `Error locating course ${emboss(args[0])} on campus ${emboss(args[1])}.`, null, message));
+            message.reply(this.embeds.build('Course Search', EmbedIconType.UCONN, `Error locating course ${emboss(args[0])} on campus ${emboss(args[1])}.`, null, message));
             endLoader(loader);
             return CommandReturn.EXIT;
         }
@@ -104,7 +103,7 @@ export class CourseCommand extends Command {
 
         if (!sections.length || !professors.length) {
             endLoader(loader);
-            message.reply(this.manager.engine.embeds.build('', EmbedIconType.UCONN, `${bold(name)}\n\n`
+            message.reply(this.embeds.build('', EmbedIconType.UCONN, `${bold(name)}\n\n`
                 + `:arrow_right: ${link('Course Catalog', target)}\n`
                 + `:hash: Credits: ${bold(credits)}\n` 
                 + `:asterisk: Grading Type: ${bold(grading)}\n\n`
@@ -130,71 +129,24 @@ export class CourseCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        let divisor = getHighestDivisor(professors.length);
-        let pages: PageContent[] = [];
-        let tempPage: PageContent;
-        let profList = '';
+        let professorData: ProfessorData[] = professors.sort((a, b) => a.name.localeCompare(b.name));
+        let transform = (data: ProfessorData[]): PageContent => {
+            let profList = '';
 
-        // TODO: Broken for larger course offerings.
-        if (professors.length <= 10) divisor = professors.length;
-        if (divisor > 10) divisor = 10;
-
-        let counter = 0;
-
-        professors
-            .sort((a, b) => a.name.length - b.name.length)
-            .forEach((prof: ProfessorData, i) => {
-                counter++;
-
-                if (counter >= divisor && i !== 0) {
-                    tempPage.fields[2].value = profList;
-                    pages.push(tempPage);
-                    counter = 0;
-                    profList = '';
-                    tempPage = null;
-                }
-
-                if (!tempPage) {
-                    tempPage = {
-                        description: `${bold(name)}\n\n`
-                                    + `:arrow_right: ${link('Course Catalog', target)}\n`
-                                    + `:hash: Credits: ${bold(credits)}\n` 
-                                    + `:asterisk: Grading Type: ${bold(grading)}\n\n`
-                                    + `${bold('Description')}\n` 
-                                    + `${italic(description)}\n\n`,
-                        fields: [
-                            {
-                                name: 'Last Data Marker',
-                                value: moment(lastDataMarker).format('MMMM Do YYYY, h:mm:ss a'),
-                                inline: false
-                            },
-                            {
-                                name: 'Prerequisites',
-                                value: prereqs,
-                                inline: false
-                            },
-                            {
-                                name: 'Sections',
-                                value: profList.trimEnd(),
-                                inline: false
-                            }
-                        ]
-                    }
-                }
-
+            data.forEach(prof => {
                 let rmpList = '';
                 prof
                     .rmpIds
                     .slice(0, Math.min(prof.rmpIds.length, 10))
                     .forEach((id, i) => rmpList += link(`[${i + 1}]`, `https://www.ratemyprofessors.com/ShowRatings.jsp?tid=${id}`));
-
+    
                 let campuses = [];
                 prof.sections.forEach(section => {
                     if (!campuses.includes(section.campus)) {
                         campuses.push(section.campus);
                     }
                 });
-
+    
                 let campusIndicator = '';
                 campuses.forEach(campus => campusIndicator += getCampusIndicator(campus));
                 
@@ -208,17 +160,40 @@ export class CourseCommand extends Command {
                 profList += toAppend;
             });
 
-        endLoader(loader);
-
-        if (pages.length === 0) {
-            message.reply(this.manager.engine.embeds.build(`Course Search » ${identifier}`, EmbedIconType.UCONN, 'An error occurred while retrieving data from the web.', null, message));
-            return CommandReturn.EXIT;
+            return {
+                description: `${bold(name)}\n\n`
+                        + `:arrow_right: ${link('Course Catalog', target)}\n`
+                        + `:hash: Credits: ${bold(credits)}\n` 
+                        + `:asterisk: Grading Type: ${bold(grading)}\n\n`
+                        + `${bold('Description')}\n` 
+                        + `${italic(description)}\n\n`,
+                fields: [
+                    {
+                        name: 'Last Data Marker',
+                        value: moment(lastDataMarker).format('MMMM Do YYYY, h:mm:ss a'),
+                        inline: false
+                    },
+                    {
+                        name: 'Prerequisites',
+                        value: prereqs,
+                        inline: false
+                    },
+                    {
+                        name: 'Sections',
+                        value: profList.trimEnd(),
+                        inline: false
+                    }
+                ]
+            }
         }
 
-        PaginatedEmbed.of(this.manager.engine,
+        endLoader(loader);
+
+        PaginatedEmbed.ofItems<ProfessorData>(this.manager.engine,
             message.channel as TextChannel,
             user, `Course Search » ${identifier}`,
-            EmbedIconType.UCONN, pages, 600000);
+            EmbedIconType.UCONN, professorData,
+            6, transform, 600000);
                 
         return CommandReturn.EXIT;
     }

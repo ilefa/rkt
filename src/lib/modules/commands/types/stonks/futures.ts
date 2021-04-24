@@ -33,7 +33,7 @@ export class FuturesCommand extends Command {
             }
         });
 
-        message.reply(this.manager.engine.embeds.build('Pre-Market Futures', EmbedIconType.STONKS, '', fields, message));
+        message.reply(this.embeds.build('Pre-Market Futures', EmbedIconType.STONKS, '', fields, message));
         return CommandReturn.EXIT;
     }
 

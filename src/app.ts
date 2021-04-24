@@ -5,14 +5,7 @@ import PollManager from './lib/modules/poll';
 import CustomEventManager from './lib/modules/events';
 
 import { Client } from 'discord.js';
-
-import {
-    CommandManager,
-    DefaultEventManager,
-    IvyEngine,
-    Logger,
-    Module
-} from '@ilefa/ivy';
+import { IvyEngine, Logger } from '@ilefa/ivy';
 
 import {
     ReactionManager,
@@ -69,9 +62,9 @@ export default class RktBot extends IvyEngine {
                 '177167251986841600',
                 '268044207854190604',
                 '248149168323821569',
-                '592924575831031821',
+                '224566699448336384',
                 '140520164629151744',
-                '224566699448336384'
+                '298217416276836354'
             ],
             reportErrors: [
                 '785050947407052821'
@@ -94,31 +87,8 @@ export default class RktBot extends IvyEngine {
         })
     }
 
-    private requireModule = <T extends Module>(name: string) =>
-        this
-            .moduleManager
-            .modules
-            .find(module => module.name.toLowerCase() === name.toLowerCase()) as T;
-
     onReady(_client: Client): void {
-        // fuckery to setup a custom event manager
-        let def = this.requireModule<DefaultEventManager>('Events');
-        let handler = new CustomEventManager(
-                this,
-                this.requireModule<CommandManager>('Commands'),
-                this.requireModule<ReactionManager>('Reactions'),
-                this.requireModule<PollManager>('Polls'));
-
-        // deactivate default manager
-        let modules = this.moduleManager.modules;
-        if (def) {
-            def.end();
-            modules = modules.filter(_ => _.name !== def.name);
-        }
-
-        // register our own and set it in opts
-        this.opts.eventHandler = handler;
-        this.registerModule(handler);
+        this.registerEventHandler(new CustomEventManager(this, this.commandManager, this.reactionHandler, this.pollHandler));        
     }
 
     registerCommands() {

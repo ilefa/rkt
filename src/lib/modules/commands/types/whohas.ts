@@ -25,7 +25,7 @@ export class WhoHasCommand extends Command {
 
         let input = args.join(' ');
         if (!input || !input.length) {
-            message.reply(this.manager.engine.embeds.build('Role Information', EmbedIconType.PREFS, `Invalid or malformed role name: ${emboss(input)}`, null, message));
+            message.reply(this.embeds.build('Role Information', EmbedIconType.PREFS, `Invalid or malformed role name: ${emboss(input)}`, null, message));
             return CommandReturn.EXIT;
         }
 
@@ -36,7 +36,7 @@ export class WhoHasCommand extends Command {
             .find(role => role.name.toLowerCase() === input.toLowerCase());
 
         if (!role) {
-            message.reply(this.manager.engine.embeds.build('Role Information', EmbedIconType.PREFS, `Unable to locate role with name ${emboss(input)}.`, null, message));
+            message.reply(this.embeds.build('Role Information', EmbedIconType.PREFS, `Unable to locate role with name ${emboss(input)}.`, null, message));
             return CommandReturn.EXIT;
         }
 
@@ -50,7 +50,7 @@ export class WhoHasCommand extends Command {
 
         let str = join(members.sort((a, b) => a.displayName.localeCompare(b.displayName)), ', ', member => asMention(member.id));
         let total = members.length + sliced;
-        message.reply(this.manager.engine.embeds.build('Role Information', EmbedIconType.PREFS,
+        message.reply(this.embeds.build('Role Information', EmbedIconType.PREFS,
             `${bold(`${total} member${numberEnding(total)} with ${name}`)}\n\n` 
                 + `${str}${sliced !== 0 ? `, ${italic(`+ ${sliced} more`)}` : ''}`, null, message)
             .setColor(color));

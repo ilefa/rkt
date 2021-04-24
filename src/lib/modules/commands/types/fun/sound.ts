@@ -114,7 +114,7 @@ export class SoundCommand extends Command {
 
         let match: string = SoundType[args[0].toUpperCase()];
         if (!match) {
-            message.reply(this.manager.engine.embeds.build('Sounds', EmbedIconType.AUDIO, `Invalid sound: ${emboss(args[0])}`, [
+            message.reply(this.embeds.build('Sounds', EmbedIconType.AUDIO, `Invalid sound: ${emboss(args[0])}`, [
                 {
                     name: `Valid Sounds (${valid.length})`,
                     value: emboss(valid.join(', ')),
@@ -126,13 +126,13 @@ export class SoundCommand extends Command {
 
         let vc = message.member.voice.channel;
         if (!vc) {
-            message.reply(this.manager.engine.embeds.build('Sounds', EmbedIconType.AUDIO, 'You must be in a voice channel to do this.', null, message));
+            message.reply(this.embeds.build('Sounds', EmbedIconType.AUDIO, 'You must be in a voice channel to do this.', null, message));
             return;
         }
 
         let permissions = vc.permissionsFor(message.client.user);
         if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
-            message.reply(this.manager.engine.embeds.build('Sounds', EmbedIconType.AUDIO, `Insufficient privileges to join ${emboss(vc.name)}!`, null, message));
+            message.reply(this.embeds.build('Sounds', EmbedIconType.AUDIO, `Insufficient privileges to join ${emboss(vc.name)}!`, null, message));
             return;
         }
 
@@ -147,7 +147,7 @@ export class SoundCommand extends Command {
 
                 dispatcher.on('finish', () => vc.leave());
             }).catch(err => {
-                message.reply(this.manager.engine.embeds.build('Sounds', EmbedIconType.AUDIO, 'An error occurred while playing sounds.', [
+                message.reply(this.embeds.build('Sounds', EmbedIconType.AUDIO, 'An error occurred while playing sounds.', [
                     {
                         name: 'Stack',
                         value: err,

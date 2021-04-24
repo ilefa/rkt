@@ -4,7 +4,17 @@ import minors from '../../../../util/uconn/minors';
 
 import { EmbedIconType } from '../../../../util';
 import { Message, Permissions, TextChannel, User } from 'discord.js';
-import { bold, Command, CommandReturn, emboss, link, PageContent, PaginatedEmbed } from '@ilefa/ivy';
+
+import {
+    bold,
+    Command,
+    CommandReturn,
+    emboss,
+    join,
+    link,
+    PageContent,
+    PaginatedEmbed
+} from '@ilefa/ivy';
 
 export type MinorData = {
     name: string;
@@ -23,28 +33,18 @@ export class MinorCommand extends Command {
         }
 
         if (args[0].toLowerCase() === 'list') {
-            let i = 0;
-            let temp: MinorData[] = [];
-            let pages: PageContent[] = [];
-            for (let minor of minors) {
-                if (i % 23 === 0 && i !== 0) {
-                    let description = '';
-                    temp.forEach(record => {
-                        description += `${link(record.name, record.url)}\n`;
-                    });
-
-                    pages.push({ description, fields: [] });
-                    temp = [];
+            let transform = (pageItems: MinorData[]): PageContent => {
+                return {
+                    description: join(pageItems, '\n', minor => `${link(minor.name, minor.url)}`),
+                    fields: []
                 }
-
-                i++;
-                temp.push(minor);
             }
 
-            PaginatedEmbed.of(this.manager.engine,
-                message.channel as TextChannel, user,
-                `UConn Minors (${minors.length})`, EmbedIconType.UCONN,
-                pages, 600000, 'https://avatars0.githubusercontent.com/u/70737187?s=200&v=4');
+            let icon = 'https://avatars0.githubusercontent.com/u/70737187?s=200&v=4';
+
+            PaginatedEmbed.ofItems<MinorData>(this.manager.engine,
+                message.channel as TextChannel, user, `UConn Minors (${minors.length})`,
+                EmbedIconType.UCONN, minors, 20, transform, 600000, icon);
 
             return CommandReturn.EXIT;
         }
@@ -57,12 +57,12 @@ export class MinorCommand extends Command {
             .get(`https://catalog.uconn.edu/minors/${query}/`)
             .then(res => res.data)
             .catch(err => {
-                this.manager.engine.logger.except(err, 'Minors', `Failed to query []`);
+                this.logger.except(err, 'Minors', `Failed to query ${query}`);
                 return null;
             });
 
         if (!data) {
-            message.reply(this.manager.engine.embeds.build('Minor Search', EmbedIconType.UCONN, `Couldn't locate any minors by descriptor ${emboss(args.join(' '))}.`, null, message));
+            message.reply(this.embeds.build('Minor Search', EmbedIconType.UCONN, `Couldn't locate any minors by the name of ${emboss(args.join(' '))}.`, null, message));
             return CommandReturn.EXIT;
         }
 
@@ -75,7 +75,7 @@ export class MinorCommand extends Command {
             str += element.text() + '\n\n';
         });
 
-        message.reply(this.manager.engine.embeds.build(`Minors » ${title.split(' Minor')[0]}`, EmbedIconType.UCONN, `${bold(title)}\n\n`
+        message.reply(this.embeds.build(`Minors » ${title.split(' Minor')[0]}`, EmbedIconType.UCONN, `${bold(title)}\n\n`
             + `:arrow_right: ${link('Course Catalog', `https://catalog.uconn.edu/minors/${query}/`)}\n\n`
             + `${bold('Description')}\n` 
             + `${str

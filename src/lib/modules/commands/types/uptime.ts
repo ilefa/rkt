@@ -16,7 +16,7 @@ export class UptimeCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        message.reply(this.manager.engine.embeds.build('Uptime', EmbedIconType.PREFS, `${bold('rkt')} has been running for ${bold(getLatestTimeValue(Date.now() - this.uptime))}.`, null, message))
+        message.reply(this.embeds.build('Uptime', EmbedIconType.PREFS, `${bold('rkt')} has been running for ${bold(getLatestTimeValue(Date.now() - this.uptime))}.`, null, message));
         return CommandReturn.EXIT;
     }
 

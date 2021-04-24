@@ -42,7 +42,7 @@ export class PollCommand extends Command {
 
         // Simple polls
         if (components.length === 1) {
-            let reply = await message.reply(this.manager.engine.embeds.build('Polls', EmbedIconType.POLL, `${italic(prompt)}\nby ${asMention(user)}`, null, message));
+            let reply = await message.reply(this.embeds.build('Polls', EmbedIconType.POLL, `${italic(prompt)}\nby ${asMention(user)}`, null, message));
             ['👍', '👎', '🤷'].map(async emote => await reply.react(emote));
 
             return CommandReturn.EXIT;
@@ -56,7 +56,7 @@ export class PollCommand extends Command {
         let question = components[0].trim();
         let responses = components.slice(1);
         if (responses.length < 2 || responses.length > 20) {
-            message.reply(this.manager.engine.embeds.build('Polls', EmbedIconType.POLL, `${responses.length < 2 ? 'Too few response groups, must have have atleast two.' : 'Too many response groups, can have twenty at most.'}`, [
+            message.reply(this.embeds.build('Polls', EmbedIconType.POLL, `${responses.length < 2 ? 'Too few response groups, must have have atleast two.' : 'Too many response groups, can have twenty at most.'}`, [
                 {
                     name: 'Valid Response Specification',
                     value: emboss('[<response>]'),
@@ -79,7 +79,7 @@ export class PollCommand extends Command {
             emotes.push(RESPONSE_GROUP_EMOJI_RAW[i]);
         })
 
-        let reply = await message.reply(this.manager.engine.embeds.build('Polls', EmbedIconType.POLL, `${italic(question)}\n` 
+        let reply = await message.reply(this.embeds.build('Polls', EmbedIconType.POLL, `${italic(question)}\n` 
             + `by ${asMention(user)}\n\n` 
             + `${bold('Responses')}\n` 
             + `${str.trim()}`, null, message));

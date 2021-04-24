@@ -5,7 +5,7 @@ import {
     bold,
     Command,
     CommandReturn,
-    CUSTOM_PERMS,
+    CustomPermissions,
     emboss,
     MultiCommand,
     replaceAll
@@ -27,13 +27,13 @@ export class HelpCommand extends Command {
 
         commands
             .filter(_cmd => !_cmd.command.hideFromHelp)
-            .filter(_cmd => this.manager.engine.has(user, _cmd.command.permission, message.guild))
+            .filter(_cmd => this.engine.has(user, _cmd.command.permission, message.guild))
             .sort((a, b) => {
-                let ap = a.command.permission === CUSTOM_PERMS.SUPER_PERMS 
+                let ap = a.command.permission === CustomPermissions.SUPER_PERMS 
                     ? -a.command.permission 
                     : a.command.permission;
                 
-                let bp = b.command.permission === CUSTOM_PERMS.SUPER_PERMS
+                let bp = b.command.permission === CustomPermissions.SUPER_PERMS
                     ? -b.command.permission
                     : b.command.permission;
 
@@ -60,17 +60,17 @@ export class HelpCommand extends Command {
             });
 
         let legend = '';
-        if (this.manager.engine.has(user, CUSTOM_PERMS.SUPER_PERMS, message.guild)) {
-            legend += `${getEmoteForCommandPermission(CUSTOM_PERMS.SUPER_PERMS)} Super User\n\t${bold('rkt')} developers and other select cool people\n\n`;
+        if (this.engine.has(user, CustomPermissions.SUPER_PERMS, message.guild)) {
+            legend += `${getEmoteForCommandPermission(CustomPermissions.SUPER_PERMS)} Super User\n\t${bold('rkt')} developers and other select cool people\n\n`;
         }
 
-        if (this.manager.engine.has(user, Permissions.FLAGS.ADMINISTRATOR, message.guild)) {
+        if (this.engine.has(user, Permissions.FLAGS.ADMINISTRATOR, message.guild)) {
             legend += `${getEmoteForCommandPermission(Permissions.FLAGS.ADMINISTRATOR)} Administrator\n\t${bold(message.guild.name)} server administrators\n\n`;
         }
 
         legend += `${getEmoteForCommandPermission(Permissions.FLAGS.SEND_MESSAGES)} Member\n\t${bold(message.guild.name)} server members`;
 
-        message.reply(this.manager.engine.embeds.build('rkt help', EmbedIconType.HELP, `${bold('rkt')} version 0.1 (master)\n` 
+        message.reply(this.embeds.build('rkt help', EmbedIconType.HELP, `${bold('rkt')} version 0.1 (master)\n` 
             + `Made with lots of :blue_heart: and :rocket: by <@177167251986841600> & <@268044207854190604>.\n\n`
             + `${bold(`Command List (${commands.length})`)}\n` 
             + helpList.trim(),

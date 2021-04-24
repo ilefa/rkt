@@ -37,7 +37,7 @@ export class ContractCommand extends Command {
         let ticker = args[0].toLowerCase();
         let strikeInput = args[1];
         if (!conforms(/(\$)*\d{1,5}\.*\d{1,5}(c|p)/, strikeInput)) {
-            message.reply(this.manager.engine.embeds.build('.contract | Argument Error', EmbedIconType.STONKS, `Invalid strike price: ${emboss(args[1])}.`, [
+            message.reply(this.embeds.build('.contract | Argument Error', EmbedIconType.STONKS, `Invalid strike price: ${emboss(args[1])}.`, [
                 {
                     name: 'Valid Strike Price',
                     value: emboss(`$<price><c|p>`),
@@ -49,7 +49,7 @@ export class ContractCommand extends Command {
         }
 
         if (!strikeInput.endsWith('c') && !strikeInput.endsWith('p')) {
-            message.reply(this.manager.engine.embeds.build('.contract | Argument Error', EmbedIconType.STONKS, `Invalid strike type: ${emboss(args[1].substring(args[1].length - 1))}.`, [
+            message.reply(this.embeds.build('.contract | Argument Error', EmbedIconType.STONKS, `Invalid strike type: ${emboss(args[1].substring(args[1].length - 1))}.`, [
                 {
                     name: 'Valid Strike Type',
                     value: emboss(`$<price><c|p>`),
@@ -70,7 +70,7 @@ export class ContractCommand extends Command {
         if (!!args[2]) {
             let date = getExpDate(args[2]);
             if (!date) {
-                message.reply(this.manager.engine.embeds.build('.contract | Argument Error', EmbedIconType.STONKS, `Invalid expiration date: ${emboss(args[2])}.`, [
+                message.reply(this.embeds.build('.contract | Argument Error', EmbedIconType.STONKS, `Invalid expiration date: ${emboss(args[2])}.`, [
                     {
                         name: 'Valid Date Specification',
                         value: emboss(`mm/dd (include year if future year)`),
@@ -82,7 +82,7 @@ export class ContractCommand extends Command {
             }
             
             if (date.getTime() < Date.now()) {
-                message.reply(this.manager.engine.embeds.build('.contract | Argument Error', EmbedIconType.STONKS, `Invalid expiration date: ${emboss(args[2])}.`, [
+                message.reply(this.embeds.build('.contract | Argument Error', EmbedIconType.STONKS, `Invalid expiration date: ${emboss(args[2])}.`, [
                     {
                         name: 'Reason',
                         value: 'You cannot query historical options data.',
@@ -98,14 +98,14 @@ export class ContractCommand extends Command {
 
         let validExps = await getExpirationDates(ticker);
         if (!validExps) {
-            message.reply(this.manager.engine.embeds.build('.contract | Error', EmbedIconType.STONKS, `Oops, I couldn't find anything for ${emboss(ticker)}.`, null, message));
+            message.reply(this.embeds.build('.contract | Error', EmbedIconType.STONKS, `Oops, I couldn't find anything for ${emboss(ticker)}.`, null, message));
             return CommandReturn.EXIT;
         }
 
         expDate = getClosestDate(expDate ? expDate : new Date(), validExps.map(millis => new Date(millis * 1000)));
         let opts = await getOptions(ticker, expDate.getTime() / 1000);
         if (!opts) {
-            message.reply(this.manager.engine.embeds.build('.contract | Error', EmbedIconType.STONKS, `Oops, I couldn't find anything for ${emboss(ticker)}.`, null, message));
+            message.reply(this.embeds.build('.contract | Error', EmbedIconType.STONKS, `Oops, I couldn't find anything for ${emboss(ticker)}.`, null, message));
             return CommandReturn.EXIT;
         }
         
@@ -139,13 +139,13 @@ export class ContractCommand extends Command {
         
         let contract = contracts.find((contract: OptionsContract) => contract.strike === strike) as OptionsContract;
         if (!contract) {
-            message.reply(this.manager.engine.embeds.build('.contract | Error', EmbedIconType.STONKS, `Couldn't find any contracts for ${emboss(ticker)} with parameters ${emboss(`$${strike}${type} (${moment(expDate).format('MM/DD')})`)}.`, null, message));
+            message.reply(this.embeds.build('.contract | Error', EmbedIconType.STONKS, `Couldn't find any contracts for ${emboss(ticker)} with parameters ${emboss(`$${strike}${type} (${moment(expDate).format('MM/DD')})`)}.`, null, message));
             return CommandReturn.EXIT;
         }
 
         expDate.setHours(expDate.getHours() + 21);
         let needsYear = expDate.getFullYear() !== new Date().getFullYear();
-        message.reply(this.manager.engine.embeds.build(`${opts.quote.symbol} $${strike} ${typeFull} - ${moment(expDate).format(`MM/DD${needsYear ? '/YYYY' : ''}`)}`, EmbedIconType.STONKS, '', [
+        message.reply(this.embeds.build(`${opts.quote.symbol} $${strike} ${typeFull} - ${moment(expDate).format(`MM/DD${needsYear ? '/YYYY' : ''}`)}`, EmbedIconType.STONKS, '', [
             {
                 name: 'Price',
                 value: `$${contract.lastPrice}`,

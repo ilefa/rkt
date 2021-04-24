@@ -40,7 +40,7 @@ export class OptionsCommand extends Command {
                 && contractType !== 'call' 
                 && contractType !== 'p' 
                 && contractType !== 'put') {
-            message.reply(this.manager.engine.embeds.build('.options | Argument Error', EmbedIconType.STONKS, `Invalid contract type: ${emboss(contractType)}.`, [
+            message.reply(this.embeds.build('.options | Argument Error', EmbedIconType.STONKS, `Invalid contract type: ${emboss(contractType)}.`, [
                 {
                     name: 'Valid Contract Types',
                     value: emboss('c[all], p[ut]'),
@@ -54,7 +54,7 @@ export class OptionsCommand extends Command {
         if (!!args[2]) {
             let date = getExpDate(args[2]);
             if (!date) {
-                message.reply(this.manager.engine.embeds.build('.options | Argument Error', EmbedIconType.STONKS, `Invalid expiration date: ${emboss(args[2])}.`, [
+                message.reply(this.embeds.build('.options | Argument Error', EmbedIconType.STONKS, `Invalid expiration date: ${emboss(args[2])}.`, [
                     {
                         name: 'Valid Date Specification',
                         value: emboss(`mm/dd (include year if future year)`),
@@ -66,7 +66,7 @@ export class OptionsCommand extends Command {
             }
             
             if (date.getTime() < Date.now()) {
-                message.reply(this.manager.engine.embeds.build('.options | Argument Error', EmbedIconType.STONKS, `Invalid expiration date: ${emboss(args[2])}.`, [
+                message.reply(this.embeds.build('.options | Argument Error', EmbedIconType.STONKS, `Invalid expiration date: ${emboss(args[2])}.`, [
                     {
                         name: 'Reason',
                         value: 'You cannot query historical options data.',
@@ -82,14 +82,14 @@ export class OptionsCommand extends Command {
 
         let validExps = await getExpirationDates(ticker);
         if (!validExps) {
-            message.reply(this.manager.engine.embeds.build('.contract | Error', EmbedIconType.STONKS, `Oops, I couldn't find anything for ${emboss(ticker)}.`, null, message));
+            message.reply(this.embeds.build('.contract | Error', EmbedIconType.STONKS, `Oops, I couldn't find anything for ${emboss(ticker)}.`, null, message));
             return CommandReturn.EXIT;
         }
 
         expDate = getClosestDate(expDate ? expDate : new Date(), validExps.map(millis => new Date(millis * 1000)));
         let opts = await getOptions(ticker, expDate.getTime());
         if (!opts) {
-            message.reply(this.manager.engine.embeds.build('.options | Error', EmbedIconType.STONKS, `Oops, I couldn't find anything for ${emboss(ticker)}.`, null, message));
+            message.reply(this.embeds.build('.options | Error', EmbedIconType.STONKS, `Oops, I couldn't find anything for ${emboss(ticker)}.`, null, message));
             return CommandReturn.EXIT;
         }
 
@@ -138,7 +138,7 @@ export class OptionsCommand extends Command {
         let expire = new Date(expDate.getTime());
         expire.setHours(expire.getHours() + 21); // UTC-fuckery
 
-        message.reply(this.manager.engine.embeds.build(`${opts.quote.displayName} Options (${moment(expire).format('MM/DD')})`, EmbedIconType.STONKS,
+        message.reply(this.embeds.build(`${opts.quote.displayName} Options (${moment(expire).format('MM/DD')})`, EmbedIconType.STONKS,
             `Listing ${contracts.length} contract${numberEnding(contracts.length)} expiring ${bold(moment(expire).fromNow())}.`, matches, message));
         return CommandReturn.EXIT;
     }

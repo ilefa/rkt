@@ -13,7 +13,7 @@ export class PermissionsCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        let isSuperPerms = this.manager.engine.opts.superPerms.includes(user.id);
+        let isSuperPerms = this.engine.opts.superPerms.includes(user.id);
         let isAdmin = message.guild.member(user).hasPermission(Permissions.FLAGS.ADMINISTRATOR);
         let permString = 'member permissions';
         if (isSuperPerms && isAdmin) {
@@ -28,7 +28,7 @@ export class PermissionsCommand extends Command {
             permString = 'admin permissions';
         }
 
-        message.reply(this.manager.engine.embeds.build(`${user.username}#${user.discriminator}'s Permissions`, user.avatarURL(),
+        message.reply(this.embeds.build(`${user.username}#${user.discriminator}'s Permissions`, user.avatarURL(),
             `${getEmoteForPermissions(isSuperPerms, isAdmin)} ${bold(user.username + '#' + user.discriminator)} has ${permString}.`, [], message));
         return CommandReturn.EXIT;
     }

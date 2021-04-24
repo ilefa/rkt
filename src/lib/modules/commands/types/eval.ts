@@ -4,10 +4,10 @@ import { EmbedIconType } from '../../../util';
 import {
     emboss,
     bold,
-    CUSTOM_PERMS,
     CommandReturn,
     codeBlock,
-    Command
+    Command,
+    CustomPermissions
 } from '@ilefa/ivy';
 
 const HEADER = /^`{3}(?:ts|js)\n/;
@@ -29,7 +29,7 @@ export class EvalCommand extends Command {
                      + ` • You must use type JS or TS as the language specifier.`,
                 inline: false
             }
-        ], CUSTOM_PERMS.SUPER_PERMS, false);
+        ], CustomPermissions.SUPER_PERMS, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -46,7 +46,7 @@ export class EvalCommand extends Command {
 
         try {
             let res = eval(exec);
-            message.reply(this.manager.engine.embeds.build('Eval', EmbedIconType.TEST, '', [
+            message.reply(this.embeds.build('Eval', EmbedIconType.TEST, '', [
                 {
                     name: 'Command',
                     value: codeBlock('ts', exec),
@@ -59,7 +59,7 @@ export class EvalCommand extends Command {
                 }
             ], message));
         } catch (e) {
-            message.reply(this.manager.engine.embeds.build('Eval', EmbedIconType.ERROR, 'Encountered an exception while executing your request.', [
+            message.reply(this.embeds.build('Eval', EmbedIconType.ERROR, 'Encountered an exception while executing your request.', [
                 {
                     name: 'Command',
                     value: codeBlock('ts', exec),

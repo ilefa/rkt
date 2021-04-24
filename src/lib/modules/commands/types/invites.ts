@@ -17,7 +17,7 @@ export class InvitesCommand extends Command {
 
         let invites = await message.guild.fetchInvites();
         if (!invites || invites.size === 0) {
-            message.reply(this.manager.engine.embeds.build('Invites Overview', EmbedIconType.JACK, `There are no available invites for ${emboss(message.guild.name)}.`, null, message));
+            message.reply(this.embeds.build('Invites Overview', EmbedIconType.JACK, `There are no available invites for ${emboss(message.guild.name)}.`, null, message));
             return CommandReturn.EXIT;
         }
         
@@ -30,7 +30,7 @@ export class InvitesCommand extends Command {
                 str += `${bold(invite.uses.toLocaleString() + ' uses')} - ${bold(invite.code)} by ${asMention(invite.inviter)} ${emboss(`created ${moment(invite.createdAt).format('MMM Do, YYYY')})`)}\n`;
             });
 
-        message.reply(this.manager.engine.embeds.build('Invites Overview', EmbedIconType.JACK, str.trimEnd(), null, message));
+        message.reply(this.embeds.build('Invites Overview', EmbedIconType.JACK, str.trimEnd(), null, message));
         return CommandReturn.EXIT;
     }
 

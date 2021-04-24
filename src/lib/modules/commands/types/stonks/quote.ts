@@ -61,7 +61,7 @@ export class QuoteCommand extends Command {
 
         let res = await quote(ticker, range, interval);
         if (!res) {
-            message.reply(this.manager.engine.embeds.build('.quote | Error', EmbedIconType.STONKS, `Couldn't find any results for ticker ${emboss(ticker)}.`, null, message));
+            message.reply(this.embeds.build('.quote | Error', EmbedIconType.STONKS, `Couldn't find any results for ticker ${emboss(ticker)}.`, null, message));
             endLoader(loader);
             return CommandReturn.EXIT;
         }
@@ -69,7 +69,7 @@ export class QuoteCommand extends Command {
         let opt = await getOptions(ticker);
         let payload = res.indicators.quote[0].close;
         if (!payload) {
-            message.reply(this.manager.engine.embeds.build('.quote | Error', EmbedIconType.STONKS, `An unknown error occurred while quoting ${emboss(ticker)}.`, null, message));
+            message.reply(this.embeds.build('.quote | Error', EmbedIconType.STONKS, `An unknown error occurred while quoting ${emboss(ticker)}.`, null, message));
             endLoader(loader);
             return CommandReturn.EXIT;
         }
@@ -120,7 +120,7 @@ export class QuoteCommand extends Command {
         
         endLoader(loader);
 
-        message.reply(this.manager.engine.embeds.build(`${opt.quote.displayName ? opt.quote.displayName : ticker}`, EmbedIconType.STONKS,
+        message.reply(this.embeds.build(`${opt.quote.displayName ? opt.quote.displayName : ticker}`, EmbedIconType.STONKS,
             `Retrieved quote data for ${bold(ticker)} for the last ${emboss(`${range} (${interval})`)}.`,
             [
                 {

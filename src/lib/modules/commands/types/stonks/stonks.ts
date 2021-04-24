@@ -13,7 +13,7 @@ export class StonksCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        message.reply(this.manager.engine.embeds.build('Stonks Bot', EmbedIconType.STONKS, 'stonks. only. go. up.\n' 
+        message.reply(this.embeds.build('Stonks Bot', EmbedIconType.STONKS, 'stonks. only. go. up.\n' 
             + 'anyone who tells you otherwise is in kahoots with the SEC, the stock exchanges, and the banks. dont trust (or bet on) the banks.\n' 
             + 'they are trying to take over everything.\n' 
             + 'we ride at dawn and will take back what is ours.\n\n'
@@ -28,6 +28,7 @@ export class StonksCommand extends Command {
             
             + ':rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket:\n\n' 
             + 'made by <@177167251986841600> & <@268044207854190604>', null, message));
+            
         return CommandReturn.EXIT;
     }
 

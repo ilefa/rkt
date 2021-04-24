@@ -1,11 +1,11 @@
 import { User, Message } from 'discord.js';
 import { EmbedIconType } from '../../../util';
-import { Command, CommandReturn, CUSTOM_PERMS, emboss } from '@ilefa/ivy';
+import { Command, CommandReturn, CustomPermissions, emboss } from '@ilefa/ivy';
 
 export class FlowCommand extends Command {
 
     constructor() {
-        super('flow', `Invalid usage: ${emboss('.flow <name>')}`, null, [], CUSTOM_PERMS.SUPER_PERMS, false);
+        super('flow', `Invalid usage: ${emboss('.flow <name>')}`, null, [], CustomPermissions.SUPER_PERMS, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -15,7 +15,7 @@ export class FlowCommand extends Command {
 
         let flow = this.manager.findFlow(args[0]);
         if (!flow) {
-            message.reply(this.manager.engine.embeds.build('Test Flow Manager', EmbedIconType.TEST, `Invalid flow: ${emboss(args[0])}.`, null, message));
+            message.reply(this.embeds.build('Test Flow Manager', EmbedIconType.TEST, `Invalid flow: ${emboss(args[0])}.`, null, message));
             return CommandReturn.EXIT;
         }
 

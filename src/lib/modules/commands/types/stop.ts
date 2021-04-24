@@ -5,7 +5,7 @@ import {
     bold,
     Command,
     CommandReturn,
-    CUSTOM_PERMS,
+    CustomPermissions,
     emboss,
     ModuleManager
 } from '@ilefa/ivy';
@@ -15,7 +15,7 @@ export class StopCommand extends Command {
     moduleManager: ModuleManager;
 
     constructor(moduleManager: ModuleManager) {
-        super('stop', `Invalid usage: ${emboss('.stop')}`, 'change da world, my final message... goodbye', [], CUSTOM_PERMS.SUPER_PERMS, false);
+        super('stop', `Invalid usage: ${emboss('.stop')}`, 'change da world, my final message... goodbye', [], CustomPermissions.SUPER_PERMS, false);
         this.moduleManager = moduleManager;
     }
 
@@ -24,7 +24,7 @@ export class StopCommand extends Command {
             return CommandReturn.HELP_MENU;
         }
 
-        message.reply(this.manager.engine.embeds.build('rkt', EmbedIconType.PREFS, `Please confirm shutdown by responding with ${bold('Y(ES)')}.`, null, message));
+        message.reply(this.embeds.build('rkt', EmbedIconType.PREFS, `Please confirm shutdown by responding with ${bold('Y(ES)')}.`, null, message));
         message.channel.awaitMessages((message: Message) => message && message.author.id === user.id,
             {
                 max: 1,
@@ -36,7 +36,7 @@ export class StopCommand extends Command {
                 if (!msg 
                         || msg.content.toLowerCase() !== 'y' 
                         && msg.content.toLowerCase() !== 'yes') {
-                    msg.reply(this.manager.engine.embeds.build('rkt', EmbedIconType.PREFS, 'Shutdown cancelled.', null, message));
+                    msg.reply(this.embeds.build('rkt', EmbedIconType.PREFS, 'Shutdown cancelled.', null, message));
                     return;
                 }
 
@@ -45,13 +45,13 @@ export class StopCommand extends Command {
                 msg.channel.send(attachment);
 
                 setTimeout(() => {
-                    this.manager.engine.logger.info('rkt', 'Shutting down.');
+                    this.logger.info('rkt', 'Shutting down.');
                     this.moduleManager.disable();
                     message.client.destroy();
                     process.exit();
                 }, 5000);
             })
-            .catch(() => message.channel.send(this.manager.engine.embeds.build('rkt', EmbedIconType.PREFS, 'Shutdown confirmation timed out.', null, message)))
+            .catch(() => message.channel.send(this.embeds.build('rkt', EmbedIconType.PREFS, 'Shutdown confirmation timed out.', null, message)))
         return CommandReturn.EXIT;
     }
 

@@ -15,7 +15,7 @@ export class DisconnectCommand extends Command {
 
         let vc = message.guild.voice;
         if (!vc) {
-            message.reply(this.manager.engine.embeds.build('Audio', EmbedIconType.AUDIO, `${bold('rkt')} isn\'t connected to a voice channel.`, null, message));
+            message.reply(this.embeds.build('Audio', EmbedIconType.AUDIO, `${bold('rkt')} isn\'t connected to a voice channel.`, null, message));
             return CommandReturn.EXIT;
         }
 

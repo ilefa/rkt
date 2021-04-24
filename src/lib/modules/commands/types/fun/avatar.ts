@@ -11,7 +11,7 @@ export class AvatarCommand extends Command {
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
         let target: User = await findUser(message, args[0], null);
         if (!target) {
-            message.reply(this.manager.engine.embeds.build(`.avatar | Error`, EmbedIconType.ERROR, `Invalid or unknown target: ${emboss(args[0] || '[missing]')}`, null, message));
+            message.reply(this.embeds.build(`.avatar | Error`, EmbedIconType.ERROR, `Invalid or unknown target: ${emboss(args[0] || '[missing]')}`, null, message));
             return CommandReturn.EXIT;
         }
 

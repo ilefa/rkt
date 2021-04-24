@@ -1,10 +1,10 @@
 import { Message, User } from 'discord.js';
-import { Command, CommandReturn, CUSTOM_PERMS, emboss } from '@ilefa/ivy';
+import { Command, CommandReturn, CustomPermissions, emboss } from '@ilefa/ivy';
 
 export class SayCommand extends Command {
 
     constructor() {
-        super('say', `Invalid usage: ${emboss('.say <message..>')}`, null, [], CUSTOM_PERMS.SUPER_PERMS);
+        super('say', `Invalid usage: ${emboss('.say <message..>')}`, null, [], CustomPermissions.SUPER_PERMS);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

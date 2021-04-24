@@ -7,7 +7,7 @@ import {
     asMention,
     Command,
     CommandReturn,
-    CUSTOM_PERMS,
+    CustomPermissions,
     emboss,
     mentionChannel
 } from '@ilefa/ivy';
@@ -15,7 +15,7 @@ import {
 export class PrefsCommand extends Command {
 
     constructor() {
-        super('prefs', `Invalid usage: ${emboss('.prefs')}`, null, [], CUSTOM_PERMS.SUPER_PERMS, false);
+        super('prefs', `Invalid usage: ${emboss('.prefs')}`, null, [], CustomPermissions.SUPER_PERMS, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -38,7 +38,7 @@ export class PrefsCommand extends Command {
             verbose += ` • ${emboss(server)}\n`;
         });
 
-        message.reply(this.manager.engine.embeds.build('rkt preferences', EmbedIconType.PREFS, '', [
+        message.reply(this.embeds.build('rkt preferences', EmbedIconType.PREFS, '', [
             {
                 name: 'SuperPerms Users',
                 value: superPerms,

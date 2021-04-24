@@ -4,7 +4,7 @@ import MA from 'moving-average';
 import { MACD, RSI } from 'trading-signals';
 import { Guild, Message, Permissions } from 'discord.js';
 import { PriceList, RangeGranularity, StonkQuote } from '../stonk';
-import { CUSTOM_PERMS, getArrowEmoteForData, getDurationWithUnit, toWords } from '@ilefa/ivy';
+import { CustomPermissions, getArrowEmoteForData, getDurationWithUnit } from '@ilefa/ivy';
 
 export const SNOWFLAKE_REGEX = /^\d{18,}$/;
 export const EMOTE_REGEX = /<(a|):\w+:\d{18,}>/;
@@ -243,7 +243,7 @@ export const getEmoteForPermissions = (superPerms: boolean, admin: boolean) => {
 }
 
 export const getEmoteForCommandPermission = (permission: number) => {
-    if (permission === CUSTOM_PERMS.SUPER_PERMS) return ':eight_spoked_asterisk:';
+    if (permission === CustomPermissions.SUPER_PERMS) return ':eight_spoked_asterisk:';
     if (permission === Permissions.FLAGS.ADMINISTRATOR) return ':a:';
     return ':regional_indicator_m:';
 }

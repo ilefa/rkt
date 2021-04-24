@@ -26,7 +26,7 @@ import {
 export class SectionCommand extends Command {
 
     constructor() {
-        super('section', `Invalid usage: ${emboss('.section <course> <name>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
+        super('section', `Invalid usage: ${emboss('.section <course> <identifier>')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -132,7 +132,7 @@ export class SectionCommand extends Command {
 
         endLoader(loader);
 
-        message.reply(this.manager.engine.embeds.build('Course Search', EmbedIconType.UCONN, `${bold(`${name} - Section ${res.section}`)}\n\n`
+        message.reply(this.embeds.build('Course Search', EmbedIconType.UCONN, `${bold(`${name} - Section ${res.section}`)}\n\n`
             + `:arrow_right: ${link('Course Catalog', target)}\n`
             + `:hash: Credits: ${bold(credits)}\n` 
             + `:asterisk: Grading Type: ${bold(grading)}\n\n`
@@ -145,7 +145,7 @@ export class SectionCommand extends Command {
                 },
                 {
                     name: `Section Information`,
-                    value: `${bold(`Section ${section}`)} is taught by ${bold(res.instructor)}${rmpLinks}.\n\n`
+                    value: `${bold(`Section ${section}`)} is taught by ${bold(res.instructor)} ${rmpLinks}.\n\n`
                          + `This section ${location}.\n` 
                          + `${getEmoteForEnrollmentState(enrollment)} This section ${!enrollment.overfill ? '' : 'is '}currently ${!enrollment.overfill ? 'has' : ''} ${enrollment.overfill 
                                 ? (enrollment.available === enrollment.total 
