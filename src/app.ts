@@ -1,170 +1,172 @@
 import env from '../env.json';
-import discord from 'discord.js';
+import Watermark from './lib/startup';
+import DataProvider from './lib/data';
+import PollManager from './lib/modules/poll';
+import CustomEventManager from './lib/modules/events';
+import ReactionManager from './lib/modules/reactions/manager';
 
-import ModuleManager from './lib/module/manager';
-import PollManager from './lib/module/modules/poll';
-import EventManager from './lib/module/modules/events';
-import Announcer from './lib/module/modules/announcer';
-import XpTracker from './lib/module/modules/xp/tracker';
-import BirthdayManager from './lib/module/modules/birthday';
-import CommandManager from './lib/module/modules/commands/manager';
-import CountHerManager from './lib/module/modules/counther/manager';
-import ReactionManager from './lib/module/modules/reactions/manager';
-// import VoiceBoardManager from './lib/module/modules/vcboard/manager';
-
-import * as Logger from './lib/logger';
+import { Client } from 'discord.js';
 
 import {
-    AlertsCommand,
+    CommandManager,
+    DefaultEventManager,
+    IvyEngine,
+    Logger,
+    Module
+} from '@ilefa/ivy';
+
+import {
+    DeleteMessageReactionHandler,
+    OnlyGoesUpReactionHandler
+} from './lib/modules/reactions';
+
+import {
     AvatarCommand,
     BigJannieCommand,
-    BirthdayCommand,
     ContractCommand,
-    CountHerCommand,
     CourseCommand,
     DisconnectCommand,
     EvalCommand,
+    FlowCommand,
     FuturesCommand,
     HelpCommand,
     InvitesCommand,
-    IsMarketOpenCommand,
-    JackCommand,
     KingCommand,
     MaldCommand,
     MembersCommand,
     MinorCommand,
     OptionsCommand,
-    PassFailCommand,
     PermissionsCommand,
+    QuoteCommand,
     PollCommand,
     PrefsCommand,
-    PurgeCommand,
-    QuoteCommand,
-    ReactCommand,
     SayCommand,
     SectionCommand,
     SoundCommand,
-    StackCommand,
     StimmyCommand,
-    StonksCommand,
-    StopCommand,
-    TestGameEmbedCommand,
-    UpdateCommand,
-    UptimeCommand,
-    VersionCommand,
-    // VoiceAdminCommand,
-    // VoiceBoardCommand,
-    // VoiceRankCommand,
-    WhoHasCommand,
-    XpBoardCommand,
-    XpCompareCommand,
-    XpRankCommand,
-    XpTopCommand,
-    XpTrackCommand,
-    YtPlayCommand
-} from './lib/module/modules/commands'; 
+    StonksCommand, 
+    StopCommand, 
+    UpdateCommand, 
+    UptimeCommand, 
+    VersionCommand, 
+    WhereAmIFlow,
+    WhoHasCommand, 
+    YtPlayCommand,
+} from './lib/modules/commands';
 
-import {
-    DeleteMessageReactionHandler,
-    OnlyGoesUpReactionHandler
-} from './lib/module/modules/reactions';
+export default class RktBot extends IvyEngine {
 
-import { printStartup } from './lib/startup';
-import { getCurrentVersion, getReleaseChannel } from './lib/util/vcs';
+    pollHandler: PollManager;
+    reactionHandler: ReactionManager;
 
-const start = Date.now();
-const client = new discord.Client({
-    partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-    fetchAllMembers: true,
-});
+    constructor() {
+        super({
+            token: env.token,
+            name: 'rkt',
+            logger: new Logger(),
+            gitRepo: 'ilefa/rkt',
+            superPerms: [
+                '177167251986841600',
+                '268044207854190604',
+                '248149168323821569',
+                '592924575831031821',
+                '140520164629151744',
+                '224566699448336384'
+            ],
+            reportErrors: [
+                '785050947407052821'
+            ],
+            color: 0x27AE60,
+            provider: new DataProvider(),
+            startup: new Watermark(),
+            presence: {
+                status: 'online',
+                activity: {
+                    type: 'LISTENING',
+                    name: 'rocket thrusters',
+                    url: 'https://open.spotify.com/track/7GhIk7Il098yCjg4BQjzvb?si=FOvlyk-xQ_q50JIUVi_vNg',
+                }
+            },
+            discord: {
+                partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+                fetchAllMembers: true,
+            },
+        })
+    }
 
-const moduleManager = new ModuleManager(client);
-const commandCenter = new CommandManager(client);
-const countHerManager = new CountHerManager(client);
-const birthdayManager = new BirthdayManager(client);
-// const voiceBoardManager = new VoiceBoardManager(client);
-const reactionManager = new ReactionManager();
-const pollManager = new PollManager();
+    private requireModule = <T extends Module>(name: string) =>
+        this
+            .moduleManager
+            .modules
+            .find(module => module.name.toLowerCase() === name.toLowerCase()) as T;
 
-commandCenter.registerCommand('alerts', new AlertsCommand());
-commandCenter.registerCommand('avatar', new AvatarCommand());
-commandCenter.registerCommand('bigjannie', new BigJannieCommand());
-commandCenter.registerCommand('birthday', new BirthdayCommand(birthdayManager));
-commandCenter.registerCommand('contract', new ContractCommand());
-commandCenter.registerCommand('counther', new CountHerCommand(countHerManager));
-commandCenter.registerCommand('course', new CourseCommand());
-commandCenter.registerCommand('dc', new DisconnectCommand());
-commandCenter.registerCommand('eval', new EvalCommand());
-commandCenter.registerCommand('futures', new FuturesCommand());
-commandCenter.registerCommand('help', new HelpCommand());
-commandCenter.registerCommand('invites', new InvitesCommand());
-commandCenter.registerCommand('ismarketopen', new IsMarketOpenCommand());
-commandCenter.registerCommand('jack', new JackCommand());
-commandCenter.registerCommand('king', new KingCommand());
-commandCenter.registerCommand('mald', new MaldCommand());
-commandCenter.registerCommand('members', new MembersCommand());
-commandCenter.registerCommand('minor', new MinorCommand());
-commandCenter.registerCommand('options', new OptionsCommand());
-commandCenter.registerCommand('perms', new PermissionsCommand());
-commandCenter.registerCommand('quote', new QuoteCommand());
-commandCenter.registerCommand('pf', new PassFailCommand());
-commandCenter.registerCommand('poll', new PollCommand());
-commandCenter.registerCommand('prefs', new PrefsCommand());
-commandCenter.registerCommand('purge', new PurgeCommand());
-commandCenter.registerCommand('react', new ReactCommand());
-commandCenter.registerCommand('say', new SayCommand());
-commandCenter.registerCommand('section', new SectionCommand());
-commandCenter.registerCommand('sound', new SoundCommand());
-commandCenter.registerCommand('stack', new StackCommand());
-commandCenter.registerCommand('stimmy', new StimmyCommand());
-commandCenter.registerCommand('stonks', new StonksCommand());
-commandCenter.registerCommand('stop', new StopCommand(moduleManager));
-commandCenter.registerCommand('tge', new TestGameEmbedCommand());
-commandCenter.registerCommand('update', new UpdateCommand());
-commandCenter.registerCommand('uptime', new UptimeCommand(start));
-// commandCenter.registerCommand('vcadmin', new VoiceAdminCommand(voiceBoardManager));
-// commandCenter.registerCommand('vcboard', new VoiceBoardCommand(voiceBoardManager));
-// commandCenter.registerCommand('vcrank', new VoiceRankCommand(voiceBoardManager));
-commandCenter.registerCommand('version', new VersionCommand());
-commandCenter.registerCommand('whohas', new WhoHasCommand());
-commandCenter.registerCommand('xpboard', new XpBoardCommand());
-commandCenter.registerCommand('xpcompare', new XpCompareCommand());
-commandCenter.registerCommand('xprank', new XpRankCommand());
-commandCenter.registerCommand('xptop', new XpTopCommand());
-commandCenter.registerCommand('xptrack', new XpTrackCommand());
-commandCenter.registerCommand('ytplay', new YtPlayCommand());
+    onReady(_client: Client): void {
+        // fuckery to setup a custom event manager
+        let def = this.requireModule<DefaultEventManager>('Events');
+        let handler = new CustomEventManager(
+                this,
+                this.requireModule<CommandManager>('Commands'),
+                this.requireModule<ReactionManager>('Reactions'),
+                this.requireModule<PollManager>('Polls'));
 
-reactionManager.registerHandler('delete', new DeleteMessageReactionHandler());
-reactionManager.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());
-
-printStartup();
-
-moduleManager.registerModule(commandCenter);
-moduleManager.registerModule(countHerManager);
-moduleManager.registerModule(birthdayManager);
-moduleManager.registerModule(reactionManager);
-// moduleManager.registerModule(voiceBoardManager);
-moduleManager.registerModule(new Announcer(client));
-moduleManager.registerModule(new EventManager(commandCenter,
-                                              countHerManager,
-                                              reactionManager,
-                                              pollManager));
-
-moduleManager.registerModule(new XpTracker());
-moduleManager.init();
-
-client.on('ready', async () => {
-    Logger.info('rkt', `Release channel: ${await getReleaseChannel()}, version: ${await getCurrentVersion()}`);
-    Logger.info('rkt', 'Successfully connected to Discord.');
-
-    client.user.setPresence({
-        status: 'online',
-        activity: {
-            type: 'LISTENING',
-            name: 'rocket thrusters',
-            url: 'https://open.spotify.com/track/7GhIk7Il098yCjg4BQjzvb?si=FOvlyk-xQ_q50JIUVi_vNg',
+        // deactivate default manager
+        let modules = this.moduleManager.modules;
+        if (def) {
+            def.end();
+            modules = modules.filter(_ => _.name !== def.name);
         }
-    });
-});
 
-client.login(env.token);
+        // register our own and set it in opts
+        this.opts.eventHandler = handler;
+        this.registerModule(handler);
+    }
+
+    registerCommands() {
+        this.registerCommand('avatar', new AvatarCommand());
+        this.registerCommand('bigjannie', new BigJannieCommand());
+        this.registerCommand('contract', new ContractCommand());
+        this.registerCommand('course', new CourseCommand());
+        this.registerCommand('dc', new DisconnectCommand());
+        this.registerCommand('eval', new EvalCommand());
+        this.registerCommand('flow', new FlowCommand());
+        this.registerCommand('futures', new FuturesCommand());
+        this.registerCommand('help', new HelpCommand());
+        this.registerCommand('invites', new InvitesCommand());
+        this.registerCommand('king', new KingCommand());
+        this.registerCommand('mald', new MaldCommand());
+        this.registerCommand('members', new MembersCommand());
+        this.registerCommand('minor', new MinorCommand());
+        this.registerCommand('options', new OptionsCommand());
+        this.registerCommand('perms', new PermissionsCommand());
+        this.registerCommand('quote', new QuoteCommand());
+        this.registerCommand('poll', new PollCommand());
+        this.registerCommand('prefs', new PrefsCommand());
+        this.registerCommand('say', new SayCommand());
+        this.registerCommand('section', new SectionCommand());
+        this.registerCommand('sound', new SoundCommand());
+        this.registerCommand('stimmy', new StimmyCommand());
+        this.registerCommand('stonks', new StonksCommand());
+        this.registerCommand('stop', new StopCommand(this.moduleManager));
+        this.registerCommand('update', new UpdateCommand());
+        this.registerCommand('uptime', new UptimeCommand(this.start));
+        this.registerCommand('version', new VersionCommand());
+        this.registerCommand('whohas', new WhoHasCommand());
+        this.registerCommand('ytplay', new YtPlayCommand());
+    }
+
+    registerModules() {
+        this.reactionHandler = new ReactionManager();
+        this.reactionHandler.registerHandler('delete', new DeleteMessageReactionHandler());
+        this.reactionHandler.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());
+        this.registerModule(this.reactionHandler);
+
+        this.registerModule(this.pollHandler = new PollManager());
+    }
+
+    registerFlows() {
+        this.registerFlow(new WhereAmIFlow());
+    }
+
+}
+
+new RktBot();

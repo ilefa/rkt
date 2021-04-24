@@ -1,6 +1,7 @@
 import env from '../env.json';
 import discord from 'discord.js';
-import { join } from '../src/lib/util';
+
+import { join } from '@ilefa/ivy';
 
 let client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 

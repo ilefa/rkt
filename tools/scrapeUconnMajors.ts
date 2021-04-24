@@ -2,7 +2,7 @@ import axios from 'axios';
 import cheerio from 'cheerio';
 import tableparse from 'cheerio-tableparser';
 
-import { timeDiff } from '../src/lib/util';
+import { timeDiff } from '@ilefa/ivy';
 
 type MajorData = {
     name: string;

@@ -4,7 +4,7 @@ import moment from 'moment';
 import cheerio from 'cheerio';
 import tableparse from 'cheerio-tableparser';
 
-import { replaceAll } from '.';
+import { replaceAll } from '@ilefa/ivy';
 import { decode as decodeEntity } from 'html-entities';
 
 export const COURSE_IDENTIFIER = /^[a-zA-Z]{2,4}\d{4}(Q|E|W)*$/;

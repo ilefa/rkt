@@ -1,4 +1,4 @@
-import { getClosestMatches } from "../src/lib/util";
+import { getClosestMatches } from "@ilefa/ivy";
 
 const valid = [
     'average',

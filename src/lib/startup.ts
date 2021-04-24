@@ -1,10 +1,11 @@
 import moment from 'moment';
-import * as Logger from './logger';
 
-import { Colors } from './logger';
+import { Colors, IvyEngine, StartupRunnable } from '@ilefa/ivy';
 
-export async function printStartup() {
-Logger.unlisted(Colors.GREEN + `
+export default class Watermark implements StartupRunnable {
+    run(engine: IvyEngine): void {
+        let { logger } = engine;
+logger.unlisted(Colors.GREEN + `
                    |
                   / \\
                  / _ \\            _    _   
@@ -15,7 +16,8 @@ Logger.unlisted(Colors.GREEN + `
              /  |  |  |  \\
              |,-'--|--'-.|                                            
 ` + Colors.RESET);
-Logger.unlisted(`            Booting ${Logger.wrap(Colors.GREEN, 'rkt')} version ${Logger.wrap(Colors.DIM, '0.1 (master)')}`);
-Logger.unlisted(`                  ILEFA Labs (c) ${moment().format('YYYY')}`);
-Logger.unlisted(``);
+logger.unlisted(`            Booting ${logger.wrap(Colors.GREEN, 'rkt')} version ${logger.wrap(Colors.DIM, '0.1 (master)')}`);
+logger.unlisted(`                  ILEFA Labs (c) ${moment().format('YYYY')}`);
+logger.unlisted(``);
+    }
 }
