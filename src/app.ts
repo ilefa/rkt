@@ -46,6 +46,7 @@ import {
     WhoHasCommand, 
     YtPlayCommand,
 } from './lib/modules/commands';
+import { GetRealCommand } from './lib/modules/commands/types/fun/getreal';
 
 export default class RktBot extends IvyEngine {
 
@@ -100,6 +101,7 @@ export default class RktBot extends IvyEngine {
         this.registerCommand('eval', new EvalCommand());
         this.registerCommand('flow', new FlowCommand());
         this.registerCommand('futures', new FuturesCommand());
+        this.registerCommand('getreal', new GetRealCommand());
         this.registerCommand('help', new HelpCommand());
         this.registerCommand('invites', new InvitesCommand());
         this.registerCommand('king', new KingCommand());
