@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import { Message, Permissions, TextChannel, User } from 'discord.js';
-import { CampusType, ProfessorData, searchCourse } from '../../../../util/uconn';
+import { CampusType, ProfessorData, searchCourse } from '@ilefa/husky';
 import { EmbedIconType, getCampusIndicator, MessageLoader } from '../../../../util';
 
 import {

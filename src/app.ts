@@ -38,15 +38,17 @@ import {
     SoundCommand,
     StimmyCommand,
     StonksCommand, 
-    StopCommand, 
+    StopCommand,
     UpdateCommand, 
     UptimeCommand, 
     VersionCommand, 
     WhereAmIFlow,
     WhoHasCommand, 
     YtPlayCommand,
+    GetRealCommand,
+    UConnStatusCommand,
+    FunnyCommand,
 } from './lib/modules/commands';
-import { GetRealCommand } from './lib/modules/commands/types/fun/getreal';
 
 export default class RktBot extends IvyEngine {
 
@@ -100,6 +102,7 @@ export default class RktBot extends IvyEngine {
         this.registerCommand('dc', new DisconnectCommand());
         this.registerCommand('eval', new EvalCommand());
         this.registerCommand('flow', new FlowCommand());
+        this.registerCommand('funny', new FunnyCommand());
         this.registerCommand('futures', new FuturesCommand());
         this.registerCommand('getreal', new GetRealCommand());
         this.registerCommand('help', new HelpCommand());
@@ -119,6 +122,7 @@ export default class RktBot extends IvyEngine {
         this.registerCommand('stimmy', new StimmyCommand());
         this.registerCommand('stonks', new StonksCommand());
         this.registerCommand('stop', new StopCommand(this.moduleManager));
+        this.registerCommand('ucs', new UConnStatusCommand());
         this.registerCommand('update', new UpdateCommand());
         this.registerCommand('uptime', new UptimeCommand(this.start));
         this.registerCommand('version', new VersionCommand());

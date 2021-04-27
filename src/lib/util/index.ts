@@ -2,6 +2,7 @@ import axios from 'axios';
 import MA from 'moving-average';
 
 import { MACD, RSI } from 'trading-signals';
+import { EnrollmentPayload } from '@ilefa/husky';
 import { Guild, Message, Permissions } from 'discord.js';
 import { PriceList, RangeGranularity, StonkQuote } from '../stonk';
 import { CustomPermissions, getArrowEmoteForData, getDurationWithUnit } from '@ilefa/ivy';
@@ -246,6 +247,13 @@ export const getEmoteForCommandPermission = (permission: number) => {
     if (permission === CustomPermissions.SUPER_PERMS) return ':eight_spoked_asterisk:';
     if (permission === Permissions.FLAGS.ADMINISTRATOR) return ':a:';
     return ':regional_indicator_m:';
+}
+
+export const getEmoteForEnrollmentState = (state: EnrollmentPayload) => {
+    if (state.overfill && state.available !== state.total) return ':no_entry_sign:';
+    if (state.overfill) return ':x:';
+    if (state.percent > 0.9) return ':octagonal_sign:';
+    return ':white_check_mark:';
 }
 
 /**

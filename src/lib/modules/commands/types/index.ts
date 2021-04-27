@@ -2,6 +2,8 @@
 export * from './fun/avatar';
 export * from './fun/bigjannie';
 export * from './fun/disconnect';
+export * from './fun/funny';
+export * from './fun/getreal';
 export * from './fun/king';
 export * from './fun/mald';
 export * from './fun/poll';
@@ -21,6 +23,7 @@ export * from './stonks/stonks';
 export * from './uconn/course';
 export * from './uconn/minor';
 export * from './uconn/section';
+export * from './uconn/status';
 
 // General Commands
 export * from './eval';

@@ -1,14 +1,13 @@
-import { EmbedIconType } from '../../../../util';
 import { Message, Permissions, User } from 'discord.js';
+import { EmbedIconType, getEmoteForEnrollmentState } from '../../../../util';
 
 import {
     COURSE_IDENTIFIER,
-    getEmoteForEnrollmentState,
+    SECTION_IDENTIFIER,
     getRawEnrollment,
     searchBySection,
-    searchRMP,
-    SECTION_IDENTIFIER
-} from '../../../../util/uconn';
+    searchRMP
+} from '@ilefa/husky';
 
 import {
     bold,
