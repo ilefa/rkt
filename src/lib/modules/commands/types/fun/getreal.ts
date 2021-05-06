@@ -30,7 +30,8 @@ const weightedMap = new Map<string, number>()
     .set('https://tenor.com/view/get-real-stickman-neon-dance-dancing-gif-20592187', 1)
     .set('https://tenor.com/view/getreal-get-real-please-do-not-get-fake-gif-20594592', 1)
     .set('https://tenor.com/view/sonic-the-hedgehog-sonic-get-real-get-real-gif-19386744', 1)
-    .set('https://tenor.com/view/get-real-fortnite-gif-20397038', 1);
+    .set('https://tenor.com/view/get-real-fortnite-gif-20397038', 1)
+    .set('https://tenor.com/view/get-real-mario-karc-mario-kart-gif-21001616', 1);
 
 export class GetRealCommand extends Command {
     
