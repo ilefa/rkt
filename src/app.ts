@@ -2,6 +2,7 @@ import env from '../env.json';
 import Watermark from './lib/startup';
 import DataProvider from './lib/data';
 import PollManager from './lib/modules/poll';
+import AudioManager from './lib/modules/audio';
 import CustomEventManager from './lib/modules/events';
 
 import { Client } from 'discord.js';
@@ -21,7 +22,9 @@ import {
     DisconnectCommand,
     EvalCommand,
     FlowCommand,
+    FunnyCommand,
     FuturesCommand,
+    GetRealCommand,
     HelpCommand,
     InvitesCommand,
     KingCommand,
@@ -31,28 +34,32 @@ import {
     OptionsCommand,
     PermissionsCommand,
     QuoteCommand,
+    PauseCommand,
+    PlayCommand,
     PollCommand,
     PrefsCommand,
+    QueueCommand,
     SayCommand,
     SectionCommand,
+    SkipCommand,
     SoundCommand,
     StimmyCommand,
     StonksCommand, 
     StopCommand,
+    UConnStatusCommand,
     UpdateCommand, 
     UptimeCommand, 
     VersionCommand, 
+    VolumeCommand,
     WhereAmIFlow,
-    WhoHasCommand, 
-    YtPlayCommand,
-    GetRealCommand,
-    UConnStatusCommand,
-    FunnyCommand,
+    WhoHasCommand,
+    NowPlayingCommand, 
 } from './lib/modules/commands';
 
 export default class RktBot extends IvyEngine {
 
     pollHandler: PollManager;
+    audioManager: AudioManager;
     reactionHandler: ReactionManager;
 
     constructor() {
@@ -111,13 +118,18 @@ export default class RktBot extends IvyEngine {
         this.registerCommand('mald', new MaldCommand());
         this.registerCommand('members', new MembersCommand());
         this.registerCommand('minor', new MinorCommand());
+        this.registerCommand('now', new NowPlayingCommand());
         this.registerCommand('options', new OptionsCommand());
         this.registerCommand('perms', new PermissionsCommand());
+        this.registerCommand('queue', new QueueCommand());
         this.registerCommand('quote', new QuoteCommand());
+        this.registerCommand('pause', new PauseCommand());
+        this.registerCommand('play', new PlayCommand());
         this.registerCommand('poll', new PollCommand());
         this.registerCommand('prefs', new PrefsCommand());
         this.registerCommand('say', new SayCommand());
         this.registerCommand('section', new SectionCommand());
+        this.registerCommand('skip', new SkipCommand());
         this.registerCommand('sound', new SoundCommand());
         this.registerCommand('stimmy', new StimmyCommand());
         this.registerCommand('stonks', new StonksCommand());
@@ -126,8 +138,8 @@ export default class RktBot extends IvyEngine {
         this.registerCommand('update', new UpdateCommand());
         this.registerCommand('uptime', new UptimeCommand(this.start));
         this.registerCommand('version', new VersionCommand());
+        this.registerCommand('vol', new VolumeCommand());
         this.registerCommand('whohas', new WhoHasCommand());
-        this.registerCommand('ytplay', new YtPlayCommand());
     }
 
     registerModules() {
@@ -136,6 +148,7 @@ export default class RktBot extends IvyEngine {
         this.reactionHandler.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());
         
         this.registerModule(this.reactionHandler);
+        this.registerModule(this.audioManager = new AudioManager());
         this.registerModule(this.pollHandler = new PollManager());
     }
 

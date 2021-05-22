@@ -11,6 +11,7 @@ import {
     endLoader,
     getArrowEmoteForData,
     join,
+    MessageLoader,
     startLoader
 } from '@ilefa/ivy';
 
@@ -22,7 +23,6 @@ import {
     validRanges,
     validIntervals,
     EmbedIconType,
-    MessageLoader,
 } from '../../../../util';
 
 export class QuoteCommand extends Command {

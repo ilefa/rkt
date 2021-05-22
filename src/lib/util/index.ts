@@ -1,17 +1,11 @@
 import axios from 'axios';
 import MA from 'moving-average';
 
+import { Permissions } from 'discord.js';
 import { MACD, RSI } from 'trading-signals';
 import { EnrollmentPayload } from '@ilefa/husky';
-import { Guild, Message, Permissions } from 'discord.js';
 import { PriceList, RangeGranularity, StonkQuote } from '../stonk';
 import { CustomPermissions, getArrowEmoteForData, getDurationWithUnit } from '@ilefa/ivy';
-
-export const SNOWFLAKE_REGEX = /^\d{18,}$/;
-export const EMOTE_REGEX = /<(a|):\w+:\d{18,}>/;
-export const USER_MENTION_REGEX = /^<@\!\d{18,}>$/;
-
-export const URL_REGEX = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
 
 export enum EmbedIconType {
     AUDIO = 'https://storage.googleapis.com/stonks-cdn/audio.png',
@@ -27,11 +21,6 @@ export enum EmbedIconType {
     TEST = 'https://storage.googleapis.com/stonks-cdn/test.png',
     UCONN = 'https://storage.googleapis.com/stonks-cdn/univ.png',
     XP = 'https://storage.googleapis.com/stonks-cdn/xp.png'
-}
-
-export type MessageLoader = {
-    message: Message;
-    start: number;
 }
 
 export type YtMetaResponse = {
@@ -115,10 +104,6 @@ export const COMPARISON_LEGEND = [
 
 export const validRanges = ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max'];
 export const validIntervals = ['1m', '5m', '10m', '15m', '30m', '1h', '2h', '4h', 'D', 'W', 'M', 'Q', 'Y'];
-
-export const isFC = (guild: Guild | string) => guild instanceof Guild 
-    ? guild.id === '749978305549041734' 
-    : guild === '749978305549041734';
 
 /**
  * Attempts to retrieve metadata about

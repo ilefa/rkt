@@ -1,3 +1,11 @@
+// Audio Commands
+export * from './audio/nowplaying';
+export * from './audio/pause';
+export * from './audio/play';
+export * from './audio/queue';
+export * from './audio/skip';
+export * from './audio/volume';
+
 // Fun Commands
 export * from './fun/avatar';
 export * from './fun/bigjannie';
@@ -10,7 +18,6 @@ export * from './fun/poll';
 export * from './fun/say';
 export * from './fun/sound';
 export * from './fun/stimmy';
-export * from './fun/ytplay';
 
 // Stonks
 export * from './stonks/contract';
