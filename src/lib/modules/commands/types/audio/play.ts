@@ -29,7 +29,7 @@ import {
 } from '@ilefa/ivy';
 
 const YOUTUBE_EMOTE = '<:youtube:845571428896342017>';
-const YOUTUBE_PLAYLIST_MAX = 31;
+const YOUTUBE_PLAYLIST_MAX = 51;
 
 const NEEDED_PERMS = [
     Permissions.FLAGS.SPEAK,
