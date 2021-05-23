@@ -1,8 +1,6 @@
-import moment from 'moment';
-
 import { EmbedIconType } from '../../../util';
 import { Message, Permissions, User } from 'discord.js';
-import { asMention, bold, Command, CommandReturn, emboss } from '@ilefa/ivy';
+import { asMention, bold, Command, CommandReturn, emboss, time } from '@ilefa/ivy';
 
 export class InvitesCommand extends Command {
 
@@ -27,7 +25,7 @@ export class InvitesCommand extends Command {
             .sort((a, b) => b.uses - a.uses)
             .slice(1, 25)
             .map((invite, i) => {
-                str += `${bold(invite.uses.toLocaleString() + ' uses')} - ${bold(invite.code)} by ${asMention(invite.inviter)} ${emboss(`created ${moment(invite.createdAt).format('MMM Do, YYYY')})`)}\n`;
+                str += `${bold(invite.uses.toLocaleString() + ' uses')} - ${bold(invite.code)} by ${asMention(invite.inviter)} ${emboss(`created ${time(invite.createdAt.getTime(), 'MMM Do, YYYY')})`)}\n`;
             });
 
         message.reply(this.embeds.build('Invites Overview', EmbedIconType.JACK, str.trimEnd(), null, message));

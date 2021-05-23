@@ -13,6 +13,7 @@ import {
     bold,
     Command,
     CommandReturn,
+    conforms,
     emboss,
     endLoader,
     italic,
@@ -34,7 +35,7 @@ export class SectionCommand extends Command {
         }
 
         let course = args[0];
-        if (!COURSE_IDENTIFIER.test(course)) {
+        if (!conforms(COURSE_IDENTIFIER, course)) {
             message.reply(this.manager.engine.embeds.build('Course Search', EmbedIconType.UCONN, `Invalid or malformed course name: ${emboss(course)}`, [
                 {
                     name: 'Valid Course Name',
@@ -51,7 +52,7 @@ export class SectionCommand extends Command {
         }
 
         let section = args[1];
-        if (!SECTION_IDENTIFIER.test(section)) {
+        if (!conforms(SECTION_IDENTIFIER, section)) {
             message.reply(this.manager.engine.embeds.build('Course Search', EmbedIconType.UCONN, `Invalid or malformed section: ${emboss(section)}`, [
                 {
                     name: 'Valid Section Name',

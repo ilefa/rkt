@@ -12,7 +12,8 @@ import {
     emboss,
     getClosestDate,
     getExpDate,
-    numberEnding
+    numberEnding,
+    time
 } from '@ilefa/ivy';
 
 export class OptionsCommand extends Command {
@@ -138,7 +139,7 @@ export class OptionsCommand extends Command {
         let expire = new Date(expDate.getTime());
         expire.setHours(expire.getHours() + 21); // UTC-fuckery
 
-        message.reply(this.embeds.build(`${opts.quote.displayName} Options (${moment(expire).format('MM/DD')})`, EmbedIconType.STONKS,
+        message.reply(this.embeds.build(`${opts.quote.displayName} Options (${time(expire.getTime(), 'MM/DD')})`, EmbedIconType.STONKS,
             `Listing ${contracts.length} contract${numberEnding(contracts.length)} expiring ${bold(moment(expire).fromNow())}.`, matches, message));
         return CommandReturn.EXIT;
     }

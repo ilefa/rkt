@@ -7,7 +7,8 @@ import {
     CommandReturn,
     codeBlock,
     Command,
-    CustomPermissions
+    CustomPermissions,
+    conforms
 } from '@ilefa/ivy';
 
 const HEADER = /^`{3}(?:ts|js)\n/;
@@ -38,7 +39,7 @@ export class EvalCommand extends Command {
         }
         
         let exec = args.join(' ');
-        if (HEADER.test(exec)) {
+        if (conforms(HEADER, exec)) {
             exec = exec
                 .split(HEADER)[1]
                 .split('```')[0];

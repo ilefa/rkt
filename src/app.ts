@@ -31,6 +31,7 @@ import {
     MaldCommand,
     MembersCommand,
     MinorCommand,
+    NowPlayingCommand, 
     OptionsCommand,
     PermissionsCommand,
     QuoteCommand,
@@ -41,6 +42,7 @@ import {
     QueueCommand,
     SayCommand,
     SectionCommand,
+    ShuffleCommand,
     SkipCommand,
     SoundCommand,
     StimmyCommand,
@@ -53,7 +55,7 @@ import {
     VolumeCommand,
     WhereAmIFlow,
     WhoHasCommand,
-    NowPlayingCommand, 
+    LoopCommand,
 } from './lib/modules/commands';
 
 export default class RktBot extends IvyEngine {
@@ -77,7 +79,8 @@ export default class RktBot extends IvyEngine {
                 '298217416276836354'
             ],
             reportErrors: [
-                '785050947407052821'
+                '785050947407052821',
+                '613783446464102612'
             ],
             color: 0x27AE60,
             provider: new DataProvider(),
@@ -115,6 +118,7 @@ export default class RktBot extends IvyEngine {
         this.registerCommand('help', new HelpCommand());
         this.registerCommand('invites', new InvitesCommand());
         this.registerCommand('king', new KingCommand());
+        this.registerCommand('loop', new LoopCommand());
         this.registerCommand('mald', new MaldCommand());
         this.registerCommand('members', new MembersCommand());
         this.registerCommand('minor', new MinorCommand());
@@ -129,6 +133,7 @@ export default class RktBot extends IvyEngine {
         this.registerCommand('prefs', new PrefsCommand());
         this.registerCommand('say', new SayCommand());
         this.registerCommand('section', new SectionCommand());
+        this.registerCommand('shuffle', new ShuffleCommand());
         this.registerCommand('skip', new SkipCommand());
         this.registerCommand('sound', new SoundCommand());
         this.registerCommand('stimmy', new StimmyCommand());

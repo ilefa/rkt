@@ -8,6 +8,7 @@ import {
     bold,
     Command,
     CommandReturn,
+    conforms,
     emboss,
     endLoader,
     italic,
@@ -15,7 +16,8 @@ import {
     MessageLoader,
     PageContent,
     PaginatedEmbed,
-    startLoader
+    startLoader,
+    time
 } from '@ilefa/ivy';
 
 const identifierRegex = /^[a-zA-Z]{2,4}\d{4}(Q|E|W)*$/;
@@ -49,7 +51,7 @@ export class CourseCommand extends Command {
         }
 
         let identifier = args[0].toUpperCase();
-        if (!identifierRegex.test(identifier)) {
+        if (!conforms(identifierRegex, identifier)) {
             message.reply(this.embeds.build('Course Search', EmbedIconType.UCONN, `Invalid or malformed course name: ${emboss(identifier)}`, [
                 {
                     name: 'Valid Course Name',
@@ -149,7 +151,7 @@ export class CourseCommand extends Command {
                 fields: [
                     {
                         name: 'Last Data Marker',
-                        value: moment(lastDataMarker).format('MMMM Do YYYY, h:mm:ss a'),
+                        value: time(lastDataMarker.getTime()),
                         inline: false
                     },
                     {

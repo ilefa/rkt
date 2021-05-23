@@ -5,7 +5,7 @@ import { getFutures } from '../../../../repo';
 import { FuturesQuote } from '../../../../stonk';
 import { EmbedIconType, getChangeString } from '../../../../util';
 import { EmbedFieldData, Message, Permissions, User } from 'discord.js';
-import { bold, Command, CommandReturn, emboss, getArrowEmoteForData } from '@ilefa/ivy';
+import { bold, Command, CommandReturn, emboss, getArrowEmoteForData, time } from '@ilefa/ivy';
 
 export class FuturesCommand extends Command {
 
@@ -23,7 +23,7 @@ export class FuturesCommand extends Command {
             return {
                 name: `${future.name}`,
                 value: `${getArrowEmoteForData(future.change, 0, 0, 0)} ${bold(getChangeString(future.change, '$', 2, true))} (${getChangeString(future.change_pct, '', 2, false)}%)\n` 
-                        + `:dollar: ${bold('$' + parseFloat(future.last).toLocaleString())} as of ${moment(future.last_time).format('MMM Do [at] h:mm:ss a')}.\n\n`
+                        + `:dollar: ${bold('$' + parseFloat(future.last).toLocaleString())} as of ${time(parseInt(future.last_time), 'MMM Do [at] h:mm:ss a')}.\n\n`
                         + `**Historical**\n`
                         + `Prev Close: **$${Number(future.previous_day_closing).toFixed(2)}**\n`
                         + `Year Low: ${future.FundamentalData.yrlodate ? `**$${future.FundamentalData.yrloprice}** (${future.FundamentalData.yrlodate})` : bold('Unavailable')}\n`

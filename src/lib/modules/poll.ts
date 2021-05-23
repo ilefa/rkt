@@ -8,7 +8,7 @@ export default class PollManager extends Module {
         super('Polls');
     }
 
-    start = () => this.manager.engine.logger.info('Polls', 'Poll handler activated.');
+    start = () => this.manager.engine.logger.info('Polls', 'Poll Handler activated.');
      
     end() {}
 

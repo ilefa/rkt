@@ -1,8 +1,10 @@
 // Audio Commands
-export * from './audio/nowplaying';
+export * from './audio/loop';
+export * from './audio/now';
 export * from './audio/pause';
 export * from './audio/play';
 export * from './audio/queue';
+export * from './audio/shuffle';
 export * from './audio/skip';
 export * from './audio/volume';
 

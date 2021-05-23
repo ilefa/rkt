@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 import { EmbedIconType } from '../../../../util';
 import { OptionsContract } from '../../../../stonk';
 import { Message, Permissions, User } from 'discord.js';
@@ -12,7 +10,8 @@ import {
     conforms,
     emboss,
     getClosestDate,
-    getExpDate
+    getExpDate,
+    time
 } from '@ilefa/ivy';
 
 export class ContractCommand extends Command {
@@ -139,13 +138,13 @@ export class ContractCommand extends Command {
         
         let contract = contracts.find((contract: OptionsContract) => contract.strike === strike) as OptionsContract;
         if (!contract) {
-            message.reply(this.embeds.build('.contract | Error', EmbedIconType.STONKS, `Couldn't find any contracts for ${emboss(ticker)} with parameters ${emboss(`$${strike}${type} (${moment(expDate).format('MM/DD')})`)}.`, null, message));
+            message.reply(this.embeds.build('.contract | Error', EmbedIconType.STONKS, `Couldn't find any contracts for ${emboss(ticker)} with parameters ${emboss(`$${strike}${type} (${time(expDate.getTime(), 'MM/DD')})`)}.`, null, message));
             return CommandReturn.EXIT;
         }
 
         expDate.setHours(expDate.getHours() + 21);
         let needsYear = expDate.getFullYear() !== new Date().getFullYear();
-        message.reply(this.embeds.build(`${opts.quote.symbol} $${strike} ${typeFull} - ${moment(expDate).format(`MM/DD${needsYear ? '/YYYY' : ''}`)}`, EmbedIconType.STONKS, '', [
+        message.reply(this.embeds.build(`${opts.quote.symbol} $${strike} ${typeFull} - ${time(expDate.getTime(), `MM/DD${needsYear ? '/YYYY' : ''}`)}`, EmbedIconType.STONKS, '', [
             {
                 name: 'Price',
                 value: `$${contract.lastPrice}`,
@@ -183,7 +182,7 @@ export class ContractCommand extends Command {
             },
             {
                 name: 'Expiration Date',
-                value: moment(expDate.getTime()).format('MMMM Do YYYY'),
+                value: time(expDate.getTime(), 'MMMM Do YYYY'),
                 inline: true
             },
             {

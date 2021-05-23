@@ -8,8 +8,10 @@ import {
     bold,
     Command,
     CommandReturn,
+    cond,
     emboss,
-    getLatestTimeValue,
+    GRAY_CIRCLE,
+    GREEN_CIRCLE,
     link,
     time
 } from '@ilefa/ivy';
@@ -33,10 +35,10 @@ export class NowPlayingCommand extends Command {
 
         let cur = queue[0];
         let elapsed = Date.now() - cur.startTime;
-        let amount = (elapsed / cur.meta.duration) * 20;
+        let amount = (elapsed / cur.meta.duration) * 30;
         let display = time(elapsed, 'm:ss') + ' / ' + time(cur.meta.duration, 'm:ss');
 
-        message.reply(this.embeds.build('Audio Player', EmbedIconType.AUDIO, `Now Playing: ${link(cur.meta.title, cur.meta.url)} (${getLatestTimeValue(cur.meta.duration)})`, [
+        message.reply(this.embeds.build('Audio Player', EmbedIconType.AUDIO, `Now Playing: ${link(cur.meta.title, cur.meta.url)}`, [
             {
                 name: 'Creator',
                 value: cur.meta.authorLink ? link(cur.meta.author, cur.meta.authorLink) : cur.meta.author,
@@ -48,16 +50,35 @@ export class NowPlayingCommand extends Command {
                 inline: true
             },
             {
+                name: 'Published',
+                value: cur.meta.date
+                    ? time(cur.meta.date, 'MMM D, YYYY')
+                    : 'Unavailable',
+                inline: true
+            },
+            {
+                name: 'Ratings',
+                value: cur.meta.rating
+                    ? `:thumbsup: ${cur.meta.rating.up.toLocaleString()} / :thumbsdown: ${cur.meta.rating.down.toLocaleString()}`
+                    : 'Unavailable',
+                inline: true,
+            },
+            {
+                name: 'Looping',
+                value: cond(cur.loop, `${GREEN_CIRCLE} Yes`, `${GRAY_CIRCLE} No`),
+                inline: true
+            },
+            {
                 name: 'Requested By',
                 value: asMention(cur.requester),
                 inline: true
             },
             {
                 name: 'Elasped',
-                value: `${bold(display)} [${'▰'.repeat(amount)}${'▱'.repeat(20 - amount)}]`,
+                value: `${bold(display)} [${'▰'.repeat(amount)}${'▱'.repeat(30 - amount)}]`,
                 inline: false
             }
-        ], message, null/*, cur.meta.image ?? null*/));
+        ], message, null));
 
         return CommandReturn.EXIT;
     }

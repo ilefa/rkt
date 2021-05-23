@@ -2,7 +2,7 @@ import AudioManager from '../../../audio';
 
 import { EmbedIconType } from '../../../../util';
 import { Message, Permissions, User } from 'discord.js';
-import { bold, Command, CommandReturn, emboss } from '@ilefa/ivy';
+import { bold, Command, CommandReturn, emboss, getVoiceConnection } from '@ilefa/ivy';
 
 export class PauseCommand extends Command {
 
@@ -20,7 +20,7 @@ export class PauseCommand extends Command {
             return CommandReturn.EXIT;
         }
 
-        let connection = this.engine.client.voice.connections.find(conn => conn.channel.id === channel.id);
+        let connection = getVoiceConnection(this.engine.client, channel);
         if (!connection) {
             message.reply(this.embeds.build('Audio Player', EmbedIconType.AUDIO, `You are not in a channel where ${bold('rkt')} is connected.`, [], message));
             return CommandReturn.EXIT;
