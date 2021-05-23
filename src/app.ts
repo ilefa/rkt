@@ -28,6 +28,7 @@ import {
     HelpCommand,
     InvitesCommand,
     KingCommand,
+    LoopCommand,
     MaldCommand,
     MembersCommand,
     MinorCommand,
@@ -55,7 +56,6 @@ import {
     VolumeCommand,
     WhereAmIFlow,
     WhoHasCommand,
-    LoopCommand,
 } from './lib/modules/commands';
 
 export default class RktBot extends IvyEngine {
