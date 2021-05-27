@@ -1,12 +1,28 @@
 import env from '../env.json';
 import Watermark from './lib/startup';
 import DataProvider from './lib/data';
+import Auditor from './lib/modules/auditor';
 import PollManager from './lib/modules/poll';
 import AudioManager from './lib/modules/audio';
 import CustomEventManager from './lib/modules/events';
 
 import { Client } from 'discord.js';
 import { IvyEngine, Logger } from '@ilefa/ivy';
+
+import {
+    ChannelCreateProbe,
+    ChannelDeleteProbe,
+    ChannelPinsUpdateProbe,
+    ChannelUpdateProbe,
+    EmojiCreateProbe,
+    EmojiDeleteProbe,
+    EmojiUpdateProbe,
+    GuildBanAddProbe,
+    GuildBanRemoveProbe,
+    GuildMemberAddProbe,
+    GuildMemberRemoveProbe,
+    GuildMemberUpdateProbe,
+} from './lib/modules/auditor/probes';
 
 import {
     ReactionManager,
@@ -60,6 +76,7 @@ import {
 
 export default class RktBot extends IvyEngine {
 
+    auditor: Auditor;
     pollHandler: PollManager;
     audioManager: AudioManager;
     reactionHandler: ReactionManager;
@@ -151,6 +168,20 @@ export default class RktBot extends IvyEngine {
         this.reactionHandler = new ReactionManager();
         this.reactionHandler.registerHandler('delete', new DeleteMessageReactionHandler());
         this.reactionHandler.registerHandler('onlygoesup', new OnlyGoesUpReactionHandler());
+        
+        this.registerModule(this.auditor = new Auditor());
+        this.auditor.registerProbe(new ChannelCreateProbe());
+        this.auditor.registerProbe(new ChannelDeleteProbe());
+        this.auditor.registerProbe(new ChannelPinsUpdateProbe());
+        this.auditor.registerProbe(new ChannelUpdateProbe());
+        this.auditor.registerProbe(new EmojiCreateProbe());
+        this.auditor.registerProbe(new EmojiDeleteProbe());
+        this.auditor.registerProbe(new EmojiUpdateProbe());
+        this.auditor.registerProbe(new GuildBanAddProbe());
+        this.auditor.registerProbe(new GuildBanRemoveProbe());
+        this.auditor.registerProbe(new GuildMemberAddProbe());
+        this.auditor.registerProbe(new GuildMemberRemoveProbe());
+        this.auditor.registerProbe(new GuildMemberUpdateProbe());
         
         this.registerModule(this.reactionHandler);
         this.registerModule(this.audioManager = new AudioManager());
