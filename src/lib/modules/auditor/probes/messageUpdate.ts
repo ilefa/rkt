@@ -1,6 +1,6 @@
 import { AuditorProbe } from '..';
 import { Message } from 'discord.js';
-import { bold, codeBlock, mentionChannel } from '@ilefa/ivy';
+import { bold, codeBlock, conforms, mentionChannel } from '@ilefa/ivy';
 
 export class MessageUpdateProbe extends AuditorProbe {
     
@@ -30,6 +30,15 @@ export class MessageUpdateProbe extends AuditorProbe {
         let entry = this.getEntryForGuild(message.guild);
         if (!entry)
             return false;
+
+        if (!message.author
+            || message.author.bot
+            || message.type !== 'DEFAULT'
+            || !message.content
+            || message.attachments.some(attachment => conforms(/^http(?:s){0,}:\/{2}(?:giphy.com|tenor.com|kapwing.com|imgflip.com|gifsoup.com|imgplay|senorgif.com)/, attachment.url))
+            || conforms(/^\.\w+(?:\s.+){0,}/, message.content))
+        return false;
+
 
         return entry.events.includes(this.eventType);
     }

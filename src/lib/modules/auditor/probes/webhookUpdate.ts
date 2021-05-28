@@ -18,7 +18,7 @@ export class WebhookUpdateProbe extends AuditorProbe {
             return;
 
         let displayServer = entry.tracks.length !== 1;
-        reports.send(`${this.manager.WEBHOOK} Webhooks were updated for ${bold(channel.name)} (${mentionChannel(channel.id)}) ${displayServer ? ` in ${bold(channel.guild.name)}` : ``}.`);
+        reports.send(`${this.manager.WEBHOOK} Webhooks were updated for ${bold(channel.name)} (${mentionChannel(channel.id)})${displayServer ? ` in ${bold(channel.guild.name)}` : ``}.`);
     }
 
     shouldReport = (...args: any[]): boolean => {

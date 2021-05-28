@@ -1,4 +1,4 @@
-import { searchCourse } from "../src/lib/util";
+import { searchCourse } from '@ilefa/husky';
 
 const TEST_CASES = [
     'CSE1729',

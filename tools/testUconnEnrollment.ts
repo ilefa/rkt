@@ -1,4 +1,4 @@
-import { getRawEnrollment } from "../src/lib/util";
+import { getRawEnrollment } from '@ilefa/husky';
 
 const TEST_CASES = [
     {

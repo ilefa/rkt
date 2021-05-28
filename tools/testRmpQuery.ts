@@ -1,4 +1,4 @@
-import { searchRMP } from "../src/lib/util";
+import { searchRMP } from '@ilefa/husky';
 
 const TEST_CASES = [
     'Gregory Johnson',
