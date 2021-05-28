@@ -40,6 +40,8 @@ enum ChannelUpdateCause {
     CATEGORY,
     CATEGORY_PERM_SYNC,
     PERM_OVERRIDES,
+    BITRATE,
+    REGION, // apparently not in discord.js yet -- will be implemented once that is added
     UNKNOWN
 }
 
@@ -106,7 +108,7 @@ export class ChannelUpdateProbe extends AuditorProbe {
         return entry.events.includes(this.eventType);
     }
 
-    private generateChangeMessage = async (a: TextChannel, b: TextChannel, cause: ChannelUpdateCause, display: boolean) => {
+    private generateChangeMessage = async (a: TextChannel | VoiceChannel, b: TextChannel | VoiceChannel, cause: ChannelUpdateCause, display: boolean) => {
         let end = display ? ` in ${bold(b.guild.name)}` : ``;
         if (cause == ChannelUpdateCause.UNKNOWN)
             return `${this.manager.CHANNEL} Channel ${bold(b.name)} (${mentionChannel(b.id)}) was somehow updated${end}.`;
@@ -114,17 +116,27 @@ export class ChannelUpdateProbe extends AuditorProbe {
         if (cause == ChannelUpdateCause.NAME)
             return `${this.manager.CHANNEL} Channel ${bold(a.name)} (${mentionChannel(b.id)}) was renamed to ${bold(b.name) + end}.`;
             
-        if (cause == ChannelUpdateCause.TOPIC)
-            return `${this.manager.CHANNEL} Channel ${bold(b.name + '\'s')} (${mentionChannel(b.id)}) topic was updated to ${emboss(b.topic) + end}.`;
+        if (a instanceof TextChannel && b instanceof TextChannel) {
+            if (cause == ChannelUpdateCause.TOPIC)
+                return `${this.manager.CHANNEL} Channel ${bold(b.name + '\'s')} (${mentionChannel(b.id)}) topic was updated to ${emboss(b.topic) + end}.`;
 
-        if (cause == ChannelUpdateCause.NSFW)
-            return `${this.manager.CHANNEL} Channel ${bold(b.name)} (${mentionChannel(b.id)}) is ${cond(b.nsfw, 'now', 'no longer')} marked NSFW${end}.`;
+            if (cause == ChannelUpdateCause.NSFW)
+                return `${this.manager.CHANNEL} Channel ${bold(b.name)} (${mentionChannel(b.id)}) is ${cond(b.nsfw, 'now', 'no longer')} marked NSFW${end}.`;
 
+            if (cause == ChannelUpdateCause.SLOWMODE)
+                return `${this.manager.CHANNEL} Channel ${bold(b.name + '\'s')} (${mentionChannel(b.id)}) slowmode ${cond(b.rateLimitPerUser === 0, 'was disabled', `is now ${bold(getLatestTimeValue(b.rateLimitPerUser * 1000))}`) + end}.`;
+        }
+
+        if (a instanceof VoiceChannel && b instanceof VoiceChannel) {
+            if (cause == ChannelUpdateCause.BITRATE)
+                return `${this.manager.CHANNEL} Channel ${bold(b.name + '\'s')} bitrate was set to ${bold((b as VoiceChannel).bitrate)}`;
+
+            // if (cause == ChannelUpdateCause.REGION)
+            //     return `${this.manager.CHANNEL} Channel ${bold(b.name + '\'s')} region was set to ${bold(b.region)}`;
+        }
+        
         if (cause == ChannelUpdateCause.POSITION)
             return `${this.manager.CHANNEL} Channel ${bold(b.name)} (${mentionChannel(b.id)}) was moved (now position ${b.rawPosition})${end}.`;
-
-        if (cause == ChannelUpdateCause.SLOWMODE)
-            return `${this.manager.CHANNEL} Channel ${bold(b.name + '\'s')} (${mentionChannel(b.id)}) slowmode ${cond(b.rateLimitPerUser === 0, 'was disabled', `is now ${bold(getLatestTimeValue(b.rateLimitPerUser * 1000))}`) + end}`;
 
         if (cause == ChannelUpdateCause.CATEGORY)
             return `${this.manager.CHANNEL} Channel ${bold(b.name)} (${mentionChannel(b.id)}) was moved ${(!b.parent ? 'out of a category' : `to category ${bold(b.parent.name)}`) + end}.`;
@@ -146,9 +158,9 @@ export class ChannelUpdateProbe extends AuditorProbe {
                     .sort((a, b) => a.status - b.status);
 
                 changes += `${this.manager.MEMBERS + ' ' + bold(cond(name === '@everyone', 'everyone', name))}\n` 
-                        + `${allChanges
-                                .map(ent => cond(ent.status === PermissionOverwriteStatus.ALLOW, GREEN_CIRCLE, RED_CIRCLE) + ` ${ent.permission}`)
-                                .join('\n')}`;
+                        + allChanges
+                            .map(ent => cond(ent.status === PermissionOverwriteStatus.ALLOW, GREEN_CIRCLE, RED_CIRCLE) + ` ${ent.permission}`)
+                            .join('\n');
             }
 
             return `${this.manager.CHANNEL} Channel ${bold(b.name + '\'s')} (${mentionChannel(b.id)}) permissions were updated${end}.\n${changes}`;
@@ -184,18 +196,12 @@ export class ChannelUpdateProbe extends AuditorProbe {
         let user = await this.client.users.fetch(id);
         if (!user) return 'Unknown';
 
-        return user.username + '#' + user.discriminator;
+        return this.asName(user);
     }
     
-    private detectChange = (a: TextChannel, b: TextChannel) => {
-        if (a.name !== b.name)                                 return ChannelUpdateCause.NAME;
-        if (a.topic !== b.topic)                               return ChannelUpdateCause.TOPIC;
-        if (a.nsfw !== b.nsfw)                                 return ChannelUpdateCause.NSFW;
-
-        // causes a bunch of reports to be sent - so it is disabled for now
-        // if (a.rawPosition !== b.rawPosition)                   return ChannelUpdateCause.POSITION;
-        
-        if (a.rateLimitPerUser !== b.rateLimitPerUser)         return ChannelUpdateCause.SLOWMODE;
+    private detectChange = (a: TextChannel | VoiceChannel, b: TextChannel | VoiceChannel) => {
+        if (a.name !== b.name)
+            return ChannelUpdateCause.NAME;
 
         if (!a.parent && b.parent || !b.parent && a.parent)
             return ChannelUpdateCause.CATEGORY;
@@ -203,8 +209,38 @@ export class ChannelUpdateProbe extends AuditorProbe {
         if ((a.parent && b.parent) && a.parent.id !== b.parent.id)
             return ChannelUpdateCause.CATEGORY;
 
-        if (a.permissionsLocked !== b.permissionsLocked)       return ChannelUpdateCause.CATEGORY_PERM_SYNC;
-        if (a.permissionOverwrites !== b.permissionOverwrites) return ChannelUpdateCause.PERM_OVERRIDES;
+        // causes a bunch of reports to be sent - so it is disabled for now
+        // if (a.rawPosition !== b.rawPosition)
+        //    return ChannelUpdateCause.POSITION;
+
+        if (a.permissionsLocked !== b.permissionsLocked)
+            return ChannelUpdateCause.CATEGORY_PERM_SYNC;
+        
+        if (a.permissionOverwrites !== b.permissionOverwrites)
+            return ChannelUpdateCause.PERM_OVERRIDES;    
+
+        if (a instanceof TextChannel && b instanceof TextChannel) {
+            if (a.topic !== b.topic)
+                return ChannelUpdateCause.TOPIC;
+            
+            if (a.nsfw !== b.nsfw)
+                return ChannelUpdateCause.NSFW;            
+            
+            if (a.rateLimitPerUser !== b.rateLimitPerUser)
+                return ChannelUpdateCause.SLOWMODE;            
+            
+            return ChannelUpdateCause.UNKNOWN;
+        }
+
+        if (a instanceof VoiceChannel && b instanceof VoiceChannel) {
+            if (a.bitrate !== b.bitrate)
+                return ChannelUpdateCause.BITRATE;
+            
+            // if (a.region !== b.region)
+            //     return ChannelUpdateCause.REGION;
+
+            return ChannelUpdateCause.UNKNOWN;
+        }
 
         return ChannelUpdateCause.UNKNOWN;
     }

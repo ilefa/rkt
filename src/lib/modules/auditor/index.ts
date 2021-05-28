@@ -1,7 +1,13 @@
 import env from '../../../../env.json';
 
 import { Module, resolvableToId } from '@ilefa/ivy';
-import { Client, GuildResolvable, TextChannel } from 'discord.js';
+import {
+    Client,
+    GuildMember,
+    GuildResolvable,
+    TextChannel,
+    User
+} from 'discord.js';
 
 type AuditorEntry = {
     channel: string;
@@ -42,6 +48,13 @@ export abstract class AuditorProbe {
             .fetch(entry.channel) as TextChannel;
     }
 
+    asName = (member: GuildMember | User) => {
+        if (member instanceof GuildMember)
+            member = member.user;
+
+        return member.username + '#' + member.discriminator;
+    }
+
 }
 
 const EventKeys = [
@@ -61,18 +74,14 @@ const EventKeys = [
     'guildUpdate',
     'inviteCreate',
     'inviteDelete',
-    'message',
     'messageDelete',
     'messageDeleteBulk',
     'messageReactionRemoveAll',
-    'messageReactionRemoveEmoji',
-    'messageReactionAdd',
-    'messageReactionRemove',
     'messageUpdate',
     'roleCreate',
     'roleDelete',
     'roleUpdate',
-    'userUpdate',
+    'voiceStateUpdate',
     'webhookUpdate'
 ] as const;
 
@@ -81,6 +90,7 @@ export default class Auditor extends Module {
     config: Map<string, AuditorEntry>;
     probes: AuditorProbe[]; 
 
+    readonly COG = '<:cog:847564995289284638>';
     readonly PIN = '<:pin:847284224540540941>';
     readonly CHANNEL = '<:channel:847304547516678194>';
     readonly CHANNEL_LOCKED = '<:channelLocked:847304547402907688>';
@@ -92,8 +102,18 @@ export default class Auditor extends Module {
     readonly LEAVE = '<:leave:847362716498395146>';
     readonly INVITE = '<:invite:847320072153726986>';
     readonly MEMBERS = '<:members:847337907810467841>';
+    readonly MENTION = '<:mention:847601027414753290>';
     readonly VOICE = '<:voice:847320072145862676>';
     readonly VOICE_LOCKED = '<:voiceLocked:847320072175353896>';
+    readonly MUTE = '<:mute:847611885494992916>';
+    readonly UNMUTE = '<:unmute:847611885406912542>';
+    readonly DEAFEN = '<:deafen:847611885268631612>';
+    readonly UNDEAFEN = '<:undeafen:847611887335899156>';
+    readonly STREAM = '<:stream:847688506414596106>';
+    readonly WIDGET = '<:widget:847615965084647474>';
+    readonly VERIFIED = '<:verified:847618591858753609>';
+    readonly WEBHOOK = '<:webhook:847690690976940032>';
+    readonly DIVIDER = ':white_small_square:';
 
     constructor() {
         super('Auditor');

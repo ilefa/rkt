@@ -13,6 +13,7 @@
       "resolveJsonModule": true,
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
+      "downlevelIteration": true,
       "sourceMap": true,
    }
 }

@@ -17,7 +17,7 @@ export class GuildBanRemoveProbe extends AuditorProbe {
             return;
 
         let displayServer = entry.tracks.length !== 1;
-        reports.send(`${this.manager.MEMBERS} ${asMention(user)} (${user.id}) was unbanned${displayServer ? ` in ${bold(guild.name)}` : ``}.`);
+        reports.send(`${this.manager.MEMBERS} ${asMention(user)} (${user.id}) was unbanned${displayServer ? ` from ${bold(guild.name)}` : ``}.`);
     }
 
     shouldReport = (...args: any[]): boolean => {

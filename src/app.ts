@@ -19,9 +19,21 @@ import {
     EmojiUpdateProbe,
     GuildBanAddProbe,
     GuildBanRemoveProbe,
+    GuildIntegrationsUpdateProbe,
     GuildMemberAddProbe,
     GuildMemberRemoveProbe,
     GuildMemberUpdateProbe,
+    GuildUpdateProbe,
+    InviteCreateProbe,
+    InviteDeleteProbe,
+    MessageDeleteBulkProbe,
+    MessageDeleteProbe,
+    MessageUpdateProbe,
+    RoleCreateProbe,
+    RoleDeleteProbe,
+    RoleUpdateProbe,
+    VoiceStateUpdateProbe,
+    WebhookUpdateProbe,
 } from './lib/modules/auditor/probes';
 
 import {
@@ -179,9 +191,21 @@ export default class RktBot extends IvyEngine {
         this.auditor.registerProbe(new EmojiUpdateProbe());
         this.auditor.registerProbe(new GuildBanAddProbe());
         this.auditor.registerProbe(new GuildBanRemoveProbe());
+        this.auditor.registerProbe(new GuildIntegrationsUpdateProbe());
         this.auditor.registerProbe(new GuildMemberAddProbe());
         this.auditor.registerProbe(new GuildMemberRemoveProbe());
         this.auditor.registerProbe(new GuildMemberUpdateProbe());
+        this.auditor.registerProbe(new GuildUpdateProbe());
+        this.auditor.registerProbe(new InviteCreateProbe());
+        this.auditor.registerProbe(new InviteDeleteProbe());
+        this.auditor.registerProbe(new MessageDeleteProbe());
+        this.auditor.registerProbe(new MessageDeleteBulkProbe());
+        this.auditor.registerProbe(new MessageUpdateProbe());
+        this.auditor.registerProbe(new RoleCreateProbe());
+        this.auditor.registerProbe(new RoleDeleteProbe());
+        this.auditor.registerProbe(new RoleUpdateProbe());
+        this.auditor.registerProbe(new VoiceStateUpdateProbe());
+        this.auditor.registerProbe(new WebhookUpdateProbe());
         
         this.registerModule(this.reactionHandler);
         this.registerModule(this.audioManager = new AudioManager());
