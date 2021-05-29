@@ -6,6 +6,7 @@ export * from './audio/play';
 export * from './audio/queue';
 export * from './audio/shuffle';
 export * from './audio/skip';
+export * from './audio/stop';
 export * from './audio/volume';
 
 // Fun Commands
@@ -42,7 +43,7 @@ export * from './invites';
 export * from './members';
 export * from './perms';
 export * from './prefs';
-export * from './stop';
+export * from './procstop';
 export * from './update';
 export * from './uptime';
 export * from './version';

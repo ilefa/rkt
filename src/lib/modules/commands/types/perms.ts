@@ -1,5 +1,5 @@
-import { Message, Permissions, User } from 'discord.js';
 import { getEmoteForPermissions } from '../../../util';
+import { Message, Permissions, User } from 'discord.js';
 import { bold, Command, CommandReturn, emboss } from '@ilefa/ivy';
 
 export class PermissionsCommand extends Command {

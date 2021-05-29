@@ -26,18 +26,22 @@ export class MessageUpdateProbe extends AuditorProbe {
     }
 
     shouldReport = (...args: any[]): boolean => {
-        let message: Message = args[0][0];
-        let entry = this.getEntryForGuild(message.guild);
+        let a: Message = args[0][0];
+        let b: Message = args[0][1];
+        let entry = this.getEntryForGuild(a.guild);
         if (!entry)
             return false;
 
-        if (!message.author
-            || message.author.bot
-            || message.type !== 'DEFAULT'
-            || !message.content
-            || message.attachments.some(attachment => conforms(/^http(?:s){0,}:\/{2}(?:giphy.com|tenor.com|kapwing.com|imgflip.com|gifsoup.com|imgplay|senorgif.com)/, attachment.url))
-            || conforms(/^\.\w+(?:\s.+){0,}/, message.content))
-        return false;
+        if (!a.author
+                || a.author.bot
+                || a.type !== 'DEFAULT'
+                || !a.content
+                || !a.attachments.array() && b.attachments.array()
+                || !b.attachments.array() && a.attachments.array()
+                || a.content === b.content
+                || a.attachments.some(attachment => conforms(/^http(?:s){0,}:\/{2}(?:giphy.com|tenor.com|kapwing.com|imgflip.com|gifsoup.com|imgplay|senorgif.com|youtube.com)/, attachment.url))
+                || conforms(/^\.\w+(?:\s.+){0,}/, a.content))
+            return false;
 
 
         return entry.events.includes(this.eventType);

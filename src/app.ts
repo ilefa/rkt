@@ -84,6 +84,7 @@ import {
     VolumeCommand,
     WhereAmIFlow,
     WhoHasCommand,
+    ProcessStopCommand,
 } from './lib/modules/commands';
 
 export default class RktBot extends IvyEngine {
@@ -160,6 +161,7 @@ export default class RktBot extends IvyEngine {
         this.registerCommand('play', new PlayCommand());
         this.registerCommand('poll', new PollCommand());
         this.registerCommand('prefs', new PrefsCommand());
+        this.registerCommand('procstop', new ProcessStopCommand(this.moduleManager));
         this.registerCommand('say', new SayCommand());
         this.registerCommand('section', new SectionCommand());
         this.registerCommand('shuffle', new ShuffleCommand());
@@ -167,7 +169,7 @@ export default class RktBot extends IvyEngine {
         this.registerCommand('sound', new SoundCommand());
         this.registerCommand('stimmy', new StimmyCommand());
         this.registerCommand('stonks', new StonksCommand());
-        this.registerCommand('stop', new StopCommand(this.moduleManager));
+        this.registerCommand('stop', new StopCommand());
         this.registerCommand('ucs', new UConnStatusCommand());
         this.registerCommand('update', new UpdateCommand());
         this.registerCommand('uptime', new UptimeCommand(this.start));

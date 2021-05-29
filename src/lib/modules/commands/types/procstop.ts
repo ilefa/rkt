@@ -10,12 +10,12 @@ import {
     ModuleManager
 } from '@ilefa/ivy';
 
-export class StopCommand extends Command {
+export class ProcessStopCommand extends Command {
 
     moduleManager: ModuleManager;
 
     constructor(moduleManager: ModuleManager) {
-        super('stop', `Invalid usage: ${emboss('.stop')}`, 'change da world, my final message... goodbye', [], CustomPermissions.SUPER_PERMS, false);
+        super('procstop', `Invalid usage: ${emboss('.procstop')}`, 'change da world, my final message... goodbye', [], CustomPermissions.SUPER_PERMS, false);
         this.moduleManager = moduleManager;
     }
 

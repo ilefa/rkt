@@ -149,7 +149,7 @@ export class PlayCommand extends Command {
         }
         
         let selectionEmbed = PaginatedEmbed.ofItems(this.engine, message.channel as TextChannel,
-            user, `${message.guild.name} Results`, EmbedIconType.AUDIO,
+            user, `Audio Search`, EmbedIconType.AUDIO,
             pageObjects, 6, transform);
 
         message.channel.awaitMessages((message: Message) => message && message.author.id === user.id,
@@ -184,7 +184,11 @@ export class PlayCommand extends Command {
                     selectionEmbed.message.delete();
                 });
             })
-            .catch(() => message.reply(`:hourglass: Media selection timed out.`));
+            .catch(() => {
+                message.reply(`:hourglass: Media selection timed out.`);
+                selectionEmbed.collector.stop();
+                selectionEmbed.message.delete();
+            });
 
         return CommandReturn.EXIT;
     }

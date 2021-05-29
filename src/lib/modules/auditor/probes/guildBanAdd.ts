@@ -1,6 +1,6 @@
 import { AuditorProbe } from '..';
 import { Guild, User } from 'discord.js';
-import { asMention, bold } from '@ilefa/ivy';
+import { asMention, bold, emboss } from '@ilefa/ivy';
 
 export class GuildBanAddProbe extends AuditorProbe {
     
@@ -17,7 +17,21 @@ export class GuildBanAddProbe extends AuditorProbe {
             return;
 
         let displayServer = entry.tracks.length !== 1;
-        reports.send(`${this.manager.MEMBERS} ${asMention(user)} (${user.id}) was banned${displayServer ? ` from ${bold(guild.name)}` : ``}.`);
+        let auditReport = await guild.fetchAuditLogs({
+            limit: 1,
+            type: 'MEMBER_BAN_ADD'
+        });
+
+        let auditEntry = auditReport.entries.first();
+        if (!auditEntry || (auditEntry.target as User).id !== user.id) {
+            reports.send(`${this.manager.MEMBERS} ${asMention(user)} (${user.id}) was banned${displayServer ? ` from ${bold(guild.name)}` : ``}.`);
+            return;
+        }
+
+        let { executor, reason } = auditEntry;
+        reports.send(`${this.manager.MEMBERS} ${asMention(user)} (${user.id}) was banned${displayServer ? ` from ${bold(guild.name)}` : ``} by ${bold(this.asName(executor))}.` 
+                   + reason ? `${this.manager.DIVIDER} The provided reason for this punishment was ${emboss(reason)}.` : '');
+
     }
 
     shouldReport = (...args: any[]): boolean => {
