@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 import { EmbedIconType, getCampusIndicator } from '../../../../util';
 import { Message, Permissions, TextChannel, User } from 'discord.js';
 import { CampusType, ProfessorData, searchCourse } from '@ilefa/husky';

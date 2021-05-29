@@ -11,10 +11,17 @@ import {
     replaceAll
 } from '@ilefa/ivy';
 
+enum PermissionSorting {
+    MEMBER,
+    MOD,
+    ADMIN,
+    SUPER
+}
+
 export class HelpCommand extends Command {
     
     constructor() {
-        super('help', `Invalid usage: ${emboss('.help [category]')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
+        super('help', `Invalid usage: ${emboss('.help')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
@@ -29,15 +36,10 @@ export class HelpCommand extends Command {
             .filter(_cmd => !_cmd.command.hideFromHelp)
             .filter(_cmd => this.engine.has(user, _cmd.command.permission, message.guild))
             .sort((a, b) => {
-                let ap = a.command.permission === CustomPermissions.SUPER_PERMS 
-                    ? -a.command.permission 
-                    : a.command.permission;
-                
-                let bp = b.command.permission === CustomPermissions.SUPER_PERMS
-                    ? -b.command.permission
-                    : b.command.permission;
+                let ap = this.getPermissionSort(a.command.permission);
+                let bp = this.getPermissionSort(b.command.permission);
 
-                return bp - ap;
+                return ap - bp;
             })
             .map(_cmd => {
                 let command = _cmd.command;
@@ -68,9 +70,13 @@ export class HelpCommand extends Command {
             legend += `${getEmoteForCommandPermission(Permissions.FLAGS.ADMINISTRATOR)} Administrator\n\t${bold(message.guild.name)} server administrators\n\n`;
         }
 
+        if (this.engine.has(user, Permissions.FLAGS.BAN_MEMBERS, message.guild)) {
+            legend += `${getEmoteForCommandPermission(Permissions.FLAGS.BAN_MEMBERS)} Moderators\n\t${bold(message.guild.name)} server moderators\n\n`
+        }
+
         legend += `${getEmoteForCommandPermission(Permissions.FLAGS.SEND_MESSAGES)} Member\n\t${bold(message.guild.name)} server members`;
 
-        message.reply(this.embeds.build('rkt help', EmbedIconType.HELP, `${bold('rkt')} version 0.1 (master)\n` 
+        message.reply(this.embeds.build('rkt help', EmbedIconType.HELP, `${bold('rkt')} version ${await this.engine.getCurrentVersion()} (${await this.engine.getReleaseChannel()})\n` 
             + `Made with lots of :blue_heart: and :rocket: by <@177167251986841600> & <@268044207854190604>.\n\n`
             + `${bold(`Command List (${commands.length})`)}\n` 
             + helpList.trim(),
@@ -83,6 +89,20 @@ export class HelpCommand extends Command {
             ], message));
 
         return CommandReturn.EXIT;
+    }
+
+    private getPermissionSort = (perm: number) => {
+        if (perm === Permissions.FLAGS.SEND_MESSAGES)
+            return PermissionSorting.MEMBER;
+
+        if (perm === Permissions.FLAGS.BAN_MEMBERS)
+            return PermissionSorting.MOD;
+
+        if (perm === Permissions.FLAGS.ADMINISTRATOR)
+            return PermissionSorting.ADMIN;
+
+        if (perm === CustomPermissions.SUPER_PERMS)
+            return PermissionSorting.SUPER;
     }
 
 }

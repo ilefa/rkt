@@ -1,6 +1,6 @@
 import env from '../../../../env.json';
 
-import { Module, resolvableToId } from '@ilefa/ivy';
+import { Module, numberEnding, resolvableToId } from '@ilefa/ivy';
 import {
     Client,
     GuildMember,
@@ -113,7 +113,7 @@ export default class Auditor extends Module {
     readonly WIDGET = '<:widget:847615965084647474>';
     readonly VERIFIED = '<:verified:847618591858753609>';
     readonly WEBHOOK = '<:webhook:847690690976940032>';
-    readonly DIVIDER = ':white_small_square:';
+    readonly DIVIDER = '<:transparent:848092920979652648>';
 
     constructor() {
         super('Auditor');
@@ -160,10 +160,8 @@ export default class Auditor extends Module {
             this.config.set(dupe.guild, dupe.entry);
         }
 
-        this.manager.engine.logger.info('Auditor', `Auditor activated.`);
-        this.manager.engine.logger.info('Auditor', `Events in use: [${inUse.join(', ')}]`);
-
         this.client.on('ready', () => {
+            this.manager.engine.logger.info('Auditor', `Auditor activated with ${this.probes.length} investigation${numberEnding(this.probes.length)}.`);            
             for (let event of inUse) {
                 let handler = this.probes.find(handler => handler.eventType === event);
                 if (!handler)
@@ -189,7 +187,6 @@ export default class Auditor extends Module {
         probe.manager = this;
         probe.client = this.client;
         this.probes.push(probe);
-        this.manager.engine.logger.info('Auditor', `[${probe.eventType}] probe registered.`);
     }
 
     private hasDuplicateProbe = (eventType: string) => this.probes.some(probe => probe.eventType === eventType);

@@ -13,11 +13,12 @@ import {
     numberEnding,
     RED_CIRCLE,
     GREEN_CIRCLE,
-    YELLOW_CIRCLE
+    YELLOW_CIRCLE,
+    BLUE_CIRCLE
 } from '@ilefa/ivy';
 
 const OPERATIONAL = GREEN_CIRCLE;
-const REPORTING = '<:blue:836447279782297640>';
+const REPORTING = BLUE_CIRCLE;
 const DEGRADED = YELLOW_CIRCLE;
 const OUTAGE = RED_CIRCLE;
 

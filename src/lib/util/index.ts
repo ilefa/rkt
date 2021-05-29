@@ -231,6 +231,7 @@ export const getEmoteForPermissions = (superPerms: boolean, admin: boolean) => {
 export const getEmoteForCommandPermission = (permission: number) => {
     if (permission === CustomPermissions.SUPER_PERMS) return ':eight_spoked_asterisk:';
     if (permission === Permissions.FLAGS.ADMINISTRATOR) return ':a:';
+    if (permission === Permissions.FLAGS.BAN_MEMBERS) return ':passport_control:';
     return ':regional_indicator_m:';
 }
 

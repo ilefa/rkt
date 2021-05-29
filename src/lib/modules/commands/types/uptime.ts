@@ -7,7 +7,7 @@ export class UptimeCommand extends Command {
     uptime: number;
 
     constructor(uptime: number) {
-        super('uptime', `Invalid usage: ${emboss('.uptime')}`, null, [], Permissions.FLAGS.ADMINISTRATOR, false);
+        super('uptime', `Invalid usage: ${emboss('.uptime')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
         this.uptime = uptime;
     }
 
