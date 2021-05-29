@@ -161,7 +161,7 @@ export default class Auditor extends Module {
         }
 
         this.client.on('ready', () => {
-            this.manager.engine.logger.info('Auditor', `Auditor activated with ${this.probes.length} investigation${numberEnding(this.probes.length)}.`);            
+            this.manager.engine.logger.info('Auditor', `Launched ${this.probes.length} investigation${numberEnding(this.probes.length)}.`);            
             for (let event of inUse) {
                 let handler = this.probes.find(handler => handler.eventType === event);
                 if (!handler)

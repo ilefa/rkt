@@ -76,7 +76,7 @@ export class HelpCommand extends Command {
 
         legend += `${getEmoteForCommandPermission(Permissions.FLAGS.SEND_MESSAGES)} Member\n\t${bold(message.guild.name)} server members`;
 
-        message.reply(this.embeds.build('rkt help', EmbedIconType.HELP, `${bold('rkt')} version ${await this.engine.getCurrentVersion()} (${await this.engine.getReleaseChannel()})\n` 
+        message.reply(this.embeds.build('rkt help', EmbedIconType.HELP, `${bold('rkt')} version ${bold(await this.engine.getCurrentVersion())} ${bold(`(${await this.engine.getReleaseChannel()})`)}\n` 
             + `Made with lots of :blue_heart: and :rocket: by <@177167251986841600> & <@268044207854190604>.\n\n`
             + `${bold(`Command List (${commands.length})`)}\n` 
             + helpList.trim(),
