@@ -5,6 +5,7 @@ import { bold, mentionChannel } from '@ilefa/ivy';
 enum VoiceStateCause {
     CONNECT,
     DISCONNECT,
+    SWITCH_CHANNEL,
     SERVER_DEAF,
     SERVER_DEAF_OFF,
     SERVER_MUTE,
@@ -57,6 +58,9 @@ export class VoiceStateUpdateProbe extends AuditorProbe {
         if (cause == VoiceStateCause.DISCONNECT)
             return `${this.manager.VOICE} ${bold(this.asName(a.member))} disconnected from ${mentionChannel(a.channel.id) + end}.`;
 
+        if (cause == VoiceStateCause.SWITCH_CHANNEL)
+            return `${this.manager.VOICE} ${bold(this.asName(a.member))} switched from ${mentionChannel(a.channel.id)} to ${mentionChannel(b.channel.id) + end}.`;
+
         if (cause == VoiceStateCause.SERVER_DEAF)
             return `${this.manager.DEAFEN} ${bold(this.asName(a.member))} was server deafened${end}.`;
 
@@ -82,6 +86,9 @@ export class VoiceStateUpdateProbe extends AuditorProbe {
         
         if (a.channel && !b.channel)
             return VoiceStateCause.DISCONNECT;
+
+        if (a.channel.id !== b.channel.id)
+            return VoiceStateCause.SWITCH_CHANNEL;
             
         if (!a.serverDeaf && b.serverDeaf)
             return VoiceStateCause.SERVER_DEAF;
