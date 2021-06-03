@@ -1,6 +1,6 @@
 import { Message, Permissions, User } from 'discord.js';
 import { asMention, bold, Command, CommandReturn, emboss, italic } from '@ilefa/ivy';
-import { EmbedIconType, RESPONSE_GROUP_EMOJI, RESPONSE_GROUP_EMOJI_RAW } from '../../../../util';
+import { EmbedIconType, RESPONSE_GROUP_EMOJI, RESPONSE_GROUP_EMOJI_RAW } from '../../../util';
 
 export class PollCommand extends Command {
 

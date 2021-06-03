@@ -18,10 +18,7 @@ import {
 export const quote = async (ticker: string, range: string | RangeGranularity, interval: string | DataGranularity): Promise<StonkQuote> => await axios
     .get(`https://query2.finance.yahoo.com/v7/finance/chart/${ticker}?range=${range}&interval=${interval}&includeTimestamps=true&corsDomain=finance.yahoo.com`)
     .then(res => res.data.chart.result[0])
-    .then(data => {
-        return data;
-    })
-    .catch(console.error);
+    .catch(_ => null);
 
 /**
  * Attempts to retrieve options data for the given ticker.
@@ -30,10 +27,7 @@ export const quote = async (ticker: string, range: string | RangeGranularity, in
 export const getOptions = async (ticker: string, expDate?: string | number): Promise<OptionsData> => await axios
     .get(`https://query2.finance.yahoo.com/v7/finance/options/${ticker + (expDate ? '?date=' + expDate : '')}`)
     .then(res => res.data.optionChain.result[0])
-    .then(data => {
-        return data;
-    })
-    .catch(console.error);
+    .catch(_ => null);
 
 /**
  * Attempts to retrieve options data for the given ticker.
@@ -41,10 +35,7 @@ export const getOptions = async (ticker: string, expDate?: string | number): Pro
  */
 export const getExpirationDates = async (ticker: string): Promise<number[]> => {
     let data = await getOptions(ticker);
-    if (!data) {
-        return null;
-    } 
-
+    if (!data) return null;
     return data.expirationDates;
 }
 
@@ -56,4 +47,4 @@ export const getFutures = async (tickers: string[]): Promise<FuturesQuote[]> => 
     .get(`https://quote.cnbc.com/quote-html-webservice/quote.htm?partnerId=2&requestMethod=quick&exthrs=1&noform=1&fund=1&output=json&symbols=${tickers.join('|')}`)
     .then(res => res.data)
     .then(data => data.QuickQuoteResult.QuickQuote)
-    .catch(console.error);
+    .catch(_ => null);

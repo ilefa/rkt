@@ -7,7 +7,7 @@ import { bold, Command, CommandReturn, emboss, getVoiceConnection } from '@ilefa
 export class SkipCommand extends Command {
 
     constructor() {
-        super('skip', `Invalid usage: ${emboss('.skip [amount]')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false);
+        super('skip', `Invalid usage: ${emboss('.skip [amount]')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false, false, ['DJ']);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

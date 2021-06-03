@@ -6,7 +6,7 @@ import { Command, CommandReturn, emboss } from '@ilefa/ivy';
 export class StopCommand extends Command {
 
     constructor() {
-        super('stop', `Invalid usage: ${emboss('.stop')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false);
+        super('stop', `Invalid usage: ${emboss('.stop')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false, false, ['DJ']);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

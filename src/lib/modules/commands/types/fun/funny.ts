@@ -18,7 +18,7 @@ import {
 export class FunnyCommand extends Command {
 
     constructor() {
-        super('funny', `Invalid usage: ${emboss('.funny <display url> <secondary url>')}`, null, [], CustomPermissions.SUPER_PERMS);
+        super('funny', `Invalid usage: ${emboss('.funny <display url> <secondary url>')}`, null, [], CustomPermissions.SUPER_PERMS, true, false, [], [], true);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

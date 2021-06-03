@@ -15,7 +15,7 @@ import {
 export class PrefsCommand extends Command {
 
     constructor() {
-        super('prefs', `Invalid usage: ${emboss('.prefs')}`, null, [], CustomPermissions.SUPER_PERMS, false);
+        super('prefs', `Invalid usage: ${emboss('.prefs')}`, null, [], CustomPermissions.SUPER_PERMS, false, false, [], [], true);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

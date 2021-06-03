@@ -5,7 +5,7 @@ import { Command, CommandReturn, CustomPermissions, emboss } from '@ilefa/ivy';
 export class FlowCommand extends Command {
 
     constructor() {
-        super('flow', `Invalid usage: ${emboss('.flow <name>')}`, null, [], CustomPermissions.SUPER_PERMS, false);
+        super('flow', `Invalid usage: ${emboss('.flow <name>')}`, null, [], CustomPermissions.SUPER_PERMS, false, false, [], [], true);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

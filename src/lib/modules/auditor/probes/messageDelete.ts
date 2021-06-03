@@ -54,9 +54,9 @@ export class MessageDeleteProbe extends AuditorProbe {
                    + `${this.manager.DIVIDER} Original content:`);
 
         // make sure the message can fit in the code block
-        reports.send(codeBlock(message.content.length === 2000
+        reports.send(codeBlock('', message.content.length === 2000
             ? message.content.substring(0, message.content.length - 9)
-            : message.content, ''));
+            : message.content));
     }
 
     shouldReport = (...args: any[]): boolean => {

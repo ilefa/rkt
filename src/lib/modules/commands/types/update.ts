@@ -6,7 +6,7 @@ import { bold, Command, CommandReturn, CustomPermissions, emboss } from '@ilefa/
 export class UpdateCommand extends Command {
 
     constructor() {
-        super('update', `Invalid usage: ${emboss('.update')}`, null, [], CustomPermissions.SUPER_PERMS, false);
+        super('update', `Invalid usage: ${emboss('.update')}`, null, [], CustomPermissions.SUPER_PERMS, false, false, [], [], true);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

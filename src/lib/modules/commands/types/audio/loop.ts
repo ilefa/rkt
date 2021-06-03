@@ -7,7 +7,7 @@ import { bold, Command, CommandReturn, emboss, getVoiceConnection } from '@ilefa
 export class LoopCommand extends Command {
 
     constructor() {
-        super('loop', `Invalid usage: ${emboss('.loop')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false);
+        super('loop', `Invalid usage: ${emboss('.loop')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false, false, ['DJ']);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

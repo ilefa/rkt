@@ -34,6 +34,7 @@ export class HelpCommand extends Command {
 
         commands
             .filter(_cmd => !_cmd.command.hideFromHelp)
+            .filter(_cmd => _cmd.command.internalCommand && this.engine.opts.reportErrors.includes(message.guild.id))
             .filter(_cmd => this.engine.has(user, _cmd.command.permission, message.guild))
             .sort((a, b) => {
                 let ap = this.getPermissionSort(a.command.permission);

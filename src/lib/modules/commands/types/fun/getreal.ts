@@ -36,7 +36,7 @@ const weightedMap = new Map<string, number>()
 export class GetRealCommand extends Command {
     
     constructor() {
-        super('getreal', `Invalid usage: ${emboss('.getreal')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
+        super('getreal', `Invalid usage: ${emboss('.getreal')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false, false, [], [], true);
     }
     
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

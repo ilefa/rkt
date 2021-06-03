@@ -7,7 +7,7 @@ import { asMention, bold, Command, CommandReturn, emboss, getVoiceConnection } f
 export class ShuffleCommand extends Command {
 
     constructor() {
-        super('shuffle', `Invalid usage: ${emboss('.shuffle [-i]')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false);
+        super('shuffle', `Invalid usage: ${emboss('.shuffle [-i]')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false, false, ['DJ']);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

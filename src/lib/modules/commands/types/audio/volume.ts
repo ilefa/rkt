@@ -5,7 +5,7 @@ import { bold, Command, CommandReturn, emboss } from '@ilefa/ivy';
 export class VolumeCommand extends Command {
 
     constructor() {
-        super('vol', `Invalid usage: ${emboss('.vol <0 - 1.0>')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false);
+        super('vol', `Invalid usage: ${emboss('.vol <0 - 1.0>')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false, false, ['DJ']);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

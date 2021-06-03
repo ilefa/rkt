@@ -7,7 +7,7 @@ import { bold, Command, CommandReturn, emboss, getVoiceConnection } from '@ilefa
 export class PauseCommand extends Command {
 
     constructor() {
-        super('pause', `Invalid usage: ${emboss('.pause')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false);
+        super('pause', `Invalid usage: ${emboss('.pause')}`, null, [], Permissions.FLAGS.BAN_MEMBERS, false, false, ['DJ']);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

@@ -5,7 +5,7 @@ import { Command, CommandReturn, emboss } from '@ilefa/ivy';
 export class StonksCommand extends Command {
 
     constructor() {
-        super('stonks', `Invalid usage: ${emboss('.stonks')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false);
+        super('stonks', `Invalid usage: ${emboss('.stonks')}`, null, [], Permissions.FLAGS.SEND_MESSAGES, false, true, [], [], true);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

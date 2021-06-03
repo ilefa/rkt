@@ -30,20 +30,18 @@ export class EvalCommand extends Command {
                      + ` • You must use type JS or TS as the language specifier.`,
                 inline: false
             }
-        ], CustomPermissions.SUPER_PERMS, false);
+        ], CustomPermissions.SUPER_PERMS, false, false, [], [], true);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {
-        if (args.length === 0) {
+        if (args.length === 0)
             return CommandReturn.HELP_MENU;
-        }
         
         let exec = args.join(' ');
-        if (conforms(HEADER, exec)) {
+        if (conforms(HEADER, exec))
             exec = exec
-                .split(HEADER)[1]
-                .split('```')[0];
-        }
+                    .split(HEADER)[1]
+                    .split('```')[0];
 
         try {
             let res = eval(exec);

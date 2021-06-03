@@ -2,10 +2,7 @@ import moment from 'moment';
 
 import { Colors, IvyEngine, StartupRunnable } from '@ilefa/ivy';
 
-export default class Watermark implements StartupRunnable {
-    run(engine: IvyEngine): void {
-        let { logger } = engine;
-logger.unlisted(Colors.GREEN + `
+const MESSAGE = Colors.GREEN + `
                    |
                   / \\
                  / _ \\            _    _   
@@ -15,9 +12,13 @@ logger.unlisted(Colors.GREEN + `
               ,'|  |  |\`.   |_|  |_|\\_\\\\__|
              /  |  |  |  \\
              |,-'--|--'-.|                                            
-` + Colors.RESET);
-logger.unlisted(`            Booting ${logger.wrap(Colors.GREEN, 'rkt')} version ${logger.wrap(Colors.DIM, '0.1 (master)')}`);
-logger.unlisted(`                  ILEFA Labs (c) ${moment().format('YYYY')}`);
-logger.unlisted(``);
+` + Colors.RESET;
+
+export default class Watermark implements StartupRunnable {
+    run({ logger }: IvyEngine): void {
+        logger.unlisted(MESSAGE);
+        logger.unlisted(`            Booting ${logger.wrap(Colors.GREEN, 'rkt')} version ${logger.wrap(Colors.DIM, '0.1 (master)')}`);
+        logger.unlisted(`                  ILEFA Labs (c) ${moment().format('YYYY')}`);
+        logger.unlisted(``);
     }
 }

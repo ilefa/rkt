@@ -5,7 +5,7 @@ import { Permissions } from 'discord.js';
 import { MACD, RSI } from 'trading-signals';
 import { EnrollmentPayload } from '@ilefa/husky';
 import { PriceList, RangeGranularity, StonkQuote } from '../stonk';
-import { CustomPermissions, getArrowEmoteForData, getDurationWithUnit } from '@ilefa/ivy';
+import { CustomPermissions, getArrowEmoteForData, toDuration } from '@ilefa/ivy';
 
 export enum EmbedIconType {
     AUDIO = 'https://storage.googleapis.com/stonks-cdn/audio.png',
@@ -269,7 +269,7 @@ export const getCampusIndicator = (campus: string) => {
  * @param prices the list of prices for the given time period
  */
 export const getMovingAverage = (range: RangeGranularity, prices: PriceList[]) => {
-    let duration = getDurationWithUnit(range, 'millisecond');
+    let duration = toDuration(range, 'millisecond');
     let ma = MA(duration);
     prices.forEach(ent => ma.push(ent.x, ent.y));
 

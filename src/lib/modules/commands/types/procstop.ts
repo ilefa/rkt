@@ -15,7 +15,7 @@ export class ProcessStopCommand extends Command {
     moduleManager: ModuleManager;
 
     constructor(moduleManager: ModuleManager) {
-        super('procstop', `Invalid usage: ${emboss('.procstop')}`, 'change da world, my final message... goodbye', [], CustomPermissions.SUPER_PERMS, false);
+        super('procstop', `Invalid usage: ${emboss('.procstop')}`, 'change da world, my final message... goodbye', [], CustomPermissions.SUPER_PERMS, false, false, [], [], true);
         this.moduleManager = moduleManager;
     }
 

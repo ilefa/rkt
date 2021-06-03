@@ -21,8 +21,9 @@ export class VersionCommand extends Command {
             `This instance of ${bold('rkt')} is running version ${emboss(ver)} via release channel ${emboss(channel)}.\n\n` 
             + `${bold('Updater')}\n` 
             + `${upstream.toLowerCase() !== ver.toLowerCase() && upstream !== 'unknown'
-                ? `Found new version ${emboss(upstream)} via release channel ${emboss(channel)}.\nExecute ${bold('.update')} to install updates.` 
-                : `This version is up-to-date. ${emboss('(' + upstream + ' via git:' + channel + ')')}`}`, null, message));
+                ? `Found new version ${emboss(upstream)} via release channel ${emboss(channel)}.\n` 
+                    + `Execute ${bold('.update')} to install updates.` 
+                : `This version is up-to-date.`}`, null, message));
 
         return CommandReturn.EXIT;
     }

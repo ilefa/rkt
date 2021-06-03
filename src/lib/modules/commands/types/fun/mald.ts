@@ -4,7 +4,7 @@ import { Command, CommandReturn, emboss } from '@ilefa/ivy';
 export class MaldCommand extends Command {
 
     constructor() {
-        super('mald', `Invalid usage: ${emboss('.mald')}`, 'fleance be maldin, it never stops :(', [], Permissions.FLAGS.SEND_MESSAGES, false);
+        super('mald', `Invalid usage: ${emboss('.mald')}`, 'fleance be maldin, it never stops :(', [], Permissions.FLAGS.SEND_MESSAGES, false, false, [], [], true);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

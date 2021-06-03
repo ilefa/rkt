@@ -104,7 +104,7 @@ const valid = [
 export class SoundCommand extends Command {
 
     constructor() {
-        super('sound', `Invalid usage: ${emboss('.sound <type>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR, false);
+        super('sound', `Invalid usage: ${emboss('.sound <type>')}`, null, [], Permissions.FLAGS.ADMINISTRATOR, false, false, [], [], true);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

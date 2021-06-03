@@ -42,18 +42,17 @@ export class WhoHasCommand extends Command {
 
         let { name, color, members: m } = role;
         let members = m.array();
-        let sliced = 0;
-        if (members.length > 80) {
-            sliced = Math.min(members.length - 80);
-            members = members.slice(0, 80);
-        }
+        let len = members.length;
+        members = members.slice(0, Math.min(members.length, 80));
+        let sliced = len - members.length;
 
         let str = join(members.sort((a, b) => a.displayName.localeCompare(b.displayName)), ', ', member => asMention(member.id));
         let total = members.length + sliced;
         message.reply(this.embeds.build('Role Information', EmbedIconType.PREFS,
             `${bold(`${total} member${numberEnding(total)} with ${name}`)}\n\n` 
-                + `${str}${sliced !== 0 ? `, ${italic(`+ ${sliced} more`)}` : ''}`, null, message)
+                + `${str + (sliced !== 0 ? `, ${italic(`+ ${sliced} more`)}` : '')}`, null, message)
             .setColor(color));
+            
         return CommandReturn.EXIT;
     }
 

@@ -1,6 +1,5 @@
 import env from '../env.json';
 import Watermark from './lib/startup';
-import DataProvider from './lib/data';
 import Auditor from './lib/modules/auditor';
 import PollManager from './lib/modules/poll';
 import AudioManager from './lib/modules/audio';
@@ -113,7 +112,7 @@ export default class RktBot extends IvyEngine {
                 '613783446464102612'
             ],
             color: 0x27AE60,
-            provider: new DataProvider(),
+            prefix: '.',
             startup: new Watermark(),
             presence: {
                 status: 'online',
@@ -135,47 +134,47 @@ export default class RktBot extends IvyEngine {
     }
 
     registerCommands() {
-        this.registerCommand('avatar', new AvatarCommand());
-        this.registerCommand('bigjannie', new BigJannieCommand());
-        this.registerCommand('contract', new ContractCommand());
-        this.registerCommand('course', new CourseCommand());
-        this.registerCommand('dc', new DisconnectCommand());
-        this.registerCommand('eval', new EvalCommand());
-        this.registerCommand('flow', new FlowCommand());
-        this.registerCommand('funny', new FunnyCommand());
-        this.registerCommand('futures', new FuturesCommand());
-        this.registerCommand('getreal', new GetRealCommand());
-        this.registerCommand('help', new HelpCommand());
-        this.registerCommand('invites', new InvitesCommand());
-        this.registerCommand('king', new KingCommand());
-        this.registerCommand('loop', new LoopCommand());
-        this.registerCommand('mald', new MaldCommand());
-        this.registerCommand('members', new MembersCommand());
-        this.registerCommand('minor', new MinorCommand());
-        this.registerCommand('now', new NowPlayingCommand());
-        this.registerCommand('options', new OptionsCommand());
-        this.registerCommand('perms', new PermissionsCommand());
-        this.registerCommand('queue', new QueueCommand());
-        this.registerCommand('quote', new QuoteCommand());
-        this.registerCommand('pause', new PauseCommand());
-        this.registerCommand('play', new PlayCommand());
-        this.registerCommand('poll', new PollCommand());
-        this.registerCommand('prefs', new PrefsCommand());
-        this.registerCommand('procstop', new ProcessStopCommand(this.moduleManager));
-        this.registerCommand('say', new SayCommand());
-        this.registerCommand('section', new SectionCommand());
-        this.registerCommand('shuffle', new ShuffleCommand());
-        this.registerCommand('skip', new SkipCommand());
-        this.registerCommand('sound', new SoundCommand());
-        this.registerCommand('stimmy', new StimmyCommand());
-        this.registerCommand('stonks', new StonksCommand());
-        this.registerCommand('stop', new StopCommand());
-        this.registerCommand('ucs', new UConnStatusCommand());
-        this.registerCommand('update', new UpdateCommand());
-        this.registerCommand('uptime', new UptimeCommand(this.start));
-        this.registerCommand('version', new VersionCommand());
-        this.registerCommand('vol', new VolumeCommand());
-        this.registerCommand('whohas', new WhoHasCommand());
+        this.registerCommand(new AvatarCommand());
+        this.registerCommand(new BigJannieCommand());
+        this.registerCommand(new ContractCommand());
+        this.registerCommand(new CourseCommand());
+        this.registerCommand(new DisconnectCommand());
+        this.registerCommand(new EvalCommand());
+        this.registerCommand(new FlowCommand());
+        this.registerCommand(new FunnyCommand());
+        this.registerCommand(new FuturesCommand());
+        this.registerCommand(new GetRealCommand());
+        this.registerCommand(new HelpCommand());
+        this.registerCommand(new InvitesCommand());
+        this.registerCommand(new KingCommand());
+        this.registerCommand(new LoopCommand());
+        this.registerCommand(new MaldCommand());
+        this.registerCommand(new MembersCommand());
+        this.registerCommand(new MinorCommand());
+        this.registerCommand(new NowPlayingCommand());
+        this.registerCommand(new OptionsCommand());
+        this.registerCommand(new PermissionsCommand());
+        this.registerCommand(new QueueCommand());
+        this.registerCommand(new QuoteCommand());
+        this.registerCommand(new PauseCommand());
+        this.registerCommand(new PlayCommand());
+        this.registerCommand(new PollCommand());
+        this.registerCommand(new PrefsCommand());
+        this.registerCommand(new ProcessStopCommand(this.moduleManager));
+        this.registerCommand(new SayCommand());
+        this.registerCommand(new SectionCommand());
+        this.registerCommand(new ShuffleCommand());
+        this.registerCommand(new SkipCommand());
+        this.registerCommand(new SoundCommand());
+        this.registerCommand(new StimmyCommand());
+        this.registerCommand(new StonksCommand());
+        this.registerCommand(new StopCommand());
+        this.registerCommand(new UConnStatusCommand());
+        this.registerCommand(new UpdateCommand());
+        this.registerCommand(new UptimeCommand(this.start));
+        this.registerCommand(new VersionCommand());
+        this.registerCommand(new VolumeCommand());
+        this.registerCommand(new WhoHasCommand());
     }
 
     registerModules() {
