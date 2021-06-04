@@ -10,11 +10,11 @@ import { CustomPermissions, getArrowEmoteForData, toDuration } from '@ilefa/ivy'
 export enum EmbedIconType {
     AUDIO = 'https://storage.googleapis.com/stonks-cdn/audio.png',
     BIRTHDAY = 'https://storage.googleapis.com/stonks-cdn/birthday.png',
-    COUNTHER = 'https://storage.googleapis.com/stonks-cdn/counther.png',
     ERROR = 'https://storage.googleapis.com/stonks-cdn/error.png',
     HELP = 'https://storage.googleapis.com/stonks-cdn/help.png',
-    JACK = 'https://storage.googleapis.com/stonks-cdn/jack.png',
+    MEMBER = 'https://storage.googleapis.com/stonks-cdn/member.png',
     MESSAGE = 'https://storage.googleapis.com/stonks-cdn/message.png',
+    NUMBERS = 'https://storage.googleapis.com/stonks-cdn/numbers.png',
     POLL = 'https://storage.googleapis.com/stonks-cdn/poll.png',
     PREFS = 'https://storage.googleapis.com/stonks-cdn/prefs.png',
     STONKS = 'https://storage.googleapis.com/stonks-cdn/stonks.png',
@@ -91,7 +91,7 @@ export const RESPONSE_GROUP_EMOJI_RAW = [
     '🇲', '🇳', '🇴',
     '🇵', '🇶', '🇷',
     '🇸', '🇹'
-]
+];
 
 export const COMPARISON_LEGEND = [
     ":red_circle:",
@@ -100,7 +100,7 @@ export const COMPARISON_LEGEND = [
     ":green_circle:",
     ":blue_circle:",
     ":purple_circle:"
-]
+];
 
 export const validRanges = ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max'];
 export const validIntervals = ['1m', '5m', '10m', '15m', '30m', '1h', '2h', '4h', 'D', 'W', 'M', 'Q', 'Y'];

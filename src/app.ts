@@ -55,6 +55,8 @@ import {
     HelpCommand,
     InvitesCommand,
     KingCommand,
+    ListCommandsFlow,
+    ListFlowsFlow,
     LoopCommand,
     MaldCommand,
     MembersCommand,
@@ -67,6 +69,7 @@ import {
     PlayCommand,
     PollCommand,
     PrefsCommand,
+    ProcessStopCommand,
     QueueCommand,
     SayCommand,
     SectionCommand,
@@ -82,8 +85,7 @@ import {
     VersionCommand, 
     VolumeCommand,
     WhereAmIFlow,
-    WhoHasCommand,
-    ProcessStopCommand,
+    WhoHasCommand
 } from './lib/modules/commands';
 
 export default class RktBot extends IvyEngine {
@@ -130,7 +132,7 @@ export default class RktBot extends IvyEngine {
     }
 
     onReady(_client: Client): void {
-        this.registerEventHandler(new CustomEventManager(this, this.commandManager, this.reactionHandler, this.pollHandler));        
+        this.registerEventHandler(new CustomEventManager(this, this.commandManager, this.reactionHandler, this.pollHandler));  
     }
 
     registerCommands() {
@@ -214,6 +216,8 @@ export default class RktBot extends IvyEngine {
     }
 
     registerFlows() {
+        this.registerFlow(new ListCommandsFlow());
+        this.registerFlow(new ListFlowsFlow());
         this.registerFlow(new WhereAmIFlow());
     }
 

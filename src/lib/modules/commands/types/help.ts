@@ -32,9 +32,14 @@ export class HelpCommand extends Command {
         let commands = this.manager.commands;
         let helpList = '';
 
-        commands
+        commands = commands
             .filter(_cmd => !_cmd.command.hideFromHelp)
-            .filter(_cmd => _cmd.command.internalCommand && this.engine.opts.reportErrors.includes(message.guild.id))
+            .filter(_cmd => {
+                if (!_cmd.command.internalCommand)
+                    return true;
+
+                return this.engine.opts.reportErrors.includes(message.guild.id);
+            })
             .filter(_cmd => this.engine.has(user, _cmd.command.permission, message.guild))
             .sort((a, b) => {
                 let ap = this.getPermissionSort(a.command.permission);
@@ -45,21 +50,19 @@ export class HelpCommand extends Command {
             .map(_cmd => {
                 let command = _cmd.command;
                 let help = replaceAll(command.help.split('Invalid usage: ')[1], '``', '');
-                if (help === '.' + command.name) {
+                if (help === '.' + command.name)
                     help = null;
-                }
 
-                if (command instanceof MultiCommand) {
+                if (command instanceof MultiCommand)
                     help = null;
-                }
 
                 // ignores dumb help messages
-                if (!command.help.includes('Invalid usage')) {
+                if (!command.help.includes('Invalid usage'))
                     help = null;
-                }
 
                 let perm = getEmoteForCommandPermission(command.permission);
                 helpList += `${perm + ' ' + bold('.' + command.name + (help ? ':' : ''))} ${help ? help : ''}\n`;
+                return _cmd;
             });
 
         let legend = '';

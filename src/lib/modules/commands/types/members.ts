@@ -38,7 +38,7 @@ export class MembersCommand extends Command {
         let dnd = count(members, member => member.presence.status ===  'dnd');
         let offline = count(members, member => member.presence.status ===  'offline');
 
-        message.reply(this.embeds.build('Member Insights', EmbedIconType.JACK, `${bold('Overview')}\n` 
+        message.reply(this.embeds.build('Member Insights', EmbedIconType.MEMBER, `${bold('Overview')}\n` 
             + `There ${members.length === 1 ? 'is' : 'are'} ${emboss(members.length)} member${numberEnding(members.length)} in ${bold(message.guild.name)}.\n` 
             + `Of these members, ${emboss(bots)} ${bots === 1 ? 'is a' : 'are'} bot${numberEnding(bots)}.\n\n` 
             + `${bold('Members by Status')}\n` 

@@ -24,7 +24,7 @@ export class PollCommand extends Command {
                        `${emboss(`         question prompt        a          b         c         d  `)}\n`,
                 inline: false
             }
-        ], Permissions.FLAGS.ADMINISTRATOR, false);
+        ], Permissions.FLAGS.BAN_MEMBERS, false, false, ['gigachad']);
     }
 
     async execute(user: User, message: Message, args: string[]): Promise<CommandReturn> {

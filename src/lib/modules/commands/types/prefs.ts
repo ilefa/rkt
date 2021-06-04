@@ -33,10 +33,19 @@ export class PrefsCommand extends Command {
             futures += ` • ${emboss(future)}\n`
         })
 
-        let verbose = '';
+        let internal = '';
         this.manager.engine.opts.reportErrors.map(server => {
-            verbose += ` • ${emboss(server)}\n`;
+            internal += ` • ${emboss(server)}\n`;
         });
+
+        let auditorServers = '';
+        []
+            .concat(Array.from(env.auditor, ({ tracks }) => tracks))
+            .join()
+            .split(',')
+            .forEach(server => {
+                auditorServers += ` • ${emboss(server)}\n`;
+            });
 
         message.reply(this.embeds.build('rkt preferences', EmbedIconType.PREFS, '', [
             {
@@ -45,13 +54,18 @@ export class PrefsCommand extends Command {
                 inline: true
             },
             {
-                name: 'Futures Tickers',
-                value: futures,
+                name: 'Internal Servers',
+                value: internal,
                 inline: true
             },
             {
-                name: 'Verbose Servers',
-                value: verbose,
+                name: 'Auditor Servers',
+                value: auditorServers,
+                inline: true
+            },
+            {
+                name: 'Futures Tickers',
+                value: futures,
                 inline: true
             },
             {

@@ -19,11 +19,9 @@ export class VersionCommand extends Command {
 
         message.reply(this.embeds.build('Version', EmbedIconType.TEST,
             `This instance of ${bold('rkt')} is running version ${emboss(ver)} via release channel ${emboss(channel)}.\n\n` 
-            + `${bold('Updater')}\n` 
             + `${upstream.toLowerCase() !== ver.toLowerCase() && upstream !== 'unknown'
-                ? `Found new version ${emboss(upstream)} via release channel ${emboss(channel)}.\n` 
-                    + `Execute ${bold('.update')} to install updates.` 
-                : `This version is up-to-date.`}`, null, message));
+                ? `${bold('Updater')}\nFound new version ${emboss(upstream)} via release channel ${emboss(channel)}.\n` 
+                    + `Execute ${bold('.update')} to install updates.` : ``}`, null, message));
 
         return CommandReturn.EXIT;
     }
