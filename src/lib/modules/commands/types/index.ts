@@ -31,6 +31,7 @@ export * from './stonks/stonks';
 // UConn
 export * from './uconn/course';
 export * from './uconn/minor';
+export * from './uconn/professor';
 export * from './uconn/section';
 export * from './uconn/status';
 

@@ -39,6 +39,33 @@ export type YtMetaResponse = {
     height?: number;
 }
 
+export const RMP_TAG_PROS = [
+    'gives good feedback',
+    'respected',
+    'accessible outside class',
+    'inspirational',
+    'clear grading criteria',
+    'hilarious',
+    'amazing lectures',
+    'caring',
+    'extra credit',
+    'would take again',
+    'tests? not many'
+]
+
+export const RMP_TAG_CONS = [
+    'lots of homework',
+    'get ready to read',
+    'participation matters',
+    'skip class? you won\'t pass.',
+    'graded by few things',
+    'test heavy',
+    'beware of pop quizzes',
+    'lecture heavy',
+    'so many papers',
+    'tough grader'
+]
+
 export const INVALID_YT_RESPONSE = {
     title: 'Unavailable',
     author_name: 'Unknown',
@@ -279,4 +306,17 @@ export const getMovingAverage = (range: RangeGranularity, prices: PriceList[]) =
         movingDeviation: ma.deviation(),
         forecast: ma.forecast()
     };
+}
+
+/**
+ * Adds a trailing decimal to a number
+ * if it does not have a decimal.
+ * 
+ * @param int the number
+ */
+export const addTrailingDecimal = (int: number) => {
+    if (!int.toString().includes('.'))
+        return int.toString() + '.0';
+
+    return int.toString();
 }

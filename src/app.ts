@@ -85,7 +85,8 @@ import {
     VersionCommand, 
     VolumeCommand,
     WhereAmIFlow,
-    WhoHasCommand
+    WhoHasCommand,
+    ProfessorCommand
 } from './lib/modules/commands';
 
 export default class RktBot extends IvyEngine {
@@ -127,7 +128,7 @@ export default class RktBot extends IvyEngine {
             discord: {
                 partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
                 fetchAllMembers: true,
-            },
+            }
         })
     }
 
@@ -163,6 +164,7 @@ export default class RktBot extends IvyEngine {
         this.registerCommand(new PollCommand());
         this.registerCommand(new PrefsCommand());
         this.registerCommand(new ProcessStopCommand(this.moduleManager));
+        this.registerCommand(new ProfessorCommand());
         this.registerCommand(new SayCommand());
         this.registerCommand(new SectionCommand());
         this.registerCommand(new ShuffleCommand());
