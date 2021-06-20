@@ -145,7 +145,7 @@ export class SectionCommand extends Command {
                 },
                 {
                     name: `Section Information`,
-                    value: `${bold(`Section ${section}`)} is taught by ${bold(res.instructor)} ${rmpLinks}.\n\n`
+                    value: `${bold(`Section ${section}`)} is taught by ${bold(res.instructor ?? 'Unknown')} ${rmpLinks}.\n\n`
                          + `This section ${location}.\n` 
                          + `${getEmoteForEnrollmentState(enrollment)} This section ${!enrollment.overfill ? '' : 'is '}currently ${!enrollment.overfill ? 'has' : ''} ${enrollment.overfill 
                                 ? (enrollment.available === enrollment.total 

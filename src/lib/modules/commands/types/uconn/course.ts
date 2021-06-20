@@ -129,7 +129,7 @@ export class CourseCommand extends Command {
                 let campusIndicator = '';
                 campuses.forEach(campus => campusIndicator += getCampusIndicator(campus));
                 
-                let toAppend = ` • ${bold(`[${campusIndicator}]`)} ${prof.name}${rmpList.length !== 0 ? ` ${rmpList}` : ''}\n     ${prof.sections.map(data => data.section).join(', ')}\n`;
+                let toAppend = ` • ${bold(`[${campusIndicator}]`)} ${prof.name ?? 'Unknown'}${rmpList.length !== 0 ? ` ${rmpList}` : ''}\n     ${prof.sections.map(data => data.section).join(', ')}\n`;
                 
                 // Happens in rare cases such as ENGR1166 wherein same sections and data repeated many times.
                 if (profList.includes(toAppend)) {

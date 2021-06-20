@@ -96,13 +96,19 @@ export class ProfessorCommand extends Command {
                 ratings: totalRatings,
                 takeAgain: averageTakeAgain,
                 difficulty: averageDifficulty,
-                tags: [...new Set(tags.map(tag => capitalizeFirst(tag.toLowerCase())))],
+                tags: [...new Set(tags.map(tag => this.splitAndCapitalize(tag.toLowerCase())))],
                 mostRelevent,
             }
         } else {
             let temp = await getRmpReport(prof.rmpIds[0]);
-            data = { ...temp, mostRelevent: prof.rmpIds[0] };
+            data = {
+                ...temp,
+                tags: [...new Set(temp.tags.map(tag => this.splitAndCapitalize(tag.toLowerCase())))],
+                mostRelevent: prof.rmpIds[0]
+            };
         }
+
+        console.log(data);
 
         message.reply(this.embeds.build(data.name, EmbedIconType.UCONN, `${bold(data.name)} was scored ${bold(`${addTrailingDecimal(data.average)}/5.0`)} based on ${bold(data.ratings)} rating${numberEnding(data.ratings)}.\n` 
             + `Difficulty Score: ${bold(addTrailingDecimal(data.difficulty) + '/5.0')}\n` 
@@ -113,12 +119,12 @@ export class ProfessorCommand extends Command {
                 .tags
                 .filter((val, i, self) => self.indexOf(val) === i)
                 .sort((a, b) => proOrConSorting(a) - proOrConSorting(b))
-                .map(tag => `${proOrCon(tag)} ${this.splitAndcapitalize(tag)}`)
+                .map(tag => `${proOrCon(tag)} ${tag}`)
                 .join('\n'), [], message));
 
         return CommandReturn.EXIT;
     }
     
-    private splitAndcapitalize = (str: string) => str.split(' ').map(capitalizeFirst).join(' ');
+    private splitAndCapitalize = (str: string) => str.split(' ').map(capitalizeFirst).join(' ');
 
 }
