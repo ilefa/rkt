@@ -162,7 +162,7 @@ export default class RktBot extends IvyEngine {
         this.registerCommand(new PauseCommand());
         this.registerCommand(new PlayCommand());
         this.registerCommand(new PollCommand());
-        this.registerCommand(new PrefsCommand());
+        this.registerCommand(new PrefsCommand(this.start));
         this.registerCommand(new ProcessStopCommand(this.moduleManager));
         this.registerCommand(new ProfessorCommand());
         this.registerCommand(new SayCommand());

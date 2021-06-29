@@ -11,6 +11,8 @@ import {
     numberEnding,
     sum,
     capitalizeFirst,
+    startLoader,
+    endLoader,
 } from '@ilefa/ivy';
 
 type RmpResponse = RateMyProfessorReport & {
@@ -61,8 +63,10 @@ export class ProfessorCommand extends Command {
         let name = args.join(' ');
         if (!name) return CommandReturn.HELP_MENU;
 
+        let loader = await startLoader(message);
         let prof = await searchRMP(name);
-        if (!prof.rmpIds.length) {
+        if (!prof || !prof.rmpIds.length) {
+            endLoader(loader);
             message.reply(this.embeds.build('Professors', EmbedIconType.UCONN, `We couldn't locate any professors named ${emboss(name)}.`, [], message));
             return CommandReturn.EXIT;
         }
@@ -108,7 +112,7 @@ export class ProfessorCommand extends Command {
             };
         }
 
-        console.log(data);
+        endLoader(loader);
 
         message.reply(this.embeds.build(data.name, EmbedIconType.UCONN, `${bold(data.name)} was scored ${bold(`${addTrailingDecimal(data.average)}/5.0`)} based on ${bold(data.ratings)} rating${numberEnding(data.ratings)}.\n` 
             + `Difficulty Score: ${bold(addTrailingDecimal(data.difficulty) + '/5.0')}\n` 

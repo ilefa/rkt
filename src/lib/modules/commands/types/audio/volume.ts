@@ -29,7 +29,7 @@ export class VolumeCommand extends Command {
         }
 
         connection.dispatcher.setVolumeLogarithmic(vol);
-        message.channel.send(`:speaker: Volume Set: ${bold(vol)} (${vol * 100}%)`);
+        message.channel.send(`:speaker: Volume Set: ${bold(vol)} (${(vol * 100).toFixed(1)}%)`);
 
         return CommandReturn.EXIT;
     }

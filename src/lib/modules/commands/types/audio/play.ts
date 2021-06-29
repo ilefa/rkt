@@ -162,18 +162,21 @@ export class PlayCommand extends Command {
                 let msg = _m.first();
                 let choice = parseInt(msg.content);
                 if (isNaN(choice)) {
+                    msg.delete();
                     msg.reply(`:x: Non-Numeric Selection: ${emboss(choice)}`);
                     return;
                 }
 
                 let valid = Array.from(Array(data.length).slice(1).keys());
                 if (!valid.includes(choice)) {
+                    msg.delete();
                     msg.reply(`:x: Invalid Selection: ${emboss(choice)}`);
                     return;
                 }
 
                 let selected = data[choice - 1];
                 if (!selected) {
+                    msg.delete();
                     msg.reply(`:x: Something went wrong while processing your request.`);
                     return;
                 }
