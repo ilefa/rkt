@@ -1,7 +1,7 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 
-import { timeDiff } from '../src/lib/util';
+import { timeDiff } from '@ilefa/ivy';
 
 type MinorData = {
     name: string;
