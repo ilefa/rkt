@@ -5,6 +5,7 @@ build/
 tmp/
 temp/
 
+.DS_Store
 env.json
 xprepo.json
 vcboard.json
